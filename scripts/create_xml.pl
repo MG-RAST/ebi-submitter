@@ -433,12 +433,17 @@ sub prep_files_for_upload{
 			my $call = "curl \"" . $stage->{url} . "\" | gzip >" . $file_zip ;  
 			
 			print $call , "\n" if ($verbose) ; 
-			my $out = `$call` unless(-f $stage->{file_name} ) ;
+			my $out = `$call` unless(-f $file_zip ) ;
 			
 
-			my $md5_check_call 	= "md5 " . $file_zip ;
+			my $md5_check_call 	= "md5sum " . $file_zip ;
 			my $md5 			= `md5 $md5_check_call` ;
-			
+	
+			if ($verbose) {
+			    print STDERR $md5_check_call , "\n" ;
+			    print STDERR "MD5 = $md5\n" ;
+			}
+		
 			unless(-f $stage->{file_name} ){
 				print STDERR "Error: Missing file " . $stage->{file_name} . "\n" ;
 			}
