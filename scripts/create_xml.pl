@@ -56,6 +56,7 @@ my $password = undef ;
 my $ftp_ena     = "webin.ebi.ac.uk";
 
 my $verbose = 0;
+my $validate = 0;
 
 GetOptions(
     'project_id=s' => \$project_id ,
@@ -64,10 +65,17 @@ GetOptions(
     'password=s' => \$password,
     'submit' => \$submit,
     'verbose' => \$verbose,
+    'validate' => \$validate ,
 );
 
 # Project ID will be ID for all submission for the given project - new and updates
 $submission_id = $project_id ;
+
+unless($auth){
+    $auth = "ENA%20$user%20$password" ;
+    $ena_url = "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/?auth=$auth";
+}
+
 
 # initialise user agent
 my $ua = LWP::UserAgent->new;
@@ -130,13 +138,13 @@ foreach my $metagenome_obj (@{$project_data->{metagenomes}}) {
 	my ($file_name , $md5) = &prep_files_for_upload($ftp , $url , $stage_name , $metagenome_id);
 	
 	my $run_data = get_json_from_url($ua,$url,$run_resource,$metagenome_id,'');
-	$run_xml .= get_run_xml($run_data,$center_name,$metagenome_id , $file_name , $md5);
+	$run_xml .= get_run_xml($run_data,$center_name,$metagenome_id , $file_name , $md5 , $project_id);
 }
 
 $run_xml .= "</RUN_SET>";
 
 if($submit){
-   submit($study_xml,$sample_xml,$experiment_xml,$metagenome_id,$center_name);
+   submit($study_xml,$sample_xml,$experiment_xml,$run_xml,$submission_id,$center_name);
 }
 else{
    print $study_xml . "\n";
@@ -304,7 +312,7 @@ EOF
 }
 
 sub get_run_xml {
-	my ($data,$center_name,$metagenome_id , $filename , $file_md5) = @_;
+	my ($data,$center_name,$metagenome_id , $filename , $file_md5 , $project_id) = @_;
 	my $run_id = $data->{id};
 	my $run_name = $data->{name};
 	
@@ -313,7 +321,7 @@ sub get_run_xml {
         <EXPERIMENT_REF refname="$metagenome_id"/>
          <DATA_BLOCK>
             <FILES>
-                <FILE filename="$filename"
+                <FILE filename="$project_id/$filename"
                     filetype="fasta"
                     checksum_method="MD5" checksum="$file_md5"/>
             </FILES>
@@ -332,12 +340,15 @@ sub get_ncbiScientificNameTaxID{
 
 sub submit{
 
-   my ($study_xml,$sample_xml,$experiment_xml,$submission_id,$center_name) = @_ ;
+   my ($study_xml,$sample_xml,$experiment_xml,$run_xml,$submission_id,$center_name) = @_ ;
 
    unless($submission_id){
        print STDERR "No submission id\n";
        exit;
    }
+
+   my $action = "ADD" ;
+   $action = "VALIDATE" if $validate ;
 
    my $submission = <<"EOF";
 <?xml version="1.0" encoding="UTF-8"?>
@@ -347,16 +358,16 @@ xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.subm
  center_name="$center_name">
         <ACTIONS>
             <ACTION>
-                <ADD source="study.xml" schema="study"/>
+                <$action source="study.xml" schema="study"/>
             </ACTION>
             <ACTION>
-                <ADD source="sample.xml" schema="sample"/>
+                <$action source="sample.xml" schema="sample"/>
             </ACTION>
             <ACTION>
-                <ADD source="experiment.xml" schema="experiment"/>
+                <$action source="experiment.xml" schema="experiment"/>
             </ACTION>
             <ACTION>
-                <ADD source="run.xml" schema="run"/>
+                <$action source="run.xml" schema="run"/>
             </ACTION>
         </ACTIONS>
     </SUBMISSION>
@@ -437,8 +448,9 @@ sub prep_files_for_upload{
 			
 
 			my $md5_check_call 	= "md5sum " . $file_zip ;
-			my $md5 			= `$md5_check_call` ;
-	
+			my $tmp        		= `$md5_check_call` ; 
+			my ($md5) = $tmp =~/^(\S+)/ ;
+			
 			if ($verbose) {
 			    print STDERR $md5_check_call , "\n" ;
 			    print STDERR "MD5 = $md5\n" ;
