@@ -50,7 +50,7 @@ my $submission_id = undef ;
 
 # ENA URL
 my $auth = "" ;
-my $ena_url = "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/?auth=$auth";
+my $ena_url = "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/";
 my $user = undef ;
 my $password = undef ;
 my $ftp_ena     = "webin.ebi.ac.uk";
@@ -69,6 +69,7 @@ GetOptions(
 
 unless($auth){
 	$auth = "ENA%20$user%20$password" ;
+	$ena_url = $ena_url ."?auth=" . $auth;
 }
 
 # Project ID will be ID for all submission for the given project - new and updates
@@ -135,13 +136,13 @@ foreach my $metagenome_obj (@{$project_data->{metagenomes}}) {
 	my ($file_name , $md5) = &prep_files_for_upload($ftp , $url , $stage_name , $metagenome_id);
 	
 	my $run_data = get_json_from_url($ua,$url,$run_resource,$metagenome_id,'');
-	$run_xml .= get_run_xml($run_data,$center_name,$metagenome_id , $file_name , $md5);
+	$run_xml .= get_run_xml($run_data,$center_name,$metagenome_id , $file_name , $md5 , $project_id);
 }
 
 $run_xml .= "</RUN_SET>";
 
 if($submit){
-   submit($study_xml,$sample_xml,$experiment_xml,$metagenome_id,$center_name);
+   submit($study_xml,$sample_xml,$experiment_xml,$run_xml,$metagenome_id,$submission_id,$center_name);
 }
 else{
    print $study_xml . "\n";
@@ -337,7 +338,7 @@ sub get_ncbiScientificNameTaxID{
 
 sub submit{
 
-   my ($study_xml,$sample_xml,$experiment_xml,$submission_id,$center_name) = @_ ;
+   my ($study_xml,$sample_xml,$experiment_xml,$run_xml,$submission_id,$center_name) = @_ ;
 
    unless($submission_id){
        print STDERR "No submission id\n";
