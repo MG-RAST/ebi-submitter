@@ -62,8 +62,8 @@ my $skip = 0 ;
 
 GetOptions(
     'project_id=s' => \$project_id ,
-#    'url=s'  => \$url ,
-    'submission_url=s' => \$url,
+    'url=s'  => \$url ,
+    'submission_url=s' => \$ena_url,
     'user=s' => \$user,
     'password=s' => \$password,
     'submit' => \$submit,
@@ -74,7 +74,6 @@ GetOptions(
     'skip=s' => \$skip,
 );
 
-$ena_url = $url if ($url) ;
 
 unless($auth){
 	$auth = "ENA%20$user%20$password" ;
@@ -244,17 +243,13 @@ sub get_project_xml{
             <STUDY_ABSTRACT>$study_description</STUDY_ABSTRACT>
         </DESCRIPTOR>
         <STUDY_ATTRIBUTES>
-            <STUDY_ATTRIBUTE>
-                <TAG>PI First Name</TAG>
-                <VALUE>$pi_first_name</VALUE>
-            </STUDY_ATTRIBUTE>
-            <STUDY_ATTRIBUTE>
-                <TAG>PI Last Name</TAG>
-                <VALUE>$pi_last_name</VALUE>
-            </STUDY_ATTRIBUTE>
 	    <STUDY_ATTRIBUTE>
 	     <TAG>BROKER_OBJECT_ID</TAG>
 	     <VALUE>$study_alias</VALUE>
+	     </STUDY_ATTRIBUTE>
+	     <STUDY_ATTRIBUTE>
+	     <TAG>BROKER_CUSTOMER_NAME</TAG>
+	     <VALUE>$pi_first_name $pi_last_name</VALUE>
 	     </STUDY_ATTRIBUTE>
         </STUDY_ATTRIBUTES>
         
@@ -456,7 +451,7 @@ sub submit{
 <SUBMISSION_SET xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.submission.xsd">
 <SUBMISSION alias="$submission_id"
- center_name="$center_name">
+ center_name="$center_name" >
         <ACTIONS>
             <ACTION>
                 <$action source="study.xml" schema="study"/>
