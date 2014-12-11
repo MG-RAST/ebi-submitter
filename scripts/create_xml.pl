@@ -439,9 +439,10 @@ sub prep_files_for_upload{
 			my $call = "curl \"" . $stage->{url} . "\" | gzip >" . $file_zip ;  
 			
 			print $call , "\n" if ($verbose) ; 
-			my $out = `$call` unless(-f $stage->{file_name} ) ;
+			my $out = `$call` unless(-f $file_zip ) ;
 			
 
+<<<<<<< HEAD
 			my $md5_check_call 	= "md5 " . $file_zip ;
 			my $md5 			= `md5 $md5_check_call` ;
 			
@@ -452,6 +453,18 @@ sub prep_files_for_upload{
 			
 			unless(-f $stage->{file_name} ){
 				print STDERR "Error: Missing file " . $stage->{file_name} . "\n" ;
+=======
+			my $md5_check_call 	= "md5sum " . $file_zip ;
+			my $md5 			= `$md5_check_call` ;
+	
+			if ($verbose) {
+			    print STDERR $md5_check_call , "\n" ;
+			    print STDERR "MD5 = $md5\n" ;
+			}
+		
+			unless(-f $file_zip ){
+				print STDERR "Error: Missing file " . $file_zip . "\n" ;
+>>>>>>> 1acb8f7352544dc113141810e2d2460af9c88aed
 			}
 			else{
 				print STDERR ($out || "success for $call"), "\n" ;
@@ -462,7 +475,7 @@ sub prep_files_for_upload{
 			
 			
 		 
-		   $ftp->put($stage->{file_name});
+		   $ftp->put($file_zip);
 		   print join "\n" , $ftp->ls ;
 		   #$ftp->cwd("/pub") or die "Cannot change working directory ", $ftp->message;
 		   #$ftp->get("that.file") or die "get failed ", $ftp->message;
