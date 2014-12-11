@@ -50,13 +50,13 @@ my $submission_id = undef ;
 
 # ENA URL
 my $auth = "" ;
-my $ena_url = "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/?auth=$auth";
+my $ena_url = "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/";
 my $user = undef ;
 my $password = undef ;
 my $ftp_ena     = "webin.ebi.ac.uk";
 
-my $verbose = 0;
-my $validate = 0;
+my $verbose     = 0;
+my $skip_upload = 0 ;
 
 GetOptions(
     'project_id=s' => \$project_id ,
@@ -65,17 +65,17 @@ GetOptions(
     'password=s' => \$password,
     'submit' => \$submit,
     'verbose' => \$verbose,
-    'validate' => \$validate ,
+	'auth=s' => \$auth ,
+    'no_upload' => \$skip_upload,
 );
+
+unless($auth){
+	$auth = "ENA%20$user%20$password" ;
+	$ena_url = $ena_url ."?auth=" . $auth;
+}
 
 # Project ID will be ID for all submission for the given project - new and updates
 $submission_id = $project_id ;
-
-unless($auth){
-    $auth = "ENA%20$user%20$password" ;
-    $ena_url = "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/?auth=$auth";
-}
-
 
 # initialise user agent
 my $ua = LWP::UserAgent->new;
@@ -89,7 +89,13 @@ $ftp->mkdir($project_id) ;
 $ftp->cwd($project_id);
 
 
-my $project_data = get_json_from_url($ua,$url,$resource,$project_id,$options);
+my ($project_data , $error) = get_json_from_url($ua,$url,$resource,$project_id,$options);
+
+if ($error) {
+    print STDERR "Fatal: retrieving project $project_id with error $error!\n";
+    exit;
+}
+
 my $center_name  = $project_data->{metadata}->{PI_organization} || "unknown" ;
 my $study_ref_name = $project_data->{id};
 my $study_xml = get_project_xml($project_data);
@@ -106,7 +112,11 @@ foreach my $sample_obj (@{$project_data->{samples}}) {
 	my $metagenome_sample_id = $sample_obj->[0];
 	my $metagenome_sample_url = $sample_obj->[1];
 	
-	my $sample_data = get_json_from_url($ua,$url,$sample_resource,$metagenome_sample_id,$options);
+	my ($sample_data, $error) = get_json_from_url($ua,$url,$sample_resource,$metagenome_sample_id,$options);
+	if($error){
+	    print STDERR "Error retrieving sample $metagenome_sample_id with error message $error!\n";
+	    next ;
+	}
 	$sample_xml .= get_sample_xml($sample_data,$center_name);
 }
 
@@ -120,7 +130,11 @@ EOF
 
 foreach my $library_obj (@{$project_data->{metagenomes}}) {
 	my $metagenome_id = $library_obj->[0];
-	my $experiment_data = get_json_from_url($ua,$url,$experiment_resource,$metagenome_id,$options);
+	my ($experiment_data,$error) = get_json_from_url($ua,$url,$experiment_resource,$metagenome_id,$options);
+	if($error){
+	    print STDERR "Error retrieving library data for $metagenome_id (ERROR:$error)\n";
+	    next;
+	}
 	$experiment_xml .= get_experiment_xml($experiment_data,$center_name,$study_ref_name);
 }
 
@@ -135,9 +149,14 @@ EOF
 foreach my $metagenome_obj (@{$project_data->{metagenomes}}) {
 	my $metagenome_id = $metagenome_obj->[0];
 	
-	my ($file_name , $md5) = &prep_files_for_upload($ftp , $url , $stage_name , $metagenome_id);
-	
-	my $run_data = get_json_from_url($ua,$url,$run_resource,$metagenome_id,'');
+	my ($file_name , $md5 , $error) = &prep_files_for_upload($ftp , $url , $stage_name , $metagenome_id);
+	if($error){
+	    print STDERR "Can't get file for $metagenome_id (ERROR:$error)\n";
+	    next;
+	}
+
+	my ($run_data,$error) = get_json_from_url($ua,$url,$run_resource,$metagenome_id,'');
+
 	$run_xml .= get_run_xml($run_data,$center_name,$metagenome_id , $file_name , $md5 , $project_id);
 }
 
@@ -158,9 +177,15 @@ sub get_json_from_url {
 	my $response = $ua->get( join "/" , $url, $resource , $metagenome_id , $options);
 
     unless($response->is_success){
-    	print STDERR "Error retrieving data for $metagenome_id.\n";
-    	# add http error message
-    	exit;
+    	print STDERR "Error retrieving data for $metagenome_id\n";
+    	print STDERR $response->status_line , "\n" ;
+	my $error = 1 ;
+	eval{
+	    print STDERR $response->content , "\n" ;
+	    my $tmp = $json->decode($response->content) ;
+	    $error = $tmp->{ERROR} if $tmp->{ERROR} ;
+	};
+	return ( undef , $error) ;
     }
 
 	my $json = new JSON;
@@ -181,7 +206,7 @@ sub get_json_from_url {
 sub get_project_xml{
    my ($data) = @_;
    # get ncbi scientific name and tax id
-   my ($ncbiScientificName,$ncbiTaxId) = get_ncbiScientificNameTaxID() ;
+   #my ($ncbiTaxId) = get_ncbiScientificNameTaxID() ;
 
    # Fill template now:
 
@@ -222,7 +247,13 @@ sub get_sample_xml{
    my ($data,$center_name) = @_;
 
    # get ncbi scientific name and tax id
-   my ($ncbiScientificName,$ncbiTaxId) = get_ncbiScientificNameTaxID() ;
+   my ($ncbiTaxId) = get_ncbiScientificNameTaxID( $data->{metadata}->{biome} ) ;
+   
+   unless($ncbiTaxId){
+       print STDERR "No tax id for " . ($data->{metadata}->{biome}) . "\n";
+       print STDERR Dumper $data;
+       exit;
+   }
 
    # Fill template now:
 
@@ -247,12 +278,11 @@ sub get_sample_xml{
 
     <SAMPLE alias="$sample_alias"
     center_name="$center_name">
-        <TITLE>$sample_name . " " . $ncbiScientificName</TITLE>
+        <TITLE>$sample_name . " Taxonomy ID:" . $ncbiTaxId</TITLE>
         <SAMPLE_NAME>
             <TAXON_ID>$ncbiTaxId</TAXON_ID>
-<SCIENTIFIC_NAME>$ncbiScientificName</SCIENTIFIC_NAME>
         </SAMPLE_NAME>
-        <DESCRIPTION>$sample_name . " " . $ncbiScientificName</DESCRIPTION>
+        <DESCRIPTION>$sample_name . " Taxonomy ID:" . $ncbiTaxId</DESCRIPTION>
         <SAMPLE_ATTRIBUTES>
 EOF
 
@@ -299,7 +329,17 @@ sub get_experiment_xml {
 			   <LIBRARY_SOURCE>$library_source</LIBRARY_SOURCE>
                <LIBRARY_SELECTION>$library_selection</LIBRARY_SELECTION>
 			   <LIBRARY_LAYOUT><SINGLE/></LIBRARY_LAYOUT>
-			</LIBRARY_DESCRIPTOR>         
+			</LIBRARY_DESCRIPTOR>
+			<SPOT_DESCRIPTOR>
+         <SPOT_DECODE_SPEC>
+              <READ_SPEC>
+                 <READ_INDEX>0</READ_INDEX>
+                 <READ_CLASS>Application Read</READ_CLASS>
+                 <READ_TYPE>Forward</READ_TYPE>
+                 <BASE_COORD>1</BASE_COORD>
+              </READ_SPEC>
+         </SPOT_DECODE_SPEC>
+ </SPOT_DESCRIPTOR>
        </DESIGN>
        <PLATFORM>
        <ILLUMINA>
@@ -312,7 +352,7 @@ EOF
 }
 
 sub get_run_xml {
-	my ($data,$center_name,$metagenome_id , $filename , $file_md5 , $project_id) = @_;
+	my ($data,$center_name,$metagenome_id , $filename , $file_md5) = @_;
 	my $run_id = $data->{id};
 	my $run_name = $data->{name};
 	
@@ -321,7 +361,7 @@ sub get_run_xml {
         <EXPERIMENT_REF refname="$metagenome_id"/>
          <DATA_BLOCK>
             <FILES>
-                <FILE filename="$project_id/$filename"
+                <FILE filename="$filename"
                     filetype="fasta"
                     checksum_method="MD5" checksum="$file_md5"/>
             </FILES>
@@ -334,7 +374,19 @@ return $run_xml;
 # function for ncbi tax name id lookup
 sub get_ncbiScientificNameTaxID{
     my ($term) = @_ ;
-    return ('Homo Sapiens' , 9606) ;
+
+    my $key = lc($term);
+    
+    my $mapping = {
+	'small lake biome' => 1169740 ,
+	'terrestrial biome' => 1348798,
+	'freshwater biome' => 449939,
+    };
+
+    print STDERR "Lookup for $key : " . $mapping->{$key} , "\n" if($verbose) ;
+
+    return $mapping->{$key
+} ;
 }
 
 
@@ -347,9 +399,6 @@ sub submit{
        exit;
    }
 
-   my $action = "ADD" ;
-   $action = "VALIDATE" if $validate ;
-
    my $submission = <<"EOF";
 <?xml version="1.0" encoding="UTF-8"?>
 <SUBMISSION_SET xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -358,16 +407,16 @@ xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.subm
  center_name="$center_name">
         <ACTIONS>
             <ACTION>
-                <$action source="study.xml" schema="study"/>
+                <ADD source="study.xml" schema="study"/>
             </ACTION>
             <ACTION>
-                <$action source="sample.xml" schema="sample"/>
+                <ADD source="sample.xml" schema="sample"/>
             </ACTION>
             <ACTION>
-                <$action source="experiment.xml" schema="experiment"/>
+                <ADD source="experiment.xml" schema="experiment"/>
             </ACTION>
             <ACTION>
-                <$action source="run.xml" schema="run"/>
+                <ADD source="run.xml" schema="run"/>
             </ACTION>
         </ACTIONS>
     </SUBMISSION>
@@ -426,7 +475,8 @@ sub prep_files_for_upload{
 	unless($response->is_success){
 	   	 print STDERR "Error retrieving data for " . (join "/" , $url , $resource , $metagenome_id , "\n" );
 	   	# add http error message
-	   	exit;
+		 print STDERR "Message " . $response->content , "\n";
+		 return ( undef , undef , 1 )
 	}
 
 
@@ -448,9 +498,8 @@ sub prep_files_for_upload{
 			
 
 			my $md5_check_call 	= "md5sum " . $file_zip ;
-			my $tmp        		= `$md5_check_call` ; 
-			my ($md5) = $tmp =~/^(\S+)/ ;
-			
+			my $md5 			= `$md5_check_call` ;
+	
 			if ($verbose) {
 			    print STDERR $md5_check_call , "\n" ;
 			    print STDERR "MD5 = $md5\n" ;
@@ -468,13 +517,13 @@ sub prep_files_for_upload{
 			
 			
 		 
-		   $ftp->put($file_zip);
+		   $ftp->put($file_zip) unless ($skip_upload);
 		   print join "\n" , $ftp->ls ;
 		   #$ftp->cwd("/pub") or die "Cannot change working directory ", $ftp->message;
 		   #$ftp->get("that.file") or die "get failed ", $ftp->message;
 		   #$ftp->quit;
 			
-		   return ( $file_zip , $md5 )
+		   return ( $file_zip , $md5 , $error )
 		}
 	}
 	
@@ -500,3 +549,4 @@ sub decode{
 	
 	return $data ;
 }
+
