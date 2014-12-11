@@ -8,6 +8,9 @@ use JSON;
 use Getopt::Long;
 use Net::FTP;
 
+
+my $json = new JSON ;
+
 # Example:
 # http://api.metagenomics.anl.gov//metagenome/mgm4447943.3?verbosity=full
 
@@ -48,11 +51,19 @@ my $submission_id = undef ;
 # ENA URL
 my $auth = "" ;
 my $ena_url = "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/?auth=$auth";
+my $user = undef ;
+my $password = undef ;
+my $ftp_ena     = "webin.ebi.ac.uk";
+
+my $verbose = 0;
 
 GetOptions(
     'project_id=s' => \$project_id ,
     'url=s'  => \$url ,
+    'user=s' => \$user,
+    'password=s' => \$password,
     'submit' => \$submit,
+    'verbose' => \$verbose,
 );
 
 # Project ID will be ID for all submission for the given project - new and updates
@@ -402,7 +413,7 @@ sub prep_files_for_upload{
 	my $response = $ua->get( join "/" , $url , $resource , $metagenome_id );
 	
 	unless($response->is_success){
-	   	 print STDERR "Error retrieving data for $resource_url.\n";
+	   	 print STDERR "Error retrieving data for " . (join "/" , $url , $resource , $metagenome_id , "\n" );
 	   	# add http error message
 	   	exit;
 	}
@@ -418,12 +429,13 @@ sub prep_files_for_upload{
 			print join "\t" , $stage->{stage_name} , $stage->{url} , "\n"  if ($verbose);
 			
 			# get sequences from MGRAST
-			my $call = "curl \"" . $stage->{url} . "\" | gzip >" . $stage->{file_name} ;  
+			my $file_zip 		= $stage->{file_name} . ".gz" ;
+			my $call = "curl \"" . $stage->{url} . "\" | gzip >" . $file_zip ;  
 			
 			print $call , "\n" if ($verbose) ; 
 			my $out = `$call` unless(-f $stage->{file_name} ) ;
 			
-			my $file_zip 		= $stage->{file_name} . ".gz" ;
+
 			my $md5_check_call 	= "md5 " . $file_zip ;
 			my $md5 			= `md5 $md5_check_call` ;
 			
