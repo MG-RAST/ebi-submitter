@@ -64,7 +64,12 @@ GetOptions(
     'password=s' => \$password,
     'submit' => \$submit,
     'verbose' => \$verbose,
+	'auth=s' => \$auth ,
 );
+
+unless($auth){
+	$auth = "ENA%20$user%20$password" ;
+}
 
 # Project ID will be ID for all submission for the given project - new and updates
 $submission_id = $project_id ;
@@ -438,6 +443,11 @@ sub prep_files_for_upload{
 
 			my $md5_check_call 	= "md5 " . $file_zip ;
 			my $md5 			= `md5 $md5_check_call` ;
+			
+			if ($verbose) {
+				print STDERR $md5_check_call , "\n" ;
+				print STDERR "MD5 = $md5\n" ;
+			}
 			
 			unless(-f $stage->{file_name} ){
 				print STDERR "Error: Missing file " . $stage->{file_name} . "\n" ;
