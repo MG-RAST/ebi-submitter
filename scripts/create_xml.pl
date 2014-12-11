@@ -50,24 +50,31 @@ my $submission_id = undef ;
 
 # ENA URL
 my $auth = "" ;
-my $ena_url = "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/";
+my $ena_url = "https://www.ebi.ac.uk/ena/submit/drop-box/submit/";
 my $user = undef ;
 my $password = undef ;
 my $ftp_ena     = "webin.ebi.ac.uk";
+my $validate = 0;
 
 my $verbose     = 0;
 my $skip_upload = 0 ;
+my $skip = 0 ;
 
 GetOptions(
     'project_id=s' => \$project_id ,
-    'url=s'  => \$url ,
+#    'url=s'  => \$url ,
+    'submission_url=s' => \$url,
     'user=s' => \$user,
     'password=s' => \$password,
     'submit' => \$submit,
     'verbose' => \$verbose,
 	'auth=s' => \$auth ,
     'no_upload' => \$skip_upload,
+    'validate' => \$validate,
+    'skip=s' => \$skip,
 );
+
+$ena_url = $url if ($url) ;
 
 unless($auth){
 	$auth = "ENA%20$user%20$password" ;
@@ -163,7 +170,18 @@ foreach my $metagenome_obj (@{$project_data->{metagenomes}}) {
 $run_xml .= "</RUN_SET>";
 
 if($submit){
-   submit($study_xml,$sample_xml,$experiment_xml,$run_xml,$submission_id,$center_name);
+    my $files = {
+	"study" => "study.xml" ,
+	"sample" => "sample.xml" ,
+	"experiment" => "experiment.xml" ,
+	"run" => "run.xml" ,
+    };
+
+    if($skip){
+	$files->{$skip} = 0 ;
+    }
+
+   submit($study_xml,$sample_xml,$experiment_xml,$run_xml,$submission_id,$center_name, $files);
 }
 else{
    print $study_xml . "\n";
@@ -234,6 +252,10 @@ sub get_project_xml{
                 <TAG>PI Last Name</TAG>
                 <VALUE>$pi_last_name</VALUE>
             </STUDY_ATTRIBUTE>
+	    <STUDY_ATTRIBUTE>
+	     <TAG>BROKER_OBJECT_ID</TAG>
+	     <VALUE>$study_alias</VALUE>
+	     </STUDY_ATTRIBUTE>
         </STUDY_ATTRIBUTES>
         
     </STUDY>
@@ -263,6 +285,11 @@ sub get_sample_xml{
    foreach my $key ( keys %{$data->{metadata}} ) {
        $sample_attribute_table->{$key} = $data->{metadata}->{$key} ;
    }
+
+   my @metagenome_ids ;
+   foreach my $tmp (@{$data->{metagenomes}}){
+       push @metagenome_ids , $tmp->[0] ;
+   }
    
    foreach my $metadata_key ( keys %{$data->{env_package}->{metadata}} ) {
    	   if (exists($sample_attribute_table->{$metadata_key})) {
@@ -285,6 +312,16 @@ sub get_sample_xml{
         <DESCRIPTION>$sample_name . " Taxonomy ID:" . $ncbiTaxId</DESCRIPTION>
         <SAMPLE_ATTRIBUTES>
 EOF
+
+   foreach my $id (@metagenome_ids){
+    $sample_xml .= <<"EOF";
+          <SAMPLE_ATTRIBUTE>
+             <TAG>BROKER_OBJECT_ID</TAG>
+             <VALUE>$id</VALUE>
+          </SAMPLE_ATTRIBUTE>
+EOF
+}
+
 
                 foreach my $key ( keys
    %{$sample_attribute_table} )
@@ -332,6 +369,7 @@ sub get_experiment_xml {
 			</LIBRARY_DESCRIPTOR>
 			<SPOT_DESCRIPTOR>
          <SPOT_DECODE_SPEC>
+       	      <SPOT_LENGTH>100</SPOT_LENGTH>
               <READ_SPEC>
                  <READ_INDEX>0</READ_INDEX>
                  <READ_CLASS>Application Read</READ_CLASS>
@@ -352,7 +390,7 @@ EOF
 }
 
 sub get_run_xml {
-	my ($data,$center_name,$metagenome_id , $filename , $file_md5) = @_;
+	my ($data,$center_name,$metagenome_id , $filename , $file_md5,$project_id) = @_;
 	my $run_id = $data->{id};
 	my $run_name = $data->{name};
 	
@@ -361,7 +399,7 @@ sub get_run_xml {
         <EXPERIMENT_REF refname="$metagenome_id"/>
          <DATA_BLOCK>
             <FILES>
-                <FILE filename="$filename"
+                <FILE filename="$project_id/$filename"
                     filetype="fasta"
                     checksum_method="MD5" checksum="$file_md5"/>
             </FILES>
@@ -392,11 +430,25 @@ sub get_ncbiScientificNameTaxID{
 
 sub submit{
 
-   my ($study_xml,$sample_xml,$experiment_xml,$run_xml,$submission_id,$center_name) = @_ ;
+   my ($study_xml,$sample_xml,$experiment_xml,$run_xml,$submission_id,$center_name , $files) = @_ ;
 
    unless($submission_id){
        print STDERR "No submission id\n";
        exit;
+   }
+
+   my $action = "ADD" ;
+   $action = "VALIDATE" if ($validate);
+
+   my @line_action ;
+   if($files){
+       foreach my $key (keys %$files){
+
+	   if($files->{$key}){
+	       push @line_action , "<ACTION><$action source=\"". $files->{$key} ."\" schema=\"".$key."\"/>" ;
+	   }
+	   print join "\n" , @line_action , "\n" if ($verbose);
+       }
    }
 
    my $submission = <<"EOF";
@@ -407,16 +459,16 @@ xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.subm
  center_name="$center_name">
         <ACTIONS>
             <ACTION>
-                <ADD source="study.xml" schema="study"/>
+                <$action source="study.xml" schema="study"/>
             </ACTION>
             <ACTION>
-                <ADD source="sample.xml" schema="sample"/>
+                <$action source="sample.xml" schema="sample"/>
             </ACTION>
             <ACTION>
-                <ADD source="experiment.xml" schema="experiment"/>
+                <$action source="experiment.xml" schema="experiment"/>
             </ACTION>
             <ACTION>
-                <ADD source="run.xml" schema="run"/>
+                <$action source="run.xml" schema="run"/>
             </ACTION>
         </ACTIONS>
     </SUBMISSION>
@@ -455,7 +507,11 @@ EOF
    print "$cmd\n";
    my $receipt = `$cmd` ;
 
-   print $receipt , "\n";
+   print STDERR $receipt , "\n" if($verbose);
+
+   open(FILE, ">receipt.xml");
+   print FILE $receipt ;
+   close FILE;
 
    my $log = undef;
 
@@ -498,8 +554,10 @@ sub prep_files_for_upload{
 			
 
 			my $md5_check_call 	= "md5sum " . $file_zip ;
-			my $md5 			= `$md5_check_call` ;
-	
+			my $tmp 	       	= `$md5_check_call` ;
+			my ($md5)  = $tmp =~/^(\S+)/ ;
+
+
 			if ($verbose) {
 			    print STDERR $md5_check_call , "\n" ;
 			    print STDERR "MD5 = $md5\n" ;
@@ -518,7 +576,7 @@ sub prep_files_for_upload{
 			
 		 
 		   $ftp->put($file_zip) unless ($skip_upload);
-		   print join "\n" , $ftp->ls ;
+		   #print join "\n" , $ftp->ls ;
 		   #$ftp->cwd("/pub") or die "Cannot change working directory ", $ftp->message;
 		   #$ftp->get("that.file") or die "get failed ", $ftp->message;
 		   #$ftp->quit;
