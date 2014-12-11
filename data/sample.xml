@@ -1,0 +1,1092 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SAMPLE_SET xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.sample.xsd">
+
+    <SAMPLE alias="mgs25820"
+    center_name="CSISP">
+        <TITLE>mgs25820 . " " . Homo Sapiens</TITLE>
+        <SAMPLE_NAME>
+            <TAXON_ID>9606</TAXON_ID>
+<SCIENTIFIC_NAME>Homo Sapiens</SCIENTIFIC_NAME>
+        </SAMPLE_NAME>
+        <DESCRIPTION>mgs25820 . " " . Homo Sapiens</DESCRIPTION>
+        <SAMPLE_ATTRIBUTES>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>nose_mouth_teeth_throat_disord</TAG>
+                <VALUE>Teeth</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>time_last_toothbrush</TAG>
+                <VALUE>24 hours</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>elevation</TAG>
+                <VALUE>13</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>age</TAG>
+                <VALUE>23 ; Year</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_date</TAG>
+                <VALUE>2009-03-25</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>feature</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>body_site</TAG>
+                <VALUE>Teeth surfaces</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_time</TAG>
+                <VALUE>10:00:00</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>misc_param_1</TAG>
+                <VALUE>geodetic_system: wgs_84</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>latitude</TAG>
+                <VALUE>39.481448</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>biome</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sample_name</TAG>
+                <VALUE>mgs25820</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_timezone</TAG>
+                <VALUE>UTC</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>altitude</TAG>
+                <VALUE>13</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>temperature</TAG>
+                <VALUE>37</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>samp_size</TAG>
+                <VALUE>1</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>country</TAG>
+                <VALUE>Spain</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>samp_mat_process</TAG>
+                <VALUE>total DNA extraction - enzymes</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>mgrast_id</TAG>
+                <VALUE>mgs25820</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>longitude</TAG>
+                <VALUE>0.353066</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>location</TAG>
+                <VALUE>Valencia</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>isol_growth_condt</TAG>
+                <VALUE>21716308</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>host_subject_id</TAG>
+                <VALUE>NOCA_01</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sex</TAG>
+                <VALUE>Male</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>depth</TAG>
+                <VALUE>1</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>disease_stat</TAG>
+                <VALUE>Healthy, CAO's Index = 0</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>env_package</TAG>
+                <VALUE>human-oral</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>continent</TAG>
+                <VALUE>europe</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>body_product</TAG>
+                <VALUE>Supragingival dental plaque</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>material</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sample_strategy</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+        </SAMPLE_ATTRIBUTES>
+    </SAMPLE>
+
+    <SAMPLE alias="mgs25822"
+    center_name="CSISP">
+        <TITLE>mgs25822 . " " . Homo Sapiens</TITLE>
+        <SAMPLE_NAME>
+            <TAXON_ID>9606</TAXON_ID>
+<SCIENTIFIC_NAME>Homo Sapiens</SCIENTIFIC_NAME>
+        </SAMPLE_NAME>
+        <DESCRIPTION>mgs25822 . " " . Homo Sapiens</DESCRIPTION>
+        <SAMPLE_ATTRIBUTES>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>nose_mouth_teeth_throat_disord</TAG>
+                <VALUE>Teeth</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>time_last_toothbrush</TAG>
+                <VALUE>24 hours</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>elevation</TAG>
+                <VALUE>13</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>age</TAG>
+                <VALUE>49 ; Year</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_date</TAG>
+                <VALUE>2010-03-01</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>feature</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>body_site</TAG>
+                <VALUE>Teeth surfaces</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_time</TAG>
+                <VALUE>10:00:00</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>misc_param_1</TAG>
+                <VALUE>geodetic_system: wgs_84</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>latitude</TAG>
+                <VALUE>39.481448</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>biome</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sample_name</TAG>
+                <VALUE>mgs25822</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_timezone</TAG>
+                <VALUE>UTC</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>altitude</TAG>
+                <VALUE>13</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>temperature</TAG>
+                <VALUE>37</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>samp_size</TAG>
+                <VALUE>1</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>country</TAG>
+                <VALUE>Spain</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>mgrast_id</TAG>
+                <VALUE>mgs25822</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>longitude</TAG>
+                <VALUE>0.353066</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>samp_mat_process</TAG>
+                <VALUE>total DNA extraction - enzymes</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>location</TAG>
+                <VALUE>Valencia</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>isol_growth_condt</TAG>
+                <VALUE>21716308</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>host_subject_id</TAG>
+                <VALUE>CA_06</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sex</TAG>
+                <VALUE>Male</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>depth</TAG>
+                <VALUE>0</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>disease_stat</TAG>
+                <VALUE>Diseased, CAO's index = 11</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>env_package</TAG>
+                <VALUE>human-oral</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>continent</TAG>
+                <VALUE>europe</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>body_product</TAG>
+                <VALUE>Supragingival dental plaque</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>material</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sample_strategy</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+        </SAMPLE_ATTRIBUTES>
+    </SAMPLE>
+
+    <SAMPLE alias="mgs25823"
+    center_name="CSISP">
+        <TITLE>mgs25823 . " " . Homo Sapiens</TITLE>
+        <SAMPLE_NAME>
+            <TAXON_ID>9606</TAXON_ID>
+<SCIENTIFIC_NAME>Homo Sapiens</SCIENTIFIC_NAME>
+        </SAMPLE_NAME>
+        <DESCRIPTION>mgs25823 . " " . Homo Sapiens</DESCRIPTION>
+        <SAMPLE_ATTRIBUTES>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>nose_mouth_teeth_throat_disord</TAG>
+                <VALUE>Teeth</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>time_last_toothbrush</TAG>
+                <VALUE>24 hours</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>elevation</TAG>
+                <VALUE>13</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>age</TAG>
+                <VALUE>36 ; Year</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_date</TAG>
+                <VALUE>2010-03-01</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>feature</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>body_site</TAG>
+                <VALUE>Teeth surfaces</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_time</TAG>
+                <VALUE>10:00:00</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>misc_param_1</TAG>
+                <VALUE>geodetic_system: wgs_84</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>latitude</TAG>
+                <VALUE>39.481448</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sample_name</TAG>
+                <VALUE>mgs25823</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>biome</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_timezone</TAG>
+                <VALUE>UTC</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>altitude</TAG>
+                <VALUE>13</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>temperature</TAG>
+                <VALUE>37</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>samp_size</TAG>
+                <VALUE>1</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>country</TAG>
+                <VALUE>Spain</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>samp_mat_process</TAG>
+                <VALUE>total DNA extraction - enzymes</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>mgrast_id</TAG>
+                <VALUE>mgs25823</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>longitude</TAG>
+                <VALUE>0.353066</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>location</TAG>
+                <VALUE>Valencia</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>isol_growth_condt</TAG>
+                <VALUE>21716308</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>host_subject_id</TAG>
+                <VALUE>CA_04</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sex</TAG>
+                <VALUE>Female</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>depth</TAG>
+                <VALUE>0</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>disease_stat</TAG>
+                <VALUE>Diseased, CAO's index = 25</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>env_package</TAG>
+                <VALUE>human-oral</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>continent</TAG>
+                <VALUE>europe</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>body_product</TAG>
+                <VALUE>Supragingival dental plaque</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>material</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sample_strategy</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+        </SAMPLE_ATTRIBUTES>
+    </SAMPLE>
+
+    <SAMPLE alias="mgs25824"
+    center_name="CSISP">
+        <TITLE>mgs25824 . " " . Homo Sapiens</TITLE>
+        <SAMPLE_NAME>
+            <TAXON_ID>9606</TAXON_ID>
+<SCIENTIFIC_NAME>Homo Sapiens</SCIENTIFIC_NAME>
+        </SAMPLE_NAME>
+        <DESCRIPTION>mgs25824 . " " . Homo Sapiens</DESCRIPTION>
+        <SAMPLE_ATTRIBUTES>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>nose_mouth_teeth_throat_disord</TAG>
+                <VALUE>Teeth</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>time_last_toothbrush</TAG>
+                <VALUE>24 hours</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>elevation</TAG>
+                <VALUE>13</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>age</TAG>
+                <VALUE>42 ; Year</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_date</TAG>
+                <VALUE>2010-03-01</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>feature</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>body_site</TAG>
+                <VALUE>Cavity on tooth 4.6</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_time</TAG>
+                <VALUE>10:00:00</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>misc_param_1</TAG>
+                <VALUE>geodetic_system: wgs_84</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>latitude</TAG>
+                <VALUE>39.481448</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>biome</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sample_name</TAG>
+                <VALUE>mgs25824</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_timezone</TAG>
+                <VALUE>UTC</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>altitude</TAG>
+                <VALUE>13</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>temperature</TAG>
+                <VALUE>37</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>samp_size</TAG>
+                <VALUE>1</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>country</TAG>
+                <VALUE>Spain</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>samp_mat_process</TAG>
+                <VALUE>total DNA extraction - enzymes</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>mgrast_id</TAG>
+                <VALUE>mgs25824</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>longitude</TAG>
+                <VALUE>0.353066</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>location</TAG>
+                <VALUE>Valencia</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>isol_growth_condt</TAG>
+                <VALUE>21716308</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>host_subject_id</TAG>
+                <VALUE>CA_05</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sex</TAG>
+                <VALUE>Male</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>depth</TAG>
+                <VALUE>0</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>disease_stat</TAG>
+                <VALUE>Diseased, CAO's index = 10</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>env_package</TAG>
+                <VALUE>human-oral</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>continent</TAG>
+                <VALUE>europe</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>body_product</TAG>
+                <VALUE>Supragingival dental plaque from inside the cavity</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>material</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sample_strategy</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+        </SAMPLE_ATTRIBUTES>
+    </SAMPLE>
+
+    <SAMPLE alias="mgs25825"
+    center_name="CSISP">
+        <TITLE>mgs25825 . " " . Homo Sapiens</TITLE>
+        <SAMPLE_NAME>
+            <TAXON_ID>9606</TAXON_ID>
+<SCIENTIFIC_NAME>Homo Sapiens</SCIENTIFIC_NAME>
+        </SAMPLE_NAME>
+        <DESCRIPTION>mgs25825 . " " . Homo Sapiens</DESCRIPTION>
+        <SAMPLE_ATTRIBUTES>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>nose_mouth_teeth_throat_disord</TAG>
+                <VALUE>Teeth</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>time_last_toothbrush</TAG>
+                <VALUE>24 hours</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>elevation</TAG>
+                <VALUE>13</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>age</TAG>
+                <VALUE>49 ; Year</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_date</TAG>
+                <VALUE>2010-03-01</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>feature</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>body_site</TAG>
+                <VALUE>Cavity on tooth 1.6</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_time</TAG>
+                <VALUE>10:00:00</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>misc_param_1</TAG>
+                <VALUE>geodetic_system: wgs_84</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>latitude</TAG>
+                <VALUE>39.481448</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>biome</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sample_name</TAG>
+                <VALUE>mgs25825</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_timezone</TAG>
+                <VALUE>UTC</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>altitude</TAG>
+                <VALUE>13</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>temperature</TAG>
+                <VALUE>37</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>samp_size</TAG>
+                <VALUE>1</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>country</TAG>
+                <VALUE>Spain</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>samp_mat_process</TAG>
+                <VALUE>total DNA extraction - enzymes</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>mgrast_id</TAG>
+                <VALUE>mgs25825</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>longitude</TAG>
+                <VALUE>0.353066</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>location</TAG>
+                <VALUE>Valencia</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>isol_growth_condt</TAG>
+                <VALUE>21716308</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>host_subject_id</TAG>
+                <VALUE>CA_06</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sex</TAG>
+                <VALUE>Male</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>depth</TAG>
+                <VALUE>0</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>disease_stat</TAG>
+                <VALUE>Diseased, CAO's index = 11</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>env_package</TAG>
+                <VALUE>human-oral</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>continent</TAG>
+                <VALUE>europe</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>body_product</TAG>
+                <VALUE>Supragingival dental plaque from inside the cavity</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>material</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sample_strategy</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+        </SAMPLE_ATTRIBUTES>
+    </SAMPLE>
+
+    <SAMPLE alias="mgs25826"
+    center_name="CSISP">
+        <TITLE>mgs25826 . " " . Homo Sapiens</TITLE>
+        <SAMPLE_NAME>
+            <TAXON_ID>9606</TAXON_ID>
+<SCIENTIFIC_NAME>Homo Sapiens</SCIENTIFIC_NAME>
+        </SAMPLE_NAME>
+        <DESCRIPTION>mgs25826 . " " . Homo Sapiens</DESCRIPTION>
+        <SAMPLE_ATTRIBUTES>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>nose_mouth_teeth_throat_disord</TAG>
+                <VALUE>Teeth</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>time_last_toothbrush</TAG>
+                <VALUE>24 hours</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>elevation</TAG>
+                <VALUE>13</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>age</TAG>
+                <VALUE>29 ; Year</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_date</TAG>
+                <VALUE>2009-03-25</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>feature</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>body_site</TAG>
+                <VALUE>Teeth surfaces</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_time</TAG>
+                <VALUE>10:00:00</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>misc_param_1</TAG>
+                <VALUE>geodetic_system: wgs_84</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>latitude</TAG>
+                <VALUE>39.481448</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>biome</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sample_name</TAG>
+                <VALUE>mgs25826</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_timezone</TAG>
+                <VALUE>UTC</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>altitude</TAG>
+                <VALUE>13</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>temperature</TAG>
+                <VALUE>37</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>samp_size</TAG>
+                <VALUE>1</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>country</TAG>
+                <VALUE>Spain</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>samp_mat_process</TAG>
+                <VALUE>total DNA extraction - enzymes</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>mgrast_id</TAG>
+                <VALUE>mgs25826</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>longitude</TAG>
+                <VALUE>0.353066</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>location</TAG>
+                <VALUE>Valencia</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>isol_growth_condt</TAG>
+                <VALUE>21716308</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>host_subject_id</TAG>
+                <VALUE>CA1_02</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sex</TAG>
+                <VALUE>Male</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>depth</TAG>
+                <VALUE>0</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>disease_stat</TAG>
+                <VALUE>Diseased, CAO's index = 6</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>env_package</TAG>
+                <VALUE>human-oral</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>continent</TAG>
+                <VALUE>europe</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>body_product</TAG>
+                <VALUE>Supragingival dental plaque</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>material</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sample_strategy</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+        </SAMPLE_ATTRIBUTES>
+    </SAMPLE>
+
+    <SAMPLE alias="mgs25827"
+    center_name="CSISP">
+        <TITLE>mgs25827 . " " . Homo Sapiens</TITLE>
+        <SAMPLE_NAME>
+            <TAXON_ID>9606</TAXON_ID>
+<SCIENTIFIC_NAME>Homo Sapiens</SCIENTIFIC_NAME>
+        </SAMPLE_NAME>
+        <DESCRIPTION>mgs25827 . " " . Homo Sapiens</DESCRIPTION>
+        <SAMPLE_ATTRIBUTES>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>nose_mouth_teeth_throat_disord</TAG>
+                <VALUE>Teeth</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>time_last_toothbrush</TAG>
+                <VALUE>24 hours</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>elevation</TAG>
+                <VALUE>13</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>age</TAG>
+                <VALUE>36 ; Year</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_date</TAG>
+                <VALUE>2009-04-01</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>feature</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>body_site</TAG>
+                <VALUE>Teeth surfaces</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_time</TAG>
+                <VALUE>10:00:00</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>misc_param_1</TAG>
+                <VALUE>geodetic_system: wgs_84</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>latitude</TAG>
+                <VALUE>39.481448</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>biome</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sample_name</TAG>
+                <VALUE>mgs25827</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_timezone</TAG>
+                <VALUE>UTC</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>altitude</TAG>
+                <VALUE>13</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>temperature</TAG>
+                <VALUE>37</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>samp_size</TAG>
+                <VALUE>1</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>country</TAG>
+                <VALUE>Spain</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>samp_mat_process</TAG>
+                <VALUE>total DNA extraction - enzymes</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>mgrast_id</TAG>
+                <VALUE>mgs25827</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>longitude</TAG>
+                <VALUE>0.353066</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>location</TAG>
+                <VALUE>Valencia</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>isol_growth_condt</TAG>
+                <VALUE>21716308</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>host_subject_id</TAG>
+                <VALUE>CA1_01</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sex</TAG>
+                <VALUE>Male</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>depth</TAG>
+                <VALUE>0</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>disease_stat</TAG>
+                <VALUE>Diseased, CAO's index = 8</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>env_package</TAG>
+                <VALUE>human-oral</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>continent</TAG>
+                <VALUE>europe</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>body_product</TAG>
+                <VALUE>Supragingival dental plaque</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>material</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sample_strategy</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+        </SAMPLE_ATTRIBUTES>
+    </SAMPLE>
+
+    <SAMPLE alias="mgs25828"
+    center_name="CSISP">
+        <TITLE>mgs25828 . " " . Homo Sapiens</TITLE>
+        <SAMPLE_NAME>
+            <TAXON_ID>9606</TAXON_ID>
+<SCIENTIFIC_NAME>Homo Sapiens</SCIENTIFIC_NAME>
+        </SAMPLE_NAME>
+        <DESCRIPTION>mgs25828 . " " . Homo Sapiens</DESCRIPTION>
+        <SAMPLE_ATTRIBUTES>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>nose_mouth_teeth_throat_disord</TAG>
+                <VALUE>Teeth</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>time_last_toothbrush</TAG>
+                <VALUE>24 hours</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>elevation</TAG>
+                <VALUE>13</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>age</TAG>
+                <VALUE>39 ; Year</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_date</TAG>
+                <VALUE>2010-01-15</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>feature</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>body_site</TAG>
+                <VALUE>Teeth surfaces</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_time</TAG>
+                <VALUE>10:00:00</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>misc_param_1</TAG>
+                <VALUE>geodetic_system: wgs_84</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>latitude</TAG>
+                <VALUE>39.481448</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>biome</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sample_name</TAG>
+                <VALUE>mgs25828</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>collection_timezone</TAG>
+                <VALUE>UTC</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>altitude</TAG>
+                <VALUE>13</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>temperature</TAG>
+                <VALUE>37</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>samp_size</TAG>
+                <VALUE>1</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>country</TAG>
+                <VALUE>Spain</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>samp_mat_process</TAG>
+                <VALUE>total DNA extraction - enzymes</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>mgrast_id</TAG>
+                <VALUE>mgs25828</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>longitude</TAG>
+                <VALUE>0.353066</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>location</TAG>
+                <VALUE>Valencia</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>isol_growth_condt</TAG>
+                <VALUE>21716308</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>host_subject_id</TAG>
+                <VALUE>NOCA_03</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sex</TAG>
+                <VALUE>Male</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>depth</TAG>
+                <VALUE>0</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>disease_stat</TAG>
+                <VALUE>Healthy, CAO's Index = 0</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>env_package</TAG>
+                <VALUE>human-oral</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>continent</TAG>
+                <VALUE>europe</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>body_product</TAG>
+                <VALUE>Supragingival dental plaque</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>material</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>sample_strategy</TAG>
+                <VALUE>human-associated habitat</VALUE>
+            </SAMPLE_ATTRIBUTE>
+        </SAMPLE_ATTRIBUTES>
+    </SAMPLE>
+</SAMPLE_SET>

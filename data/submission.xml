@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SUBMISSION_SET xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.submission.xsd">
+<SUBMISSION alias="mgp128"
+ center_name="">
+        <ACTIONS>
+            <ACTION>
+                <ADD source="study.xml" schema="study"/>
+            </ACTION>
+            <ACTION>
+                <ADD source="sample.xml" schema="sample"/>
+            </ACTION>
+            <ACTION>
+                <ADD source="experiment.xml" schema="experiment"/>
+            </ACTION>
+            <ACTION>
+                <ADD source="run.xml" schema="run"/>
+            </ACTION>
+        </ACTIONS>
+    </SUBMISSION>
+</SUBMISSION_SET>

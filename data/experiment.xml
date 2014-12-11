@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EXPERIMENT_SET xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.experiment.xsd">
+
+       <EXPERIMENT alias="mgm4447943.3" center_name="CSISP">
+       <TITLE>CA_04P</TITLE>
+       <STUDY_REF refname="mgp128"/>
+       <DESIGN>
+           <DESIGN_DESCRIPTION></DESIGN_DESCRIPTION>
+		           <SAMPLE_DESCRIPTOR refname="mgs25823"/>
+           <LIBRARY_DESCRIPTOR>
+               <LIBRARY_NAME>CA_04P</LIBRARY_NAME>
+			   <LIBRARY_STRATEGY>WGS</LIBRARY_STRATEGY>
+			   <LIBRARY_SOURCE>METAGENOMIC</LIBRARY_SOURCE>
+               <LIBRARY_SELECTION>RANDOM</LIBRARY_SELECTION>
+			   <LIBRARY_LAYOUT><SINGLE/></LIBRARY_LAYOUT>
+			</LIBRARY_DESCRIPTOR>         
+       </DESIGN>
+       <PLATFORM>
+       <ILLUMINA>
+       <INSTRUMENT_MODEL>Illumina Genome Analyzer</INSTRUMENT_MODEL>
+       </ILLUMINA>
+       </PLATFORM>
+    </EXPERIMENT>
+
+       <EXPERIMENT alias="mgm4447192.3" center_name="CSISP">
+       <TITLE>NOCA_01P</TITLE>
+       <STUDY_REF refname="mgp128"/>
+       <DESIGN>
+           <DESIGN_DESCRIPTION></DESIGN_DESCRIPTION>
+		           <SAMPLE_DESCRIPTOR refname="mgs25820"/>
+           <LIBRARY_DESCRIPTOR>
+               <LIBRARY_NAME>NOCA_01P</LIBRARY_NAME>
+			   <LIBRARY_STRATEGY>WGS</LIBRARY_STRATEGY>
+			   <LIBRARY_SOURCE>METAGENOMIC</LIBRARY_SOURCE>
+               <LIBRARY_SELECTION>RANDOM</LIBRARY_SELECTION>
+			   <LIBRARY_LAYOUT><SINGLE/></LIBRARY_LAYOUT>
+			</LIBRARY_DESCRIPTOR>         
+       </DESIGN>
+       <PLATFORM>
+       <ILLUMINA>
+       <INSTRUMENT_MODEL>Illumina Genome Analyzer</INSTRUMENT_MODEL>
+       </ILLUMINA>
+       </PLATFORM>
+    </EXPERIMENT>
+
+       <EXPERIMENT alias="mgm4447103.3" center_name="CSISP">
+       <TITLE>CA1_01P</TITLE>
+       <STUDY_REF refname="mgp128"/>
+       <DESIGN>
+           <DESIGN_DESCRIPTION></DESIGN_DESCRIPTION>
+		           <SAMPLE_DESCRIPTOR refname="mgs25827"/>
+           <LIBRARY_DESCRIPTOR>
+               <LIBRARY_NAME>CA1_01P</LIBRARY_NAME>
+			   <LIBRARY_STRATEGY>WGS</LIBRARY_STRATEGY>
+			   <LIBRARY_SOURCE>METAGENOMIC</LIBRARY_SOURCE>
+               <LIBRARY_SELECTION>RANDOM</LIBRARY_SELECTION>
+			   <LIBRARY_LAYOUT><SINGLE/></LIBRARY_LAYOUT>
+			</LIBRARY_DESCRIPTOR>         
+       </DESIGN>
+       <PLATFORM>
+       <ILLUMINA>
+       <INSTRUMENT_MODEL>Illumina Genome Analyzer</INSTRUMENT_MODEL>
+       </ILLUMINA>
+       </PLATFORM>
+    </EXPERIMENT>
+
+       <EXPERIMENT alias="mgm4447102.3" center_name="CSISP">
+       <TITLE>NOCA_03P</TITLE>
+       <STUDY_REF refname="mgp128"/>
+       <DESIGN>
+           <DESIGN_DESCRIPTION></DESIGN_DESCRIPTION>
+		           <SAMPLE_DESCRIPTOR refname="mgs25828"/>
+           <LIBRARY_DESCRIPTOR>
+               <LIBRARY_NAME>NOCA_03P</LIBRARY_NAME>
+			   <LIBRARY_STRATEGY>WGS</LIBRARY_STRATEGY>
+			   <LIBRARY_SOURCE>METAGENOMIC</LIBRARY_SOURCE>
+               <LIBRARY_SELECTION>RANDOM</LIBRARY_SELECTION>
+			   <LIBRARY_LAYOUT><SINGLE/></LIBRARY_LAYOUT>
+			</LIBRARY_DESCRIPTOR>         
+       </DESIGN>
+       <PLATFORM>
+       <ILLUMINA>
+       <INSTRUMENT_MODEL>Illumina Genome Analyzer</INSTRUMENT_MODEL>
+       </ILLUMINA>
+       </PLATFORM>
+    </EXPERIMENT>
+
+       <EXPERIMENT alias="mgm4447101.3" center_name="CSISP">
+       <TITLE>CA1_02P</TITLE>
+       <STUDY_REF refname="mgp128"/>
+       <DESIGN>
+           <DESIGN_DESCRIPTION></DESIGN_DESCRIPTION>
+		           <SAMPLE_DESCRIPTOR refname="mgs25826"/>
+           <LIBRARY_DESCRIPTOR>
+               <LIBRARY_NAME>CA1_02P</LIBRARY_NAME>
+			   <LIBRARY_STRATEGY>WGS</LIBRARY_STRATEGY>
+			   <LIBRARY_SOURCE>METAGENOMIC</LIBRARY_SOURCE>
+               <LIBRARY_SELECTION>RANDOM</LIBRARY_SELECTION>
+			   <LIBRARY_LAYOUT><SINGLE/></LIBRARY_LAYOUT>
+			</LIBRARY_DESCRIPTOR>         
+       </DESIGN>
+       <PLATFORM>
+       <ILLUMINA>
+       <INSTRUMENT_MODEL>Illumina Genome Analyzer</INSTRUMENT_MODEL>
+       </ILLUMINA>
+       </PLATFORM>
+    </EXPERIMENT>
+
+       <EXPERIMENT alias="mgm4447971.3" center_name="CSISP">
+       <TITLE>CA_06_1.6</TITLE>
+       <STUDY_REF refname="mgp128"/>
+       <DESIGN>
+           <DESIGN_DESCRIPTION></DESIGN_DESCRIPTION>
+		           <SAMPLE_DESCRIPTOR refname="mgs25825"/>
+           <LIBRARY_DESCRIPTOR>
+               <LIBRARY_NAME>CA_06_1.6</LIBRARY_NAME>
+			   <LIBRARY_STRATEGY>WGS</LIBRARY_STRATEGY>
+			   <LIBRARY_SOURCE>METAGENOMIC</LIBRARY_SOURCE>
+               <LIBRARY_SELECTION>RANDOM</LIBRARY_SELECTION>
+			   <LIBRARY_LAYOUT><SINGLE/></LIBRARY_LAYOUT>
+			</LIBRARY_DESCRIPTOR>         
+       </DESIGN>
+       <PLATFORM>
+       <ILLUMINA>
+       <INSTRUMENT_MODEL>Illumina Genome Analyzer</INSTRUMENT_MODEL>
+       </ILLUMINA>
+       </PLATFORM>
+    </EXPERIMENT>
+
+       <EXPERIMENT alias="mgm4447970.3" center_name="CSISP">
+       <TITLE>CA_05_4.6</TITLE>
+       <STUDY_REF refname="mgp128"/>
+       <DESIGN>
+           <DESIGN_DESCRIPTION></DESIGN_DESCRIPTION>
+		           <SAMPLE_DESCRIPTOR refname="mgs25824"/>
+           <LIBRARY_DESCRIPTOR>
+               <LIBRARY_NAME>CA_05_4.6</LIBRARY_NAME>
+			   <LIBRARY_STRATEGY>WGS</LIBRARY_STRATEGY>
+			   <LIBRARY_SOURCE>METAGENOMIC</LIBRARY_SOURCE>
+               <LIBRARY_SELECTION>RANDOM</LIBRARY_SELECTION>
+			   <LIBRARY_LAYOUT><SINGLE/></LIBRARY_LAYOUT>
+			</LIBRARY_DESCRIPTOR>         
+       </DESIGN>
+       <PLATFORM>
+       <ILLUMINA>
+       <INSTRUMENT_MODEL>Illumina Genome Analyzer</INSTRUMENT_MODEL>
+       </ILLUMINA>
+       </PLATFORM>
+    </EXPERIMENT>
+
+       <EXPERIMENT alias="mgm4447903.3" center_name="CSISP">
+       <TITLE>CA_06P</TITLE>
+       <STUDY_REF refname="mgp128"/>
+       <DESIGN>
+           <DESIGN_DESCRIPTION></DESIGN_DESCRIPTION>
+		           <SAMPLE_DESCRIPTOR refname="mgs25822"/>
+           <LIBRARY_DESCRIPTOR>
+               <LIBRARY_NAME>CA_06P</LIBRARY_NAME>
+			   <LIBRARY_STRATEGY>WGS</LIBRARY_STRATEGY>
+			   <LIBRARY_SOURCE>METAGENOMIC</LIBRARY_SOURCE>
+               <LIBRARY_SELECTION>RANDOM</LIBRARY_SELECTION>
+			   <LIBRARY_LAYOUT><SINGLE/></LIBRARY_LAYOUT>
+			</LIBRARY_DESCRIPTOR>         
+       </DESIGN>
+       <PLATFORM>
+       <ILLUMINA>
+       <INSTRUMENT_MODEL>Illumina Genome Analyzer</INSTRUMENT_MODEL>
+       </ILLUMINA>
+       </PLATFORM>
+    </EXPERIMENT>
+</EXPERIMENT_SET>
