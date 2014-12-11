@@ -437,15 +437,15 @@ sub prep_files_for_upload{
 			
 
 			my $md5_check_call 	= "md5sum " . $file_zip ;
-			my $md5 			= `md5 $md5_check_call` ;
+			my $md5 			= `$md5_check_call` ;
 	
 			if ($verbose) {
 			    print STDERR $md5_check_call , "\n" ;
 			    print STDERR "MD5 = $md5\n" ;
 			}
 		
-			unless(-f $stage->{file_name} ){
-				print STDERR "Error: Missing file " . $stage->{file_name} . "\n" ;
+			unless(-f $file_zip ){
+				print STDERR "Error: Missing file " . $file_zip . "\n" ;
 			}
 			else{
 				print STDERR ($out || "success for $call"), "\n" ;
@@ -456,7 +456,7 @@ sub prep_files_for_upload{
 			
 			
 		 
-		   $ftp->put($stage->{file_name});
+		   $ftp->put($file_zip);
 		   print join "\n" , $ftp->ls ;
 		   #$ftp->cwd("/pub") or die "Cannot change working directory ", $ftp->message;
 		   #$ftp->get("that.file") or die "get failed ", $ftp->message;
