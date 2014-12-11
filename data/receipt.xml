@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="receipt.xsl"?>
+<RECEIPT receiptDate="2014-12-11T11:15:17.547Z" submissionFile="submission.xml" success="false">
+<MESSAGES>
+<ERROR> Center name is null</ERROR><INFO> ADD action for the following XML: study.xml sample.xml experiment.xml run.xml       </INFO>
+</MESSAGES>
+<ACTIONS>ADD</ACTIONS><ACTIONS>ADD</ACTIONS><ACTIONS>ADD</ACTIONS><ACTIONS>ADD</ACTIONS></RECEIPT>

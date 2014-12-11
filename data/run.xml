@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RUN_SET xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.run.xsd">
+	    <RUN alias="mgm4447943.3" center_name="CSISP">      
+        <EXPERIMENT_REF refname="mgm4447943.3"/>
+         <DATA_BLOCK>
+            <FILES>
+                <FILE filename="mgp128/mgm4447943.3.050.upload.fna.gz"
+                    filetype="fasta"
+                    checksum_method="MD5" checksum="d6fa91495358a7fa6267d4ce4eb55826"/>
+            </FILES>
+        </DATA_BLOCK>
+    </RUN>
+	    <RUN alias="mgm4447192.3" center_name="CSISP">      
+        <EXPERIMENT_REF refname="mgm4447192.3"/>
+         <DATA_BLOCK>
+            <FILES>
+                <FILE filename="mgp128/mgm4447192.3.050.upload.fna.gz"
+                    filetype="fasta"
+                    checksum_method="MD5" checksum="a0acafe3658d49441ba3398a559e71bb"/>
+            </FILES>
+        </DATA_BLOCK>
+    </RUN>
+	    <RUN alias="mgm4447103.3" center_name="CSISP">      
+        <EXPERIMENT_REF refname="mgm4447103.3"/>
+         <DATA_BLOCK>
+            <FILES>
+                <FILE filename="mgp128/mgm4447103.3.050.upload.fna.gz"
+                    filetype="fasta"
+                    checksum_method="MD5" checksum="066ebe9f5baba620f117da3e9e4e991f"/>
+            </FILES>
+        </DATA_BLOCK>
+    </RUN>
+	    <RUN alias="mgm4447102.3" center_name="CSISP">      
+        <EXPERIMENT_REF refname="mgm4447102.3"/>
+         <DATA_BLOCK>
+            <FILES>
+                <FILE filename="mgp128/mgm4447102.3.050.upload.fna.gz"
+                    filetype="fasta"
+                    checksum_method="MD5" checksum="cd206f51a0df626a85165526dd1ea054"/>
+            </FILES>
+        </DATA_BLOCK>
+    </RUN>
+	    <RUN alias="mgm4447101.3" center_name="CSISP">      
+        <EXPERIMENT_REF refname="mgm4447101.3"/>
+         <DATA_BLOCK>
+            <FILES>
+                <FILE filename="mgp128/mgm4447101.3.050.upload.fna.gz"
+                    filetype="fasta"
+                    checksum_method="MD5" checksum="1b9741a35dd7a919404dd5089d9ad839"/>
+            </FILES>
+        </DATA_BLOCK>
+    </RUN>
+	    <RUN alias="mgm4447971.3" center_name="CSISP">      
+        <EXPERIMENT_REF refname="mgm4447971.3"/>
+         <DATA_BLOCK>
+            <FILES>
+                <FILE filename="mgp128/mgm4447971.3.050.upload.fna.gz"
+                    filetype="fasta"
+                    checksum_method="MD5" checksum="b1e56a780014d1ab144c8508d73a0ac3"/>
+            </FILES>
+        </DATA_BLOCK>
+    </RUN>
+	    <RUN alias="mgm4447970.3" center_name="CSISP">      
+        <EXPERIMENT_REF refname="mgm4447970.3"/>
+         <DATA_BLOCK>
+            <FILES>
+                <FILE filename="mgp128/mgm4447970.3.050.upload.fna.gz"
+                    filetype="fasta"
+                    checksum_method="MD5" checksum="d611e5c11f78fdb08974f7c99d962e22"/>
+            </FILES>
+        </DATA_BLOCK>
+    </RUN>
+	    <RUN alias="mgm4447903.3" center_name="CSISP">      
+        <EXPERIMENT_REF refname="mgm4447903.3"/>
+         <DATA_BLOCK>
+            <FILES>
+                <FILE filename="mgp128/mgm4447903.3.050.upload.fna.gz"
+                    filetype="fasta"
+                    checksum_method="MD5" checksum="8a663ffc06e3f3d9c51d6ed277aaf3da"/>
+            </FILES>
+        </DATA_BLOCK>
+    </RUN>
+</RUN_SET>
