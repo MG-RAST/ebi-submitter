@@ -40,7 +40,12 @@ we also need the platform one of the below:
 Both of these data points we should actually capture with the metadata up front, we should check if the project has this data (per job) and then fill local metadata before submitting with the info to EBI.
 
 
-
+Authors:
+Guy Cochrane
+Neil Goodgame
+Rasko Leinonen
+Folker Meyer
+Andreas Wilke
 
 
 
