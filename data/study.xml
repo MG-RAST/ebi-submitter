@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><STUDY_SET>
+    <STUDY center_name="CSISP" alias="mgp128" >
+        <DESCRIPTOR>
+            <STUDY_TITLE>The oral metagenome in health and disease</STUDY_TITLE>
+            <STUDY_TYPE existing_study_type="Metagenomics"/>
+            <STUDY_ABSTRACT>The oral cavity of humans is inhabited by hundreds of bacterial species and some of them have a key role in the development of oral diseases, mainly dental caries and periodontitis. We describe for the first time the metagenome of the human oral cavity under health and diseased conditions, with a focus on supragingival dental plaque and cavities. Direct pyrosequencing of eight samples with different oral-health status produced 1 Gbp of sequence without the biases imposed by PCR or cloning. These data show that cavities are not dominated by Streptococcus mutans (the species originally identified as the ethiological agent of dental caries) but are in fact a complex community
+formed by tens of bacterial species, in agreement with the view that caries is a polymicrobial disease. The analysis of the reads indicated that the oral cavity is functionally a different environment from the gut, with many functional categories enriched in one of the two environments
+and depleted in the other. Individuals who had never suffered from dental caries showed an over-representation of several functional categories, like genes for antimicrobial peptides and quorum sensing. In addition, they did not have mutans streptococci but displayed high recruitment of other species. Several isolates belonging to these dominant bacteria in healthy individuals were cultured and shown to inhibit the growth of cariogenic bacteria, suggesting the use of these commensal bacterial strains as probiotics to promote oral health and prevent dental caries.</STUDY_ABSTRACT>
+        </DESCRIPTOR>
+        <STUDY_ATTRIBUTES>
+            <STUDY_ATTRIBUTE>
+                <TAG>PI First Name</TAG>
+                <VALUE>Alex</VALUE>
+            </STUDY_ATTRIBUTE>
+            <STUDY_ATTRIBUTE>
+                <TAG>PI Last Name</TAG>
+                <VALUE>Mira</VALUE>
+            </STUDY_ATTRIBUTE>
+        </STUDY_ATTRIBUTES>
+        
+    </STUDY>
+</STUDY_SET>
+   
