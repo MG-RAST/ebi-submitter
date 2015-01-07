@@ -55,6 +55,7 @@ my $user = undef ;
 my $password = undef ;
 my $ftp_ena     = "webin.ebi.ac.uk";
 my $validate = 0;
+my $modify   = 0;
 
 my $verbose     = 0;
 my $skip_upload = 0 ;
@@ -71,6 +72,7 @@ GetOptions(
 	'auth=s' => \$auth ,
     'no_upload' => \$skip_upload,
     'validate' => \$validate,
+    'modify' => \$modify,
     'skip=s' => \$skip,
 );
 
@@ -81,7 +83,12 @@ unless($auth){
 }
 
 # Project ID will be ID for all submission for the given project - new and updates
-$submission_id = $project_id ;
+$submission_id = $project_id . time if ($project_id);
+
+unless($submission_id){
+    print STDERR "Can't create submission, no submisison ID or project provided\n" ;
+    exit;
+}
 
 # initialise user agent
 my $ua = LWP::UserAgent->new;
@@ -179,7 +186,7 @@ if($submit){
     if($skip){
 	$files->{$skip} = 0 ;
     }
-
+    print "Submitting\n" if ($verbose);
    submit($study_xml,$sample_xml,$experiment_xml,$run_xml,$submission_id,$center_name, $files);
 }
 else{
@@ -413,7 +420,7 @@ sub get_ncbiScientificNameTaxID{
     my $mapping = {
 	'small lake biome' => 1169740 ,
 	'terrestrial biome' => 1348798,
-	'freshwater biome' => 449939,
+	'freshwater biome' => 449393,
     };
 
     print STDERR "Lookup for $key : " . $mapping->{$key} , "\n" if($verbose) ;
@@ -434,6 +441,7 @@ sub submit{
 
    my $action = "ADD" ;
    $action = "VALIDATE" if ($validate);
+   $action = "MODIFY" if ($modify);
 
    my @line_action ;
    if($files){
@@ -445,6 +453,8 @@ sub submit{
 	   print join "\n" , @line_action , "\n" if ($verbose);
        }
    }
+
+   print "Preparing Submission XML\n" if ($verbose) ;
 
    my $submission = <<"EOF";
 <?xml version="1.0" encoding="UTF-8"?>
@@ -473,31 +483,31 @@ EOF
    #print $submission ;
 
    # dump study_xml
-   open(FILE , ">study.xml");
+   open(FILE , ">study.xml") or die "Can't write to study.xml" ;
    print FILE $study_xml ;
    close(FILE);
    
    # dump sample_xml
-   open(FILE , ">sample.xml");
+   open(FILE , ">sample.xml") or die "Can't write sample.xml" ;
    print FILE $sample_xml ;
    close(FILE);
    
-   # dump study_xml
-   open(FILE , ">experiment.xml");
+   # dump experiment_xml
+   open(FILE , ">experiment.xml") or die "Can't write experiment.xml" ;
    print FILE $experiment_xml ;
    close(FILE);
    
-   # dump study_xml
-   open(FILE , ">run.xml");
+   # dump run_xml
+   open(FILE , ">run.xml") or die "Can't write run.xml" ;
    print FILE $run_xml ;
    close(FILE);
 
    # dump submission xml
-   open(FILE , ">submission.xml");
+   open(FILE , ">submission.xml") or die "Can't write submission.xml" ;
    print FILE  $submission ;
    close FILE;
    
-   
+   print "Initiating http transfer of XMLs\n" if ($verbose);
    my $cmd = "curl -k -F \"SUBMISSION=\@submission.xml\" -F \"STUDY=\@study.xml\" -F \"SAMPLE=\@sample.xml\" -F \"EXPERIMENT=\@experiment.xml\" -F \"RUN=\@run.xml\" \"$ena_url\"";
    print "$cmd\n";
    my $receipt = `$cmd` ;
