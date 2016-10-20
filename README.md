@@ -19,7 +19,7 @@ The format of the XML files to be submitted is here http://www.ebi.ac.uk/ena/sub
 Current open Issues:
 -------
 
-* we need to capture from the users for this the NCBI taxonomy 
+* the MG-RAST biome needs to be mapped to its NCBI taxonomy id at EBI
 
 Pick one of the two below:
 
@@ -29,18 +29,22 @@ Pick one of the two below:
 
 we also need the platform one of the below:
 
-*  LS454
-*  ILLUMINA
-*  COMPLETE_GENOMICS
+* LS454
+* ILLUMINA
+* COMPLETE_GENOMICS
 * PACBIO_SMRT
-*  ION_TORRENT
+* ION_TORRENT
 * OXFORD_NANOPORE
-*  CAPILLARY
+* CAPILLARY
 
 Both of these data points we should actually capture with the metadata up front, we should check if the project has this data (per job) and then fill local metadata before submitting with the info to EBI.
 
-
-
+Authors:
+Guy Cochrane
+Neil Goodgame
+Rasko Leinonen
+Folker Meyer
+Andreas Wilke
 
 
 
