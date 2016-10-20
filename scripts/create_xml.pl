@@ -69,7 +69,7 @@ GetOptions(
     'password=s' => \$password,
     'submit' => \$submit,
     'verbose' => \$verbose,
-	'auth=s' => \$auth ,
+	  'auth=s' => \$auth ,
     'no_upload' => \$skip_upload,
     'validate' => \$validate,
     'modify' => \$modify,
@@ -104,6 +104,7 @@ $ftp->cwd($project_id);
 
 my ($project_data , $error) = get_json_from_url($ua,$url,$resource,$project_id,$options);
 
+
 if ($error) {
     print STDERR "Fatal: retrieving project $project_id with error $error!\n";
     exit;
@@ -112,6 +113,7 @@ if ($error) {
 my $center_name  = $project_data->{metadata}->{PI_organization} || "unknown" ;
 my $study_ref_name = $project_data->{id};
 my $study_xml = get_project_xml($project_data);
+
 
 #create samples xml
 
