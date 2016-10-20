@@ -11,14 +11,8 @@ use Net::FTP;
 
 my $json = new JSON ;
 
-# Example:
-# http://api.metagenomics.anl.gov//metagenome/mgm4447943.3?verbosity=full
-
-# metagenome id
+# project id
 my $project_id = undef ;
-
-# metagenome id
-my $metagenome_id = undef ;
 
 # mgrast base api url
 my $url = "http://api.metagenomics.anl.gov/" ;
@@ -33,11 +27,10 @@ my $run_resource = "download";
 my $options = "?verbosity=full";
 
 # submit to ena , default is false
-my $submit 		= 0 ;
+my $submit = 0;
 
 # stage name of file to be uploaded to ENA
-my $stage_name  = "upload" || "preprocess.passed" ;
-
+my $stage_name = "upload" || "preprocess.passed" ;
 
 # schema/object type
 my $sample_type = "Sample" ;
@@ -53,27 +46,45 @@ my $auth = "" ;
 my $ena_url = "https://www.ebi.ac.uk/ena/submit/drop-box/submit/";
 my $user = undef ;
 my $password = undef ;
-my $ftp_ena     = "webin.ebi.ac.uk";
+my $ftp_ena = "webin.ebi.ac.uk";
 my $validate = 0;
 
-my $verbose     = 0;
+my $verbose = 0;
 my $skip_upload = 0 ;
 my $skip = 0 ;
 
 GetOptions(
-    'project_id=s' => \$project_id ,
-    'url=s'  => \$url ,
-    'submission_url=s' => \$ena_url,
-    'user=s' => \$user,
-    'password=s' => \$password,
-    'submit' => \$submit,
-    'verbose' => \$verbose,
-	'auth=s' => \$auth ,
-    'no_upload' => \$skip_upload,
-    'validate' => \$validate,
-    'skip=s' => \$skip,
-);
+	   'project_id=s' => \$project_id ,
+	   'user=s' => \$user,
+	   'password=s' => \$password,
+	   'url=s'  => \$url ,
+	   'submission_url=s' => \$ena_url,
+	   'submit' => \$submit,
+	   'verbose' => \$verbose,
+	   'auth=s' => \$auth ,
+	   'no_upload' => \$skip_upload,
+	   'validate' => \$validate,
+	   'skip=s' => \$skip
+	  );
 
+sub usage {
+  print "\n\ncreate_xml.pl >>> create the ENA XML file for an MG-RAST project and submit it to EBI\n";
+  print "create_xml.pl -user <username> -password <password> -project_id <project id>\n";
+  print "\nOPTIONS\n";
+  print "url - API URL to retrieve the project from\n";
+  print "submission_url - EBI submission URL\n";
+  print "submit - perform the submission to EBI\n";
+  print "verbose - verbose output\n";
+  print "auth - custom auth header\n";
+  print "no_upload - do not upload the files to the EBI dropbox\n";
+  print "validate - instead of adding the files, only validate them\n";
+  print "skip - file to skip in file generation\n\n";
+}
+
+unless ((($user && $password) || $auth) && $project_id) {
+  &usage();
+  exit 0;
+}
 
 unless($auth){
 	$auth = "ENA%20$user%20$password" ;
@@ -89,25 +100,24 @@ $ua->agent('EBI Client 0.1');
 
 
 # Setup ftp/aspera connection
-my $ftp = Net::FTP->new( $ftp_ena, Debug => 1) or die "Cannot connect to $ftp_ena: $@";
+my $ftp = Net::FTP->new( $ftp_ena) or die "Cannot connect to $ftp_ena: $@"; # , Debug => 1
 $ftp->login($user,$password) or die "Cannot login using $user and $password", $ftp->message;
 $ftp->mkdir($project_id) ;
 $ftp->cwd($project_id);
 
-
-my ($project_data , $error) = get_json_from_url($ua,$url,$resource,$project_id,$options);
+# create project XML
+my ($project_data, $error) = get_json_from_url($ua,$url,$resource,$project_id,$options);
 
 if ($error) {
-    print STDERR "Fatal: retrieving project $project_id with error $error!\n";
-    exit;
+  print STDERR "ERROR: retrieving project $project_id with error $error!\n";
+  exit;
 }
 
 my $center_name  = $project_data->{metadata}->{PI_organization} || "unknown" ;
 my $study_ref_name = $project_data->{id};
 my $study_xml = get_project_xml($project_data);
 
-#create samples xml
-
+# create samples XML
 my $sample_xml = <<"EOF";
 <?xml version="1.0" encoding="UTF-8"?>
 <SAMPLE_SET xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -118,9 +128,9 @@ foreach my $sample_obj (@{$project_data->{samples}}) {
 	my $metagenome_sample_id = $sample_obj->[0];
 	my $metagenome_sample_url = $sample_obj->[1];
 	
-	my ($sample_data, $error) = get_json_from_url($ua,$url,$sample_resource,$metagenome_sample_id,$options);
+	my ($sample_data, $err) = get_json_from_url($ua,$url,$sample_resource,$metagenome_sample_id,$options);
 	if($error){
-	    print STDERR "Error retrieving sample $metagenome_sample_id with error message $error!\n";
+	    print STDERR "Error retrieving sample $metagenome_sample_id with error message $err!\n";
 	    next ;
 	}
 	$sample_xml .= get_sample_xml($sample_data,$center_name);
@@ -136,9 +146,9 @@ EOF
 
 foreach my $library_obj (@{$project_data->{metagenomes}}) {
 	my $metagenome_id = $library_obj->[0];
-	my ($experiment_data,$error) = get_json_from_url($ua,$url,$experiment_resource,$metagenome_id,$options);
+	my ($experiment_data,$err) = get_json_from_url($ua,$url,$experiment_resource,$metagenome_id,$options);
 	if($error){
-	    print STDERR "Error retrieving library data for $metagenome_id (ERROR:$error)\n";
+	    print STDERR "Error retrieving library data for $metagenome_id (ERROR:$err)\n";
 	    next;
 	}
 	$experiment_xml .= get_experiment_xml($experiment_data,$center_name,$study_ref_name);
@@ -155,13 +165,13 @@ EOF
 foreach my $metagenome_obj (@{$project_data->{metagenomes}}) {
 	my $metagenome_id = $metagenome_obj->[0];
 	
-	my ($file_name , $md5 , $error) = &prep_files_for_upload($ftp , $url , $stage_name , $metagenome_id);
-	if($error){
-	    print STDERR "Can't get file for $metagenome_id (ERROR:$error)\n";
+	my ($file_name , $md5 , $err) = &prep_files_for_upload($ftp , $url , $stage_name , $metagenome_id);
+	if($err){
+	    print STDERR "Can't get file for $metagenome_id (ERROR:$err)\n";
 	    next;
 	}
 
-	my ($run_data,$error) = get_json_from_url($ua,$url,$run_resource,$metagenome_id,'');
+	my ($run_data,$err2) = get_json_from_url($ua,$url,$run_resource,$metagenome_id,'');
 
 	$run_xml .= get_run_xml($run_data,$center_name,$metagenome_id , $file_name , $md5 , $project_id);
 }
@@ -190,34 +200,34 @@ else{
 }
 
 sub get_json_from_url {
-	my ($user_agent,$url, $resource, $metagenome_id, $options) = @_;
-	my $response = $ua->get( join "/" , $url, $resource , $metagenome_id , $options);
-
-    unless($response->is_success){
-    	print STDERR "Error retrieving data for $metagenome_id\n";
-    	print STDERR $response->status_line , "\n" ;
-	my $error = 1 ;
-	eval{
-	    print STDERR $response->content , "\n" ;
-	    my $tmp = $json->decode($response->content) ;
-	    $error = $tmp->{ERROR} if $tmp->{ERROR} ;
-	};
-	return ( undef , $error) ;
-    }
-
-	my $json = new JSON;
-	my $data = undef;
-
-	# error handling if not json
-	eval{
-    	$data = $json->decode($response->content)
-	};
-
-	if($@){
-    	print STDERR "Error: $@\n";
-    	exit;
-	}
-	return $data;
+  my ($user_agent,$url, $resource, $metagenome_id, $options) = @_;
+  my $response = $ua->get( join "/" , $url, $resource , $metagenome_id , $options);
+  
+  unless($response->is_success){
+    print STDERR "Error retrieving data for $metagenome_id\n";
+    print STDERR $response->status_line , "\n" ;
+    my $error = 1 ;
+    eval{
+      print STDERR $response->content , "\n" ;
+      my $tmp = $json->decode($response->content) ;
+      $error = $tmp->{ERROR} if $tmp->{ERROR} ;
+    };
+    return ( undef , $error) ;
+  }
+  
+  my $json = new JSON;
+  my $data = undef;
+  
+  # error handling if not json
+  eval{
+    $data = $json->decode($response->content)
+  };
+  
+  if($@){
+    print STDERR "Error: $@\n";
+    exit;
+  }
+  return $data;
 }
 
 sub get_project_xml{
@@ -411,9 +421,10 @@ sub get_ncbiScientificNameTaxID{
     my $key = lc($term);
     
     my $mapping = {
-	'small lake biome' => 1169740 ,
-	'terrestrial biome' => 1348798,
-	'freshwater biome' => 449939,
+		   'small lake biome' => 1169740 ,
+		   'terrestrial biome' => 1348798,
+		   'freshwater biome' => 449939,
+		   'human-associated habitat' => 449939
     };
 
     print STDERR "Lookup for $key : " . $mapping->{$key} , "\n" if($verbose) ;
