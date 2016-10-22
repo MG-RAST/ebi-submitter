@@ -1,0 +1,25 @@
+cwlVersion: v1.0
+class: CommandLineTool
+baseCommand: submitMgrastProject.pl
+hints:
+  DockerRequirement:
+    dockerPull: wilke/submitter:ebi
+requirements:
+  - class: EnvVarRequirement
+    envDef:
+      - envName: EBI_USER
+        envValue: $(inputs.user)
+      - envName: EBI_PASSWORD
+        envValue: $(inputs.password)
+inputs:
+  project:
+   type: string
+   inputBinding: 
+     position: 1
+     prefix: -project_id
+  user:
+    type: string
+  password:
+    type: string
+       
+outputs: []
