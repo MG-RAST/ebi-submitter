@@ -53,22 +53,22 @@ my $modify   = 0;
 my $verbose = 0;
 my $skip_upload = 0 ;
 my $skip = 0 ;
-
+my $receipt_file = "./receipt.xml"
 
 
 GetOptions(
-
-	   'project_id=s' => \$project_id ,
-	   'user=s' => \$user,
-	   'password=s' => \$password,
-	   'url=s'  => \$url ,
+	   'project_id=s'     => \$project_id ,
+	   'user=s'           => \$user,
+	   'password=s'       => \$password,
+	   'url=s'            => \$url ,
 	   'submission_url=s' => \$ena_url,
-	   'submit' => \$submit,
-	   'verbose' => \$verbose,
-	   'auth=s' => \$auth ,
-	   'no_upload' => \$skip_upload,
-	   'validate' => \$validate,
-	   'skip=s' => \$skip
+	   'submit'           => \$submit,
+	   'verbose'          => \$verbose,
+	   'auth=s'           => \$auth ,
+	   'no_upload'        => \$skip_upload,
+	   'validate'         => \$validate,
+	   'skip=s'           => \$skip,
+     'output=s'         => \$receipt_file
 	  );
 
 sub usage {
@@ -84,7 +84,8 @@ sub usage {
   print "-auth - custom auth header\n";
   print "-no_upload - do not upload the files to the EBI dropbox\n";
   print "-validate - instead of adding the files, only validate them\n";
-  print "-skip - file to skip in file generation\n\n";
+  print "-skip - file to skip in file generation\n";
+  print "-output - name and path of receipt file , default is receipt.xml\n\n";
 }
 
 
@@ -113,7 +114,7 @@ $ua->agent('EBI Client 0.1');
 
 # Setup ftp/aspera connection
 my $ftp = Net::FTP->new( $ftp_ena) or die "Cannot connect to $ftp_ena: $@"; # , Debug => 1
-$ftp->login($user,$password) or die "Cannot login using $user and $password", $ftp->message;
+$ftp->login($user,$password) or die "Cannot login using $user and $password. ", $ftp->message;
 $ftp->mkdir($project_id) ;
 $ftp->cwd($project_id);
 
@@ -533,7 +534,7 @@ EOF
 
    print STDERR $receipt , "\n" if($verbose);
 
-   open(FILE, ">receipt.xml");
+   open(FILE, ">".$receipt_file);
    print FILE $receipt ;
    close FILE;
 
