@@ -1,0 +1,53 @@
+{
+    "info": {
+        "pipeline": "[% pipeline %]",
+        "name": "[% job_id %]",
+        "project": "[% project_name %]",
+        "user": "[% user %]",
+        "xref": "[% xref %]",
+        "clientgroups": "[% clientgroups %]",
+        "priority": "[% priority %]",
+        "userattr": {
+            "id": "[% mg_id %]",
+            "job_id": "[% job_id %]",
+            "name": "[% mg_name %]",
+            "created": "[% job_date %]",
+            "status": "private",
+            "owner": "[% user %]",
+            "sequence_type": "[% seq_type %]",
+            "bp_count": "[% bp_count %]",
+            "project_id": "[% project_id %]",
+            "project_name": "[% project_name %]",
+            "type": "[% type %]",
+            "pipeline_version": "[% pipeline_version %]",
+            "submission": "[% submission_id %]"
+        }
+    },
+    "tasks": [
+        {
+            "cmd": {
+                "name": "submitMgrastProject.pl",
+                "args": "-project_id [% project_id %]  -output [% project_id %].receipt.xml ",
+                "description": "Submit project to EBI",
+                "[% docker_switch %]Dockerimage": "mgrast/ebi:[% docker_image_version %]"
+            },
+            "dependsOn": [],
+            "inputs": {
+            
+                }
+            }, 
+            "outputs": {
+                "[% project_id %].receipt.xml": {
+                    "host": "[% shock_url %]",
+                    "node": "-",
+                    "attrfile": "[% project_id %].receipt.json"
+                }
+            },
+            "userattr": {
+                "stage_id": "",
+                "stage_name": "EBI Submission"
+            },
+            "taskid": "0", 
+            "totalwork": 1
+}
+}
