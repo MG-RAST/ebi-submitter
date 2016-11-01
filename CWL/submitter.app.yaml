@@ -3,7 +3,7 @@ class: CommandLineTool
 baseCommand: submitMgrastProject.pl
 hints:
   DockerRequirement:
-    dockerPull: wilke/submitter:ebi
+    dockerPull: mgrast/ebi:0.1
 requirements:
   - class: EnvVarRequirement
     envDef:
@@ -13,13 +13,29 @@ requirements:
         envValue: $(inputs.password)
 inputs:
   project:
-   type: string
-   inputBinding: 
-     position: 1
-     prefix: -project_id
+    type: string
+    inputBinding: 
+      position: 1
+      prefix: -project_id
+  outfile:
+    type: string
+    default: receipt.xml
+    inputBinding:
+      position: 2
+      prefix: -output
+  url:
+    label: EBI Submission URL
+    type: string
+    default: https://www.ebi.ac.uk/ena/submit/drop-box/submit/
+    inputBinding:
+      position: 3
+      prefix:  -submission_url    
   user:
     type: string
   password:
-    type: string
-       
-outputs: []
+    type: string     
+outputs:
+  receipt:
+    type: File
+    outputBinding:
+      glob: $(inputs.output)
