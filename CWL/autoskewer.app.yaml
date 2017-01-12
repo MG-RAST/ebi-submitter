@@ -1,0 +1,33 @@
+cwlVersion: v1.0
+class: CommandLineTool
+baseCommand: autoskewer.py
+hints:
+  DockerRequirement:
+    dockerPull: wilke/autoskewer:0.1
+    
+requirements:
+  - class: InlineJavascriptRequirement
+  - class: InitialWorkDirRequirement
+    listing:
+      - $(inputs.fastq)
+
+        
+inputs:
+  fastq:
+    type: File
+    inputBinding: 
+      position: 1
+      valueFrom: $(self.basename)
+      prefix: 
+  
+outputs:
+  scrubbedFastq:
+    type: File
+    outputBinding:
+      glob: $(inputs.fastq.nameroot).scrubbed.fastq
+  scrubbedLog:
+    type: File
+    outputBinding:
+      glob: $(inputs.fastq.nameroot).scrubbed.log
+      
+      
