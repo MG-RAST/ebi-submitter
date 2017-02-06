@@ -18,16 +18,20 @@ inputs:
     inputBinding: 
       position: 1
       valueFrom: $(self.basename)
-      prefix: 
+      prefix:
   
 outputs:
   scrubbedFastq:
     type: File
     outputBinding:
-      glob: $(inputs.fastq.nameroot).scrubbed.fastq
+      glob: $(inputs.fastq.basename).scrubbed.fast*
   scrubbedLog:
     type: File
     outputBinding:
-      glob: $(inputs.fastq.nameroot).scrubbed.log
+      glob: $(inputs.fastq.basename).scrubbed.log
+  adapter:
+    type: File
+    outputBinding:
+      glob: $(inputs.fastq.basename).adapter.fa
       
       

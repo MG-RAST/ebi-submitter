@@ -1,4 +1,1 @@
-user: Webin-115
-password: 3NjBQ6H8
-project: mgpTEST
-url: https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/
+fastq: PATH/TO/SEQUENCE_FILE
