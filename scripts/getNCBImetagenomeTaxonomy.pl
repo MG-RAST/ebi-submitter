@@ -27,11 +27,10 @@ $ua->agent('NCBI Taxonomy Client 0.1');
 
 # xml parser
  #my $xs = XML::Simple->new(ForceArray => 1, KeepRoot => 1);
+my $type = 'non-host-associated' ;
 
 foreach my $url ( $nhurl ,$hurl ) {
-  
-  my $type = 'non-host-associated' ;
-  
+    
   my $response = $ua->get($url);
   
   unless ( $response->is_success ) {
