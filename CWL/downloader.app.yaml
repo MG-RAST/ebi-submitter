@@ -1,0 +1,43 @@
+cwlVersion: v1.0
+class: CommandLineTool
+baseCommand: submitMgrastProject.pl
+hints:
+  DockerRequirement:
+    dockerPull: mgrast/ebi:0.1
+inputs:
+  project:
+    type: string
+    inputBinding: 
+      position: 1
+      prefix: -project_id
+
+  workdir:
+    label: Download and Upload directory
+    type: string?
+    inputBinding:
+      prefix: -staging_dir
+  download:
+    label: Download sequence files from Project
+    type: boolean
+    default: true
+    inputBinding:
+      prefix: -download
+  user:
+    label: EBI user (not used but required)
+    type: string
+    default: "EBI"
+    inputBinding:
+      prefix: -user
+  password:
+    label: EBI password (not used but required)
+    type: string
+    default: "EBI"
+    inputBinding:
+      prefix: -password      
+outputs:
+  seqFiles:
+    type: 
+      type: array
+      items: File
+    outputBinding:
+      glob: "*.gz"     
