@@ -1,0 +1,67 @@
+cwlVersion: v1.0
+class: Workflow
+
+requirements:
+  - class: ScatterFeatureRequirement
+  - class: MultipleInputFeatureRequirement
+
+inputs:
+  project: string
+  user: string
+  password: string
+  
+
+outputs:
+  trimmed:
+    type:
+      type: array
+      items: File
+    outputSource: [trimmer/scrubbedFastq]
+  log:
+    type: 
+      type: array
+      items: File
+    outputSource: [trimmer/scrubbedLog]
+
+steps:
+  download:
+    run: downloader.app.yaml
+    in:
+      project: project
+    out: [seqFiles]
+
+  unzip:
+    run: gunzip.app.yaml
+    scatter: "#unzip/input"
+    in:
+      input: download/seqFiles
+    out: [output]
+      
+  trimmer:
+    run: autoskewer.app.yaml
+    scatter: "#trimmer/fastq"
+    in:
+      fastq: unzip/output
+    out: [scrubbedFastq,scrubbedLog,adapter]
+  
+  archive2shock:
+    run: shockClient.app.yaml
+    scatter: "#trimmer/scrubbedFastq"
+    in:
+      file: trimmer/scrubbedFastq
+      attributes: trimmer/scrubbedLog 
+    out:
+      receipt: shock.receipt.json
+      
+  upload:
+    run: uploader.app.yaml
+    in:
+      user: EBI
+      password: EBI
+      upload: "-upload"
+      staging_dir: 
+    out:    
+       	 
+    
+    
+ 
