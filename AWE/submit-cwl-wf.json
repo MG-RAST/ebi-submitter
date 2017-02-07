@@ -1,0 +1,42 @@
+  {
+        "info": {
+            "pipeline": "awe-ebi-submiiter",
+            "name": "#jobname",
+            "project": "#project",
+            "user": "#user",
+            "clientgroups":"#clientgroups",
+            "noretry": true
+        }, 
+        "tasks": [
+            {
+                "cmd": {
+                    "args": " @#cwlwf @#cwlinput", 
+                    "description": "Submit CWL Workflow", 
+                    "name": "cwl-runner",
+                    "environ": {
+                        "public": {"ENVVAL":"abc"},
+                        "private": {"KB_AUTH_TOKEN":"a_long_string_of_token"}
+                    }
+                }, 
+                "dependsOn": [], 
+                "inputs": {
+                   "#cwlwf": {
+                        "host": "http://#shockurl",
+                        "node": "#shocknode"
+                    },
+                  "#cwlinput": {
+                        "host": "http://#shockurl",
+                        "node": "#shocknode"
+                    }
+                    
+                }, 
+                "outputs": {
+                    "#receipt": {
+                        "host": "http://#shockurl",
+                        "attrfile": "receipt.attr"
+                    }
+                },
+                "taskid": "0"
+            }
+        ]
+}

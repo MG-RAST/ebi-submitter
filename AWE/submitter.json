@@ -25,7 +25,7 @@
     },
     "tasks": [
         {
-            "cmd": {
+            "cmd": { 
                 "name": "submitMgrastProject.pl",
                 "args": "-project_id [% project_id %]  -output [% project_id %].receipt.xml ",
                 "description": "Submit project to EBI",
