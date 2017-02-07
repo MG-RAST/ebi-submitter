@@ -33,5 +33,6 @@ outputs:
     type: File
     outputBinding:
       glob: $(inputs.fastq.basename).adapter.fa
+
       
       
