@@ -233,8 +233,9 @@ $sample_xml .= "</SAMPLE_SET>";
 ###### Create Experiment XML ######
 
 my $experiments = new Submitter::Experiments( {
-  study_ref   => $study_ref_name ,
-  center_name => $center_name , 
+  study_ref   => $study_ref_name,
+  center_name => $center_name,
+   
 });
 
 # build list of metagenomes
