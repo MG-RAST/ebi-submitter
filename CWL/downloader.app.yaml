@@ -3,7 +3,7 @@ class: CommandLineTool
 baseCommand: submitMgrastProject.pl
 hints:
   DockerRequirement:
-    dockerPull: mgrast/ebi:0.1
+    dockerPull: mgrast/ebi:0.2
 inputs:
   project:
     type: string
