@@ -49,19 +49,24 @@ steps:
     scatter: "#trimmer/scrubbedFastq"
     in:
       file: trimmer/scrubbedFastq
-      attributes: trimmer/scrubbedLog 
+      attributes: trimmer/scrubbedLog
     out:
       receipt: shock.receipt.json
-      
+
   upload:
     run: uploader.app.yaml
     in:
       user: EBI
       password: EBI
       upload: "-upload"
-      staging_dir: 
-    out:    
-       	 
-    
-    
+      staging_dir:
+    out:
+      receipt: [submission_receipt]
+  
+  processReceip:     	 
+    run: ebiRceipt.app.yaml
+    in:
+      receipt: upload/submission_receipt
+    out:
+      node: [node]
  
