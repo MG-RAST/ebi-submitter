@@ -72,7 +72,11 @@ sub study_abstract{
 # alias for study_abstract 
 sub description{
   my ($self) = @_ ;
-  return $self->{study_abstract} ,
+  
+  my $description = $self->{study_abstract} ;
+  $description =~ s/\w\s*\K\n//g; 
+  
+  return $description
 }
 
 sub pi{
@@ -184,7 +188,7 @@ EOF
 
     $xml .= $self->broker2xml ;
     $xml .= $self->key2attribute('submitter_name') ;
-    $xml .= $self->key2attribute('pi_email') ;
+    $xml .= $self->key2attribute('PI_email') ;
     $xml .= $self->attributes2xml ;
 
     $xml .= <<"EOF";
