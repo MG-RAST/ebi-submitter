@@ -6,14 +6,33 @@ use warnings;
 use Data::Dumper;
 
 # Get project document from API
+
+my $verbose = $ENV{'VERBOSE'} ;
+
 sub new{
   my ($class , $data) = @_ ;
+  
+  print STDERR "Initializing experiments\n" if ($verbose) ;
   
   my $self = { 
     experiments   => [] ,
     study_ref     => $data->{study_ref}   || undef ,
     center_name   => $data->{center_name} || undef ,
-  } ;
+    
+    # seq_platform  => $data->{seq_platform}|| undef ,
+    # seq_model     => $data->{seq_model}   || undef ,
+    # ebi_tech      => $data->{ebi_tech}    || undef ,
+ } ;
+  
+  if (! $self->{seq_platform} and $self->{ebi_tech}){
+    my ($platform,$model) = split "|" , $self->{ebi_tech} ;
+    $self->{seq_platform} = $platform ;
+    $self->{seq_model}    = $model ;
+  }
+  unless ($self->{seq_platform}){
+    print STDERR "Sequencing Platform missing\n" ;
+    #exit ;
+  }
   
   return bless $self 
 }
@@ -31,6 +50,7 @@ sub add{
 }
 
 
+# Check model and return unspecified if model not supported
 sub seq_model{
   my ($self , $model) = @_ ;
 
@@ -58,44 +78,73 @@ sub seq_model{
      "454 GS Junior" => 1 ,
   };
   
-
-  unless ($models->{ ($model || undef) }){
-    print STDERR "Can't find model " . ($model|| "undef") ." in supported list.\n" ;
-    $model = "unspecified";
+  if($model){
+    if ($models->{$model}){
+    $self->{seq_model} = $model ;  
+    }
+    else{
+      print STDERR "Can't find model $model. Not in supported list of models. Setting to unspecified.\n";
+      $self->{seq_model} = "unspecified" ;
+    }
   }
-  
-  return $model
+  else{
+    print STDERR "Expecting \$model but not defined.\n";
+    exit;
+  }
+
+  return $self->{seq_model}
 }
 
 
 sub platform2xml{
-  my ($self,$library) = @_ ;
+  my ($self, $library) = @_ ;
   
-  my $platform = "" ;
-  my $model = $self->seq_model( $library->{data}->{seq_model} || undef);
-  if ($library->{data}->{seq_meth} =~/454/) {
-    $platform = <<"EOF"; 
-    <PLATFORM>
-      <LS454>
-        <INSTRUMENT_MODEL>$model</INSTRUMENT_MODEL>
-      </LS454>
-    </PLATFORM>
-EOF
-  }
-  elsif($library->{data}->{seq_meth} =~/illumina/i) {
-    $platform = <<"EOF"; 
-    <PLATFORM>
-      <ILLUMINA>
-        <INSTRUMENT_MODEL>$model</INSTRUMENT_MODEL>
-      </ILLUMINA>
-    </PLATFORM>
-EOF
+  # Determine platform and model from ebi_tech field in library or seq_make and seq_meth
+  my $platform = undef ;
+  my $model    = undef ;
+  my @error; 
+  
+  if ($library->{data}->{ebi_tech}) {
+    ($platform , $model, @error) = split "|" , $library->{data}->{ebi_tech} ;
+    if(@error){
+      print STDERR "Can not parse ebi_tech: " . $library->{data}->{ebi_tech} . "\n";
+      exit;
+    }
   }
   else{
-    print STDERR "Can't identy seq method \n";
+    $model = $self->seq_model( $library->{data}->{seq_model} || 'unspecified');
+    if ($library->{data}->{seq_meth} =~/454/) {
+      $platform = "LS454" ;
+    }
+    elsif ($library->{data}->{seq_meth} =~/illumina/i) {
+      $platform = "ILLUMINA" ;
+    }
+    else{
+      print STDERR "Can't identify seq platform. Sequencing method is " . $library->{data}->{seq_meth} . "\n";
+      exit;
+    }
+  }
+  
+  if($model and $platform){
+    
+  }
+  else{
+    # Never get here
+    print STDERR "Something wrong, No sequencer model and platform.\n" ;
+    print STDERR "Platform: $platform\tModel: $model\n";
+    print STDERR Dumper $library ;
     exit;
   }
   
+  my $xml = <<"EOF"; 
+    <PLATFORM>
+      <$platform>
+        <INSTRUMENT_MODEL>$model</INSTRUMENT_MODEL>
+      </$platform>
+    </PLATFORM>
+EOF
+ 
+  return $xml ; 
 }
 
 sub attributes2xml{
@@ -129,6 +178,29 @@ EOF
   return $xml 
 }
 
+
+# Stub - Don't use - MG-RAST does not have spot descriptor info
+sub spotDescriptor2xml{
+  my ($self) = @_ ;
+  
+  my $xml = <<"EOF";
+  <SPOT_DESCRIPTOR>
+    <SPOT_DECODE_SPEC>
+      <SPOT_LENGTH>100</SPOT_LENGTH>
+      <READ_SPEC>
+          <READ_INDEX>0</READ_INDEX>
+          <READ_CLASS>Application Read</READ_CLASS>
+          <READ_TYPE>Forward</READ_TYPE>
+          <BASE_COORD>1</BASE_COORD>
+      </READ_SPEC>
+    </SPOT_DECODE_SPEC>
+  </SPOT_DESCRIPTOR>
+EOF
+
+  return $xml;
+}
+
+
 # input is metagenome object verbosity full
 sub experiment2xml{
   my ($self,$data) = @_ ;
@@ -144,7 +216,7 @@ sub experiment2xml{
     $experiment_id     = $library->{dbxref}->{ENA}
   }
   else{
-	my $experiment_id     = $library->{dbxref}->{ENA} || $library->{id};
+	  $experiment_id     = $library->{id};
   #my $experiment_id    = $data->{id};
   }
   
@@ -195,19 +267,10 @@ sub experiment2xml{
                  <LIBRARY_SELECTION>$library_selection</LIBRARY_SELECTION>
   			         <LIBRARY_LAYOUT><SINGLE/></LIBRARY_LAYOUT>
              </LIBRARY_DESCRIPTOR>
-  			     <SPOT_DESCRIPTOR>
-               <SPOT_DECODE_SPEC>
-         	       <SPOT_LENGTH>100</SPOT_LENGTH>
-                 <READ_SPEC>
-                     <READ_INDEX>0</READ_INDEX>
-                     <READ_CLASS>Application Read</READ_CLASS>
-                     <READ_TYPE>Forward</READ_TYPE>
-                     <BASE_COORD>1</BASE_COORD>
-                   </READ_SPEC>
-              </SPOT_DECODE_SPEC>
-           </SPOT_DESCRIPTOR>
+  			    
          </DESIGN>
 EOF
+#$xml .= $self->spotDescriptor2xml();
  $xml .= $self->platform2xml($library)  ;
  $xml .= $self->attributes2xml($library);
  $xml .= $self->broker_object_id($linkin_id) ;
