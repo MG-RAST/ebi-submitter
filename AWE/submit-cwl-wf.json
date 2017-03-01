@@ -1,6 +1,6 @@
   {
         "info": {
-            "pipeline": "awe-ebi-submiiter",
+            "pipeline": "awe-ebi-submitter",
             "name": "#jobname",
             "project": "#project",
             "user": "#user",
