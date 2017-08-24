@@ -3,8 +3,8 @@ class: CommandLineTool
 
 label: EBI upload read
 doc: |
-    upload reads sequence file (fasta or fastq) to EBI ftp inbox: adaptor trim / compress / md5sum
-    >ebi_upload_read.pl -input=<input> -output=<outName> -updir=<uploadDir> -furl=<ftpUrl> -user=<ftpUser> -pswd=<ftpPassword> -tmpdir=<tmpDir> -trim <toTrim>
+    upload read sequence file (fasta or fastq) to EBI ftp inbox: adaptor trim / compress / md5sum
+    >upload_read.pl -input=<input> -output=<outName> -updir=<uploadDir> -furl=<ftpUrl> -user=<ftpUser> -pswd=<ftpPassword> -tmpdir=<tmpDir> -trim <toTrim>
 
 hints:
     DockerRequirement:
@@ -13,8 +13,8 @@ hints:
 requirements:
     InlineJavascriptRequirement: {}
 
-stdout: ebi_upload_read.log
-stderr: ebi_upload_read.error
+stdout: upload_read.log
+stderr: upload_read.error
 
 inputs:
     input:
@@ -63,7 +63,7 @@ inputs:
             prefix: --output
 
 
-baseCommand: [ebi_upload_read.pl]
+baseCommand: [upload_read.pl]
 
 arguments:
     - prefix: --tmpdir
