@@ -8,7 +8,7 @@ doc: |
 
 hints:
     DockerRequirement:
-        dockerPull: wilke/autoskewer:0.1
+        dockerPull: mgrast/ebi:0.2
     
 requirements:
     InlineJavascriptRequirement: {}
@@ -25,11 +25,13 @@ inputs:
             - Formats:fastq
         inputBinding:
             prefix: -i
+    
     outName:
         type: string
         doc: Output trimmed sequences
         inputBinding:
             prefix: -o
+    
     outLog:
         type: string
         doc: Output trimmed log

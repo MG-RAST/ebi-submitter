@@ -8,7 +8,7 @@ doc: |
 
 hints:
     DockerRequirement:
-        dockerPull: wilke/autoskewer:0.1
+        dockerPull: mgrast/ebi:0.2
 
 requirements:
     InlineJavascriptRequirement: {}
