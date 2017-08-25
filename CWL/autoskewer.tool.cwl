@@ -3,7 +3,7 @@ class: CommandLineTool
 
 label: autoskewer
 doc: |
-    detect and trim adaptor sequences from reads
+    detect and trim adapter sequences from reads
     >autoskewer.py -t <runtime.tmpdir> -i <input> -o <outName> -l <outLog>
 
 hints:
@@ -48,12 +48,12 @@ outputs:
         type: stdout
     error: 
         type: stderr
-    scrubbedSeq:
+    trimmedSeq:
         type: File
         doc: Output trimmed sequences file
         outputBinding:
             glob: $(inputs.outName)
-    scrubbedLog:
+    trimmedLog:
         type: File
         doc: Output trimmed log file
         outputBinding:
