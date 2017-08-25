@@ -1,38 +1,63 @@
 cwlVersion: v1.0
 class: CommandLineTool
-baseCommand: autoskewer.py
+
+label: autoskewer
+doc: |
+    detect and trim adaptor sequences from reads
+    >autoskewer.py -t <runtime.tmpdir> -i <input> -o <outName> -l <outLog>
+
 hints:
-  DockerRequirement:
-    dockerPull: wilke/autoskewer:0.1
+    DockerRequirement:
+        dockerPull: wilke/autoskewer:0.1
     
 requirements:
-  - class: InlineJavascriptRequirement
-  - class: InitialWorkDirRequirement
-    listing:
-      - $(inputs.fastq)
+    InlineJavascriptRequirement: {}
 
-        
+stdout: autoskewer.log
+stderr: autoskewer.error
+
 inputs:
-  fastq:
-    type: File
-    inputBinding: 
-      position: 1
-      valueFrom: $(self.basename)
-      prefix:
-  
-outputs:
-  scrubbedFastq:
-    type: File
-    outputBinding:
-      glob: $(inputs.fastq.basename).scrubbed.fast*
-  scrubbedLog:
-    type: File
-    outputBinding:
-      glob: $(inputs.fastq.basename).scrubbed.log
-  adapter:
-    type: File
-    outputBinding:
-      glob: $(inputs.fastq.basename).adapter.fa
+    input:
+        type: File
+        doc: Input sequence file
+        format:
+            - Formats:fasta
+            - Formats:fastq
+        inputBinding:
+            prefix: -i
+    outName:
+        type: string
+        doc: Output trimmed sequences
+        inputBinding:
+            prefix: -o
+    outLog:
+        type: string
+        doc: Output trimmed log
+        inputBinding:
+            prefix: -l
 
-      
-      
+
+baseCommand: autoskewer.py
+
+arguments:
+    - prefix: -t
+      valueFrom: $(runtime.tmpdir)
+
+outputs:
+    info:
+        type: stdout
+    error: 
+        type: stderr
+    scrubbedSeq:
+        type: File
+        doc: Output trimmed sequences file
+        outputBinding:
+            glob: $(inputs.outName)
+    scrubbedLog:
+        type: File
+        doc: Output trimmed log file
+        outputBinding:
+            glob: $(inputs.outLog)
+
+$namespaces:
+    Formats: FileFormats.cv.yaml
