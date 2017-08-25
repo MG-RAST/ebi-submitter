@@ -4,7 +4,7 @@ class: CommandLineTool
 label: autoskewer
 doc: |
     detect and trim adaptor sequences from reads
-    >autoskewer.py -t $tmpdir -i $input -o $trimout.seq -l $trimout.log
+    >autoskewer.py -t <runtime.tmpdir> -i <input> -o <outName> -l <outLog>
 
 hints:
     DockerRequirement:
