@@ -14,6 +14,7 @@ umask 000;
 my $input  = "";
 my $output = "";
 my $mgid   = "";
+my $format = "fastq";
 my $updir  = "";
 my $furl   = "webin.ebi.ac.uk";
 my $user   = $ENV{'EBI_USER'} || undef;
@@ -25,6 +26,7 @@ my $options = GetOptions (
         "input=s"  => \$input,
         "output=s" => \$output,
         "mgid=s"   => \$mgid,
+        "format=s" => \$format,
         "updir=s"  => \$updir,
         "furl=s"   => \$furl,
         "user=s"   => \$user,
@@ -45,6 +47,11 @@ if ($help) {
     exit 1;
 } elsif (! $updir) {
     print STDERR "upload ftp dir is missing";
+    exit 1;
+}
+
+unless ($format =~ /^fastq|fasta$/) {
+    print STDERR "format must be one of: fastq or fasta";
     exit 1;
 }
 
@@ -82,13 +89,13 @@ chomp $md5;
 $ftp->put($gzfile, basename($gzfile));
 
 # print output
-my $data = {
-    metagenome_id => $mgid || undef,
-    filepath => $updir."/".basename($gzfile),
-    trim => $trim ? JSON::true : JSON::false,
-    md5 => $md5
-};
-print_json($output, $data);
+my @data = (
+    $mgid || 'null',
+    $updir."/".basename($gzfile),
+    $md5,
+    $format
+);
+print STDOUT join("\t", @data)."\n";
 
 exit 0;
 
@@ -96,9 +103,3 @@ sub get_usage {
     return "USAGE: upload_read.pl -input=<sequence file> -output=<output json file> -updir=<ftp upload dir> -furl=<ebi ftp url> -user=<ebi ftp user> -pswd=<ebi ftp password> -tmpdir=<dir for temp files, default CWD> -trim <boolean: run adapter trimmer>\n";
 }
 
-sub print_json {
-    my ($file, $data) = @_;
-    open(OUT, ">$file") or die "Couldn't open file: $!";
-    print OUT $json->encode($data);
-    close(OUT);
-}

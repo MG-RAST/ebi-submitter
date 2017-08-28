@@ -7,22 +7,19 @@ use Data::Dumper;
 
 # Get project document from API
 
-my $verbose = $ENV{'VERBOSE'} ;
+my $verbose = $ENV{'VERBOSE'};
 
-sub new{
-  my ($class , $data) = @_ ;
+sub new {
+  my ($class, $seq_model_map, $study_ref, $center_name) = @_ ;
   
   print STDERR "Initializing experiments\n" if ($verbose) ;
   
-  my $self = { 
-    experiments   => [] ,
-    study_ref     => $data->{study_ref}   || undef ,
-    center_name   => $data->{center_name} || undef ,
-    
-    # seq_platform  => $data->{seq_platform}|| undef ,
-    # seq_model     => $data->{seq_model}   || undef ,
-    # ebi_tech      => $data->{ebi_tech}    || undef ,
- } ;
+  my $self = {
+    experiments => [],
+    seq_models  => $seq_model_map || {},
+    study_ref   => $study_ref || undef,
+    center_name => $center_name || undef
+ };
   
   if (! $self->{seq_platform} and $self->{ebi_tech}){
     my ($platform,$model) = split "|" , $self->{ebi_tech} ;
@@ -37,102 +34,66 @@ sub new{
   return bless $self 
 }
 
-sub center_name{
-  my ($self) = @_ ;
-  return $self->{center_name}
+sub study_ref {
+  my ($self) = @_;
+  return $self->{study_ref};
 }
 
-sub add{
-  my ($self, $data) = @_ ;
-  if ($data and ref $data){
-    push @{$self->{experiments}} , $data;
+sub center_name {
+  my ($self) = @_;
+  return $self->{center_name};
+}
+
+sub add {
+  my ($self, $sid, $lid, $mid, $data) = @_;
+  if ($sid and $lid and $mid and $data and ref $data) {
+    push @{$self->{experiments}}, {
+        sample_id     => $sid,
+        library_id    => $lid,
+        metagenome_id => $mid,
+        library_data  => $data
+    };
   }
 }
-
 
 # Check model and return unspecified if model not supported
-sub seq_model{
-  my ($self , $model) = @_ ;
-
-  my $models = { 
-     "Illumina Genome Analyzer" => 1 ,
-     "Illumina Genome Analyzer II" => 1 ,
-     "Illumina Genome Analyzer IIx" => 1 ,
-     "Illumina HiSeq 2500" => 1 ,
-     "Illumina HiSeq 2000" => 1 ,
-     "Illumina HiSeq 1500" => 1 ,
-     "Illumina HiSeq 1000" => 1 ,
-     "Illumina MiSeq" => 1 ,
-     "Illumina HiScanSQ" => 1 ,
-     "HiSeq X Ten" => 1 ,
-     "NextSeq 500" => 1 ,
-     "HiSeq X Five" => 1 ,
-     "Illumina HiSeq 3000" => 1 ,
-     "Illumina HiSeq 4000" => 1 ,
-     "NextSeq 550" => 1 ,
-     "454 GS" => 1 ,
-     "454 GS 20" => 1 ,
-     "454 GS FLX" => 1 ,
-     "454 GS FLX+" => 1 ,
-     "454 GS FLX Titanium" => 1 ,
-     "454 GS Junior" => 1 ,
-  };
+sub seq_model {
+  my ($self, $model) = @_ ;
   
-  if($model){
-    if ($models->{$model}){
-    $self->{seq_model} = $model ;  
-    }
-    else{
+  if ($model) {
+    if ($self->{seq_models}{$model}) {
+      return $model;
+    } else {
       print STDERR "Can't find model $model. Not in supported list of models. Setting to unspecified.\n";
-      $self->{seq_model} = "unspecified" ;
+      return "unspecified";
     }
   }
-  else{
-    print STDERR "Expecting \$model but not defined.\n";
-    exit;
-  }
-
-  return $self->{seq_model}
+  
+  print STDERR "Model not defined. Setting to unspecified.\n";
+  return "unspecified";
 }
 
-
-sub platform2xml{
+sub platform2xml {
   my ($self, $library) = @_ ;
   
-  # Determine platform and model from ebi_tech field in library or seq_make and seq_meth
-  my $platform = undef ;
-  my $model    = undef ;
-  my @error; 
-  
-  if ($library->{data}->{ebi_tech}) {
-    ($platform , $model, @error) = split "|" , $library->{data}->{ebi_tech} ;
-    if(@error){
-      print STDERR "Can not parse ebi_tech: " . $library->{data}->{ebi_tech} . "\n";
-      exit;
-    }
-  }
-  else{
-    $model = $self->seq_model( $library->{data}->{seq_model} || 'unspecified');
-    if ($library->{data}->{seq_meth} =~/454/) {
-      $platform = "LS454" ;
-    }
-    elsif ($library->{data}->{seq_meth} =~/illumina/i) {
-      $platform = "ILLUMINA" ;
-    }
-    else{
-      print STDERR "Can't identify seq platform. Sequencing method is " . $library->{data}->{seq_meth} . "\n";
-      exit;
-    }
+  # use seq_meth
+  my $platform = uc($library->{seq_meth});
+  $platform =~ s/\s+/_/g;
+  if ($platform =~/454/) {
+      $platform = "LS454";
   }
   
-  if($model and $platform){
-    
+  # try seq_meth than seq_model
+  my $model = $self->seq_model($library->{seq_meth});
+  if ($model eq "unspecified") {
+      $model = $self->seq_model($library->{seq_make});
   }
-  else{
+  
+  unless ($model && $platform) {
     # Never get here
     print STDERR "Something wrong, No sequencer model and platform.\n" ;
     print STDERR "Platform: $platform\tModel: $model\n";
-    print STDERR Dumper $library ;
+    print STDERR Dumper $library;
     exit;
   }
   
@@ -143,117 +104,77 @@ sub platform2xml{
       </$platform>
     </PLATFORM>
 EOF
- 
-  return $xml ; 
+
+  return $xml; 
 }
 
-sub attributes2xml{
-  my ($self , $library) = @_ ;
+sub attributes2xml {
+  my ($self, $library) = @_ ;
   my $xml = "<EXPERIMENT_ATTRIBUTES>" ;
   
-  foreach my $key (keys %{$library->{data}}){
-    my $value = $library->{data}->{$key} ;
+  foreach my $key (keys %$library) {
+    my $value = $library->{$key};
     $xml .= <<"EOF";
-    <EXPERIMENT_ATTRIBUTE>
+     <EXPERIMENT_ATTRIBUTE>
         <TAG>$key</TAG>
         <VALUE>$value</VALUE>
      </EXPERIMENT_ATTRIBUTE>
 EOF
   }
-  $xml .= "</EXPERIMENT_ATTRIBUTES>" ;
-
- 
- return $xml ;
+  
+  $xml .= "</EXPERIMENT_ATTRIBUTES>";
+  return $xml;
 }
 
-sub broker_object_id{
+sub broker_object_id {
   my ($self, $id) = @_ ;
   
   my $xml .= <<"EOF";
-  <EXPERIMENT_ATTRIBUTE>
+   <EXPERIMENT_ATTRIBUTE>
       <TAG>BORKER_OBJECT_ID</TAG>
       <VALUE>$id</VALUE>
    </EXPERIMENT_ATTRIBUTE>
-EOF
-  return $xml 
-}
-
-
-# Stub - Don't use - MG-RAST does not have spot descriptor info
-sub spotDescriptor2xml{
-  my ($self) = @_ ;
-  
-  my $xml = <<"EOF";
-  <SPOT_DESCRIPTOR>
-    <SPOT_DECODE_SPEC>
-      <SPOT_LENGTH>100</SPOT_LENGTH>
-      <READ_SPEC>
-          <READ_INDEX>0</READ_INDEX>
-          <READ_CLASS>Application Read</READ_CLASS>
-          <READ_TYPE>Forward</READ_TYPE>
-          <BASE_COORD>1</BASE_COORD>
-      </READ_SPEC>
-    </SPOT_DECODE_SPEC>
-  </SPOT_DESCRIPTOR>
 EOF
 
   return $xml;
 }
 
-
-# input is metagenome object verbosity full
-sub experiment2xml{
-  my ($self,$data) = @_ ;
-  #my ($data,$center_name,$study_ref_name) = @_;
+# input is library object verbosity full
+sub experiment2xml {
+  my ($self, $data) = @_ ;
   
-  my $center_name     = $self->center_name() ;
-  my $study_ref_name  = $self->{study_ref} ;
-  
-  my $library = $data->{metadata}->{library} ;
-
-  my $experiment_id = undef ;
-  if (defined $library->{dbxref} and defined $library->{dbxref}->{ENA}){
-    $experiment_id     = $library->{dbxref}->{ENA}
-  }
-  else{
-	  $experiment_id     = $library->{id};
-  #my $experiment_id    = $data->{id};
-  }
+  my $center_name    = $self->center_name();
+  my $study_ref_name = $self->study_ref();  
+  my $library        = $data->{library_data};  
   
   # BORKER_OBJECT_ID used to link experiment to MG-RAST
-  my $linkin_id = $data->{id};
+  my $linkin_id = $data->{metagenome_id};
+  my $sample_id = $data->{sample_id};
   
-	my $experiment_name   = $library->{name};
-	# todo if sequence type amplicon set to amplicon 
-	my $library_strategy = $library->{type} ;
-  my $sample_id = $data->{sample}->[0];
+  my $experiment_id    = $library->{ebi_id} ? $library->{ebi_id} : $data->{library_id};
+  my $experiment_name  = $library->{metagenome_name};
+  my $library_strategy = $library->{investigation_type};
  
-	my $library_selection = "RANDOM";
-	my $library_source = undef ;
+  my $library_selection = "RANDOM";
+  my $library_source    = undef;
 
-  if ($library->{data}->{investigation_type} eq "metagenome") {
-      $library_source = "METAGENOMIC" ;
+  if ($library->{investigation_type} eq "metagenome") {
+    $library_source = "METAGENOMIC";
+  } else {
+    $library_source = uc($library->{investigation_type}) || undef;
   }
-  else{
-    $library_source = $library->{data}->{investigation_type} || undef ;
-  }
-  
-  # change to real key-value pairs
-	my ($key,$value) = ('','');
   
   # checks 
-  unless ($library->{type}) {
-    print STDERR "No library type for $experiment_id , exit!\n" ;
+  unless ($library_strategy) {
+    print STDERR "No library type for $experiment_id, exit!\n";
     exit;
   }
 
   unless ($library_source) {
-    print STDERR "Missing library source for $experiment_id, exit!\n" ;
+    print STDERR "Missing library source for $experiment_id, exit!\n";
   }
   
-  
-	my $xml = <<"EOF";
-
+  my $xml = <<"EOF";
        <EXPERIMENT alias="$experiment_id" center_name="$center_name">
          <TITLE>$experiment_name</TITLE>
          <STUDY_REF refname="$study_ref_name"/>
@@ -267,21 +188,20 @@ sub experiment2xml{
                  <LIBRARY_SELECTION>$library_selection</LIBRARY_SELECTION>
   			         <LIBRARY_LAYOUT><SINGLE/></LIBRARY_LAYOUT>
              </LIBRARY_DESCRIPTOR>
-  			    
          </DESIGN>
 EOF
-#$xml .= $self->spotDescriptor2xml();
- $xml .= $self->platform2xml($library)  ;
- $xml .= $self->attributes2xml($library);
- $xml .= $self->broker_object_id($linkin_id) ;
- $xml .= "</EXPERIMENT>" ; 
+
+  $xml .= $self->platform2xml($library);
+  $xml .= $self->attributes2xml($library);
+  $xml .= $self->broker_object_id($linkin_id) ;
+  $xml .= "</EXPERIMENT>" ; 
  
   return $xml
 }
 
 
-sub xml2txt{
-  my ($self) = @_ ;
+sub xml2txt {
+  my ($self) = @_;
      
   my $xml = <<"EOF";
 <?xml version="1.0" encoding="UTF-8"?>
@@ -289,11 +209,11 @@ sub xml2txt{
 xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.experiment.xsd">
 EOF
 
-  foreach my $mg_obj (@{$self->{experiments}}) {
-    $xml .= $self->experiment2xml($mg_obj);
+  foreach my $exp (@{$self->{experiments}}) {
+    $xml .= $self->experiment2xml($exp);
   }
   $xml .= "</EXPERIMENT_SET>";
-  return $xml
+  return $xml;
 }
 
 1;
