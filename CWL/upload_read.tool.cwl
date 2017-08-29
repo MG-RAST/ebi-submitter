@@ -41,6 +41,7 @@ inputs:
     ftpUrl:
         type: string?
         doc: Optional ftp url
+        default: webin.ebi.ac.uk
         inputBinding:
             prefix: --furl
     

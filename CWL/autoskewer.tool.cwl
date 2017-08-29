@@ -33,8 +33,8 @@ inputs:
             prefix: -o
     
     outLog:
-        type: string
-        doc: Output trimmed log
+        type: string?
+        doc: Optional output trimmed log
         inputBinding:
             prefix: -l
 
@@ -56,8 +56,8 @@ outputs:
         outputBinding:
             glob: $(inputs.outName)
     trimmedLog:
-        type: File
-        doc: Output trimmed log file
+        type: File?
+        doc: Optional output trimmed log file
         outputBinding:
             glob: $(inputs.outLog)
 
