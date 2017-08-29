@@ -187,16 +187,9 @@ my $files = {
     "experiment" => "experiment.xml",
     "run" => "run.xml"
 };
-print "Submitting\n" if ($verbose);
 
-if ($debug) {
-    print $study_xml . "\n";
-    print $sample_xml . "\n";
-    print $experiment_xml . "\n";
-    print $run_xml . "\n";
-} else {
-    submit($submit_option, $study_xml, $sample_xml, $experiment_xml, $run_xml, $submission_id, $center_name, $files);
-}
+print "Submitting\n" if ($verbose);
+submit($submit_option, $study_xml, $sample_xml, $experiment_xml, $run_xml, $submission_id, $center_name, $files);
 
 sub simplify_hash {
     my ($old) = @_;
@@ -401,16 +394,24 @@ EOF
    
    my $cmd = "curl -k -F \"SUBMISSION=\@$temp_dir/submission.xml\" -F \"STUDY=\@$temp_dir/study.xml\" -F \"SAMPLE=\@$temp_dir/sample.xml\" -F \"EXPERIMENT=\@$temp_dir/experiment.xml\" -F \"RUN=\@$temp_dir/run.xml\" \"$submit_url\"";
    print "$cmd\n";
+   
+   if ($debug) {
+       print "######### submission.xml #########\n".$submission."\n";
+       print "######### study.xml #########\n".$study_xml."\n";
+       print "######### sample.xml #########\n".$sample_xml."\n";
+       print "######### experiment.xml #########\n".$experiment_xml."\n";
+       print "######### run.xml #########\n".$run_xml."\n";
+       exit 0;
+   }
+   
    my $receipt = `$cmd`;
-
    print STDERR $receipt."\n" if($verbose);
 
    if ($receipt) {
      open(FILE, ">$receipt_file");
      print FILE $receipt;
      close FILE;
-   }
-   else{
+   } else {
      print STDERR "No receipt for submission $submission_id\n";
      exit;
    }
