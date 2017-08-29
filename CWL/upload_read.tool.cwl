@@ -4,11 +4,11 @@ class: CommandLineTool
 label: EBI upload read
 doc: |
     upload read sequence file (fasta or fastq) to EBI ftp inbox: adaptor trim / compress / md5sum
-    >upload_read.pl -input=<input> -output=<outName> -updir=<uploadDir> -furl=<ftpUrl> -user=<ftpUser> -pswd=<ftpPassword> -tmpdir=<tmpDir> -trim <toTrim>
+    >upload_read.pl -input=<input> -output=<outName> -mgid=<mgID> -updir=<uploadDir> -furl=<ftpUrl> -user=<ftpUser> -pswd=<ftpPassword> -tmpdir=<tmpDir> -trim <toTrim>
 
 hints:
     DockerRequirement:
-        dockerPull: wilke/autoskewer:0.1
+        dockerPull: mgrast/ebi:0.2
 
 requirements:
     InlineJavascriptRequirement: {}
@@ -31,6 +31,12 @@ inputs:
         doc: Upload dir on ftp site
         inputBinding:
             prefix: --updir
+    
+    mgID:
+        type: string?
+        doc: Optional MG-RAST Metagenome ID
+        inputBinding:
+            prefix: --mgid
     
     ftpUrl:
         type: string?
@@ -66,6 +72,8 @@ inputs:
 baseCommand: [upload_read.pl]
 
 arguments:
+    - prefix: --format
+      valueFrom: $(inputs.input.format)
     - prefix: --tmpdir
       valueFrom: $(runtime.tmpdir)
 

@@ -8,8 +8,8 @@ use JSON;
 use Getopt::Long;
 use Net::FTP;
 
-use Submitter::Project ;
-use Submitter::Experiments ;
+use Submitter::Project_old ;
+use Submitter::Experiments_old ;
 
 my $json = new JSON ;
 
@@ -198,7 +198,7 @@ my $center_name  = $project_data->{metadata}->{PI_organization} || "unknown" ;
 my $study_ref_name = $project_data->{id};
 # my $study_xml = get_project_xml($project_data);
 
-my $prj       = new Submitter::Project($project_data);
+my $prj       = new Submitter::Project_old($project_data);
 my $study_xml = $prj->xml2txt ;
 print Dumper  $study_xml if ($verbose); 
 
@@ -232,7 +232,7 @@ $sample_xml .= "</SAMPLE_SET>";
 
 ###### Create Experiment XML ######
 
-my $experiments = new Submitter::Experiments( {
+my $experiments = new Submitter::Experiments_old( {
   study_ref   => $study_ref_name,
   center_name => $center_name,
    

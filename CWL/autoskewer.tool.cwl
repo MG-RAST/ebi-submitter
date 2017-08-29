@@ -3,12 +3,12 @@ class: CommandLineTool
 
 label: autoskewer
 doc: |
-    detect and trim adaptor sequences from reads
+    detect and trim adapter sequences from reads
     >autoskewer.py -t <runtime.tmpdir> -i <input> -o <outName> -l <outLog>
 
 hints:
     DockerRequirement:
-        dockerPull: wilke/autoskewer:0.1
+        dockerPull: mgrast/ebi:0.2
     
 requirements:
     InlineJavascriptRequirement: {}
@@ -25,11 +25,13 @@ inputs:
             - Formats:fastq
         inputBinding:
             prefix: -i
+    
     outName:
         type: string
         doc: Output trimmed sequences
         inputBinding:
             prefix: -o
+    
     outLog:
         type: string
         doc: Output trimmed log
@@ -48,12 +50,12 @@ outputs:
         type: stdout
     error: 
         type: stderr
-    scrubbedSeq:
+    trimmedSeq:
         type: File
         doc: Output trimmed sequences file
         outputBinding:
             glob: $(inputs.outName)
-    scrubbedLog:
+    trimmedLog:
         type: File
         doc: Output trimmed log file
         outputBinding:
