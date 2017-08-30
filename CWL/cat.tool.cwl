@@ -11,7 +11,7 @@ hints:
 requirements:
     InlineJavascriptRequirement: {}
 
-stdout: $(inputs.output)
+stdout: $(inputs.outName)
 stderr: cat.error
 
 inputs:
