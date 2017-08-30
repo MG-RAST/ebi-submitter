@@ -61,7 +61,7 @@ $ftp->binary();
 
 # compress / md5
 my $gzfile = $tmpdir."/".basename($input).".gz";
-my $md5 = `gzip -c $upload_file | tee $gzfile | md5sum | cut -f1 -d' '`;
+my $md5 = `gzip -c $input | tee $gzfile | md5sum | cut -f1 -d' '`;
 chomp $md5;
 # ftp
 $ftp->put($gzfile, basename($gzfile));
