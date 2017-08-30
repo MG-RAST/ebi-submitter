@@ -1,0 +1,8 @@
+input:
+    file:
+        class: File
+        path: ../data/sequences.fastq
+        format: fastq
+    mgid: mgm12345
+
+outName: sequences.trim.fastq

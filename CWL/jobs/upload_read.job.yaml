@@ -1,0 +1,10 @@
+input:
+    file:
+        class: File
+        path: ../data/sequences.fastq
+        format: fastq
+    mgid: mgm12345
+
+uploadDir: mgpTest
+
+outName: sequences.upload
