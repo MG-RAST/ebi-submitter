@@ -16,8 +16,14 @@ sub new {
     PI_name => $data->{PI_firstname}." ".$data->{PI_lastname},
     PI_email => $data->{PI_email},
     submitter_name => $data->{firstname}." ".$data->{lastname},
-    admin_name => ($data->{"administrative-contact_PI_firstname"} || "")." ".($data->{"administrative-contact_PI_lastname"} || '')
+    admin_name => ""
   };
+  if ($data->{"administrative-contact_PI_firstname"}) {
+      $self->{admin_name} = $data->{"administrative-contact_PI_firstname"};
+  }
+  if ($data->{"administrative-contact_PI_lastname"}) {
+      $self->{admin_name} = ($self->{admin_name} == "") ? $data->{"administrative-contact_PI_lastname"} : $self->{admin_name}." ".$data->{"administrative-contact_PI_lastname"};
+  }
   
   # remove email and misc_param from metadata
   for my $key (keys %$data) {
