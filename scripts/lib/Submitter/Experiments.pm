@@ -5,31 +5,15 @@ use strict;
 use warnings;
 use Data::Dumper;
 
-# Get project document from API
-
-my $verbose = $ENV{'VERBOSE'};
-
 sub new {
   my ($class, $seq_model_map, $study_ref, $center_name) = @_ ;
-  
-  print STDERR "Initializing experiments\n" if ($verbose) ;
   
   my $self = {
     experiments => [],
     seq_models  => $seq_model_map || {},
     study_ref   => $study_ref || undef,
     center_name => $center_name || undef
- };
-  
-  if (! $self->{seq_platform} and $self->{ebi_tech}){
-    my ($platform,$model) = split "|" , $self->{ebi_tech} ;
-    $self->{seq_platform} = $platform ;
-    $self->{seq_model}    = $model ;
-  }
-  unless ($self->{seq_platform}){
-    print STDERR "Sequencing Platform missing\n" ;
-    #exit ;
-  }
+  };
   
   return bless $self 
 }

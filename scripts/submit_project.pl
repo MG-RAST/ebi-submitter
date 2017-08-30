@@ -74,6 +74,7 @@ sub usage {
     print "\t-output        - name and path of receipt file, default is receipt.xml\n";
     print "\t-temp_dir      - path of temp dir, default is CWD\n";
     print "\t-verbose       - verbose output\n";
+    print "\t-debug         - debug mode, files created but not submitted\n";
     print "upload_list line format:: mg ID \\t filepath \\t md5sum \\t file type\\n\n";
 }
 
@@ -105,7 +106,7 @@ close(UPLOAD);
 $submit_url .= '?auth=ENA%20'.$user.'%20'.$password;
 
 # Project ID will be ID for all submission for the given project - new and updates
-print STDERR "Checking submission id - create one if not provided\n" if ($verbose);
+print "Checking submission id - create one if not provided\n" if ($verbose);
 unless ($submission_id) {
     $submission_id = $project_id.".".time;
 }
@@ -115,16 +116,16 @@ my $json  = new JSON;
 my $agent = LWP::UserAgent->new;
 
 # get metagenome_taxonomy CV
-print STDERR "Getting metagenome_taxonomy CV from MG-RAST\n" if ($verbose);
+print "Getting metagenome_taxonomy CV from MG-RAST\n" if ($verbose);
 my $mg_tax_map = get_mg_tax_map($mgrast_url);
 
 # get seq_model CV
-print STDERR "Getting seq_model CV from MG-RAST\n" if ($verbose);
+print "Getting seq_model CV from MG-RAST\n" if ($verbose);
 my $seq_model_map = {};
 map { $seq_model_map->{$_} = 1 } @{ get_json_from_url($mgrast_url."/metadata/cv?label=seq_model") };
 
 # get project data
-print STDERR "Getting project metadata from MG-RAST\n" if ($verbose);
+print "Getting project metadata from MG-RAST\n" if ($verbose);
 my $project_data = get_json_from_url($mgrast_url."/metadata/export/".$project_id);
 
 
@@ -134,7 +135,7 @@ my $center_name = $project_data->{data}{PI_organization}{value} || "unknown" ;
 
 my $prj = new Submitter::Project($study_ref, simplify_hash($project_data->{data}));
 my $study_xml = $prj->xml2txt;
-print Dumper $study_xml if ($verbose);
+print Dumper $study_xml if ($verbose && (! $debug));
 
 ###### Create Experiments XML ######
 my $experiments = new Submitter::Experiments($seq_model_map, $study_ref, $center_name);
@@ -402,7 +403,7 @@ EOF
    }
    
    my $receipt = `$cmd`;
-   print STDERR $receipt."\n" if($verbose);
+   print $receipt."\n" if($verbose);
 
    if ($receipt) {
      open(FILE, ">$receipt_file");
