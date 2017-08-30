@@ -1,0 +1,51 @@
+cwlVersion: v1.0
+class: CommandLineTool
+baseCommand: submitMgrastProject.pl
+hints:
+  DockerRequirement:
+    dockerPull: mgrast/ebi:0.1
+requirements:
+  - class: EnvVarRequirement
+    envDef:
+      - envName: EBI_USER
+        envValue: $(inputs.user)
+      - envName: EBI_PASSWORD
+        envValue: $(inputs.password)
+inputs:
+  project:
+    type: string
+    inputBinding: 
+      position: 1
+      prefix: -project_id
+  outfile:
+    type: string
+    default: receipt.xml
+    inputBinding:
+      position: 2
+      prefix: -output
+  url:
+    label: EBI Submission URL
+    type: string
+    default: https://www.ebi.ac.uk/ena/submit/drop-box/submit/
+    inputBinding:
+      position: 3
+      prefix:  -submission_url
+  workdir:
+    label: Download and Upload directory
+    type: string?
+    inputBinding:
+      prefix: -staging_dir
+  download:
+    label: Download sequence files from Project
+    type: boolean?
+    inputBinding:
+      prefix: -download      
+  user:
+    type: string
+  password:
+    type: string     
+outputs:
+  receipt:
+    type: File?
+    outputBinding:
+      glob: $(inputs.output)
