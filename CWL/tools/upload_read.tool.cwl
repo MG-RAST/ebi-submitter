@@ -71,7 +71,11 @@ arguments:
     - prefix: --format
       valueFrom: |
           ${
-            if ( inputs.input.file.format.split("/").slice(-1)[0] == "fastq" ) { return "fastq"; } else { return "fasta"; }
+              if (inputs.input.file.format) {
+                  return inputs.input.file.format.split("/").slice(-1)[0];
+              } else {
+                  return null;
+              }
           }
     - prefix: --tmpdir
       valueFrom: $(runtime.tmpdir)

@@ -62,9 +62,13 @@ outputs:
                 - name: file
                   type: File
                   doc: Output trimmed sequences file
-                  format: $(inputs.input.file.format)
                   outputBinding:
                       glob: $(inputs.outName)
+                      outputEval: |
+                          ${
+                              self[0].format = inputs.input.file.format;
+                              return self[0];
+                          }
                 - name: mgid
                   type: string
                   doc: MG-RAST ID of sequence file
