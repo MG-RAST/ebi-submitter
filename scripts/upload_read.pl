@@ -4,7 +4,6 @@ use strict;
 use warnings;
 no warnings('once');
 
-use JSON;
 use Net::FTP;
 use Getopt::Long;
 use File::Basename;
@@ -20,7 +19,6 @@ my $furl   = "webin.ebi.ac.uk";
 my $user   = $ENV{'EBI_USER'} || undef;
 my $pswd   = $ENV{'EBI_PASSWORD'} || undef;
 my $tmpdir = ".";
-my $trim   = 0;
 my $help   = 0;
 my $options = GetOptions (
         "input=s"  => \$input,
@@ -32,7 +30,6 @@ my $options = GetOptions (
         "user=s"   => \$user,
         "pswd=s"   => \$pswd,
         "tmpdir=s" => \$tmpdir,
-        "trim!"    => \$trim,
 		"help!"    => \$help
 );
 
@@ -55,25 +52,6 @@ unless ($format =~ /^fastq|fasta$/) {
     exit 1;
 }
 
-# trim if requested
-my $upload_file = $input;
-if ($trim) {
-    my $trimout = basename($input).".trim";
-    my $status  = undef;
-    eval {
-        $status = system("autoskewer -t $tmpdir -i $input -o $trimout.seq -l $trimout.log");
-    }
-    if ($@ || $status) {
-        print STDERR "failed running trim (autoskewer): $@";
-    }
-    $upload_file = $trimout.".seq";
-}
-
-my $json = JSON->new;
-$json = $json->utf8();
-$json->max_size(0);
-$json->allow_nonref;
-
 # set ftp connection
 my $ftp = Net::FTP->new($furl, Passive => 1) or die "Cannot connect to $furl: $!";
 $ftp->login($user, $pswd) or die "Cannot login using $user and $pswd. ", $ftp->message;
@@ -82,7 +60,7 @@ $ftp->cwd($updir);
 $ftp->binary();
 
 # compress / md5
-my $gzfile = $tmpdir."/".basename($upload_file).".gz";
+my $gzfile = $tmpdir."/".basename($input).".gz";
 my $md5 = `gzip -c $upload_file | tee $gzfile | md5sum | cut -f1 -d' '`;
 chomp $md5;
 # ftp
