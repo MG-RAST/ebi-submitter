@@ -34,11 +34,8 @@ my $submit_url    = "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/";
 my $user          = $ENV{'EBI_USER'} || undef;
 my $password      = $ENV{'EBI_PASSWORD'} || undef;
 
-# output
-my $receipt_file  = "./receipt.xml";
-
 my $verbose = 0;
-my $help    = 0
+my $help    = 0;
 my $debug   = 0;
 
 my $submit_options = {
@@ -66,16 +63,16 @@ GetOptions(
 );
 
 sub usage {
-    print "\n\nsubmit_project.pl >>> create the ENA XML file for an MG-RAST project and submit it to EBI\n";
+    print "\nsubmit_project.pl >>> create the ENA XML file for an MG-RAST project and submit it to EBI\n";
     print "submit_project.pl -project_id <project id> -upload_list <upload list file>\n";
-    print "\nOPTIONS\n";
+    print "OPTIONS\n";
     print "\t-user          - EBI submitter login; if provided overrides environment variable EBI_USER\n";
     print "\t-password      - password for login; if provided overrides environment variable EBI_PASSWORD\n"; 
     print "\t-mgrast_url    - MG-RAST API URL to retrieve the project from\n";
     print "\t-submit_url    - EBI submission URL\n";
     print "\t-submit_option - EBI submission option (default ADD): ".join(", ", keys %$submit_options)."\n";
-    print "\t-output        - name and path of receipt file, default is receipt.xml\n\n";
-    print "\t-temp_dir      - path of temp dir, default is CWD\n\n";
+    print "\t-output        - name and path of receipt file, default is receipt.xml\n";
+    print "\t-temp_dir      - path of temp dir, default is CWD\n";
     print "\t-verbose       - verbose output\n";
     print "upload_list line format:: mg ID \\t filepath \\t md5sum \\t file type\\n\n";
 }
@@ -343,7 +340,7 @@ sub submit {
    if ($files) {
        foreach my $key (keys %$files) {
 	       if ($files->{$key}) {
-	           push @line_action, "<ACTION><$action source=\"".$files->{$key}."\" schema=\"".$key."\"/></ACTION>";
+	           push @line_actions, "<ACTION><$action source=\"".$files->{$key}."\" schema=\"".$key."\"/></ACTION>";
 	       }
        }
    }
