@@ -25,8 +25,6 @@ inputs:
     
     outName:
         type: string
-        inputBinding:
-            position: 2
 
 
 baseCommand: [cat]
