@@ -55,6 +55,7 @@ ENV PATH /usr/src/autoskewer/:$PATH
 COPY . ebi-submitter
 RUN chmod a+x ebi-submitter/scripts/*
 ENV PATH /usr/src/ebi-submitter/scripts:$PATH
+ENV PERL5LIB /usr/src/ebi-submitter/scripts/lib:$PERL5LIB
 
 CMD ["cwltool"]
 
