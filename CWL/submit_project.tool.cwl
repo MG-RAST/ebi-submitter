@@ -48,7 +48,7 @@ inputs:
     submitUrl:
         type: string?
         doc: EBI Submission URL
-        default: https://www.ebi.ac.uk/ena/submit/drop-box/submit/
+        default: https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/
         inputBinding:
             prefix: --submit_url
     
