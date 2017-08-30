@@ -21,6 +21,13 @@ sub new {
   $self->{PI_name} =~ s/^\s+|\s+$//g;
   $self->{submitter_name} =~ s/^\s+|\s+$//g;
   
+  unless ($self->{submitter_name}) {
+      $self->{submitter_name} = $self->{PI_name};
+  }
+  unless ($self->{PI_name}) {
+      $self->{PI_name} = $self->{submitter_name};
+  }
+  
   # remove email and misc_param from metadata
   for my $key (keys %$data) {
     if ($key =~ /email|misc_param|lastname|firstname/i) {
