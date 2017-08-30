@@ -156,14 +156,17 @@ EOF
 
 # process project data
 foreach my $sample_data (@{$project_data->{samples}}) {
+    print "sample: ".$sample_data->{id}."\n" if ($verbose);
     my @mg_ids = ();
     foreach my $library_data (@{$sample_data->{libraries}}) {
         next unless ($library_data->{data}{metagenome_id} && $library_data->{data}{metagenome_id}{value});
+        print "library: ".$library_data->{id}."\n" if ($verbose);
         my $mgid = $library_data->{data}{metagenome_id}{value};
         unless ($mgid =~ /^mgm.*/) {
             $mgid = 'mgm'.$mgid;
         }
         if ($upload_data->{$mgid}) {
+            print "read: $mgid, ".join(",", @{$upload_data->{$mgid}})."\n" if ($verbose);
             push @mg_ids, $mgid;
             $experiments->add($sample_data->{id}, $library_data->{id}, $mgid, simplify_hash($library_data->{data}));
             $run_xml .= get_run_xml($center_name, $mgid, $upload_data->{$mgid});
