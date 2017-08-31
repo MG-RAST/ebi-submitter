@@ -1,4 +1,4 @@
-package Submitter::Experiments;
+package Submitter::Samples;
 our @ISA = "Submitter";
 
 use strict;

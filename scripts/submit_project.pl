@@ -10,6 +10,7 @@ use JSON;
 use Getopt::Long;
 
 use Submitter::Project;
+use Submitter::Samples;
 use Submitter::Experiments;
 
 # inputs
