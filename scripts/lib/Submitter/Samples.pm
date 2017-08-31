@@ -159,7 +159,7 @@ sub xml2txt {
   my ($self) = @_;
   
   my $xml = <<"EOF";
-  <?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
   <SAMPLE_SET xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.sample.xsd">
 EOF

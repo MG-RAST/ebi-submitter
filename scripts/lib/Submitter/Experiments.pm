@@ -187,8 +187,8 @@ sub xml2txt {
      
   my $xml = <<"EOF";
 <?xml version="1.0" encoding="UTF-8"?>
-<EXPERIMENT_SET xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.experiment.xsd">
+  <EXPERIMENT_SET xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.experiment.xsd">
 EOF
 
   foreach my $exp (@{$self->{experiments}}) {

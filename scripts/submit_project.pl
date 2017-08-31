@@ -276,8 +276,6 @@ EOF
 }
 
 # Submit xml files
-# submit($study_xml, $sample_xml, $experiment_xml, $run_xml, $submission_id, $center_name, $files);
-# $files = {"study" => "study.xml", "sample" => "sample.xml", "experiment" => "experiment.xml", "run" => "run.xml"};
 sub submit {
    my ($action, $study_xml, $sample_xml, $experiment_xml, $run_xml, $submission_id, $center_name, $files) = @_;
    
