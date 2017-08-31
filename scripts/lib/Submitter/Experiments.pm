@@ -48,12 +48,12 @@ sub seq_model {
     if ($self->{seq_models}{$model}) {
       return $model;
     } else {
-      print STDERR "Can't find model $model. Not in supported list of models. Setting to unspecified.\n";
+      print "Warning: Can't find model $model. Not in supported list of models. Setting to unspecified.\n";
       return "unspecified";
     }
   }
   
-  print STDERR "Model not defined. Setting to unspecified.\n";
+  print "Warning: Model not defined. Setting to unspecified.\n";
   return "unspecified";
 }
 
@@ -69,7 +69,7 @@ sub platform2xml {
   
   # try seq_meth than seq_model
   my $model = $self->seq_model($library->{seq_meth});
-  if ($model eq "unspecified") {
+  if (($model eq "unspecified") && $library->{seq_make}) {
       $model = $self->seq_model($library->{seq_make});
   }
   

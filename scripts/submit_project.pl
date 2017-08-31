@@ -172,7 +172,7 @@ foreach my $sample_data (@{$project_data->{samples}}) {
             $mgid = 'mgm'.$mgid;
         }
         if ($upload_data->{$mgid}) {
-            print "read: $mgid, ".join(",", @{$upload_data->{$mgid}})."\n" if ($verbose);
+            print "read: $mgid, ".join(",", values %{$upload_data->{$mgid}})."\n" if ($verbose);
             push @mg_ids, $mgid;
             $experiments->add($sample_data->{id}, $library_data->{id}, $mgid, simplify_hash($library_data->{data}));
             $run_xml .= get_run_xml($center_name, $mgid, $upload_data->{$mgid});
