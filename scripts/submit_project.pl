@@ -172,7 +172,7 @@ foreach my $sample_data (@{$project_data->{samples}}) {
             $mgid = 'mgm'.$mgid;
         }
         if ($upload_data->{$mgid}) {
-            print "read: $mgid, ".join(",", values %{$upload_data->{$mgid}})."\n" if ($verbose);
+            print "read: $mgid, ".join(", ", sort values %{$upload_data->{$mgid}})."\n" if ($verbose);
             push @mg_ids, $mgid;
             $experiments->add($sample_data->{id}, $library_data->{id}, $mgid, simplify_hash($library_data->{data}));
             $run_xml .= get_run_xml($center_name, $mgid, $upload_data->{$mgid});
@@ -195,7 +195,6 @@ my $files = {
     "run" => "run.xml"
 };
 
-print "Submitting\n" if ($verbose);
 submit($submit_option, $study_xml, $sample_xml, $experiment_xml, $run_xml, $submission_id, $center_name, $files);
 
 sub simplify_hash {
@@ -397,10 +396,7 @@ EOF
    print FILE $submission;
    close FILE;
    
-   print "Initiating http transfer of XMLs\n" if ($verbose);
-   
    my $cmd = "curl -k -F \"SUBMISSION=\@$temp_dir/submission.xml\" -F \"STUDY=\@$temp_dir/study.xml\" -F \"SAMPLE=\@$temp_dir/sample.xml\" -F \"EXPERIMENT=\@$temp_dir/experiment.xml\" -F \"RUN=\@$temp_dir/run.xml\" \"$submit_url\"";
-   print "$cmd\n";
    
    if ($debug) {
        print "######### submission.xml #########\n".$submission."\n";
@@ -408,11 +404,13 @@ EOF
        print "######### sample.xml #########\n".$sample_xml."\n";
        print "######### experiment.xml #########\n".$experiment_xml."\n";
        print "######### run.xml #########\n".$run_xml."\n";
+       print "######### curl command (not sent) #########\n$cmd\n";
        exit 0;
    }
    
+   print "Initiating http transfer of XMLs\n$cmd\n" if ($verbose);
    my $receipt = `$cmd`;
-   print $receipt."\n" if($verbose);
+   print $receipt."\n" if ($verbose);
 
    if ($receipt) {
      open(FILE, ">$receipt_file");
