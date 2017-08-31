@@ -67,15 +67,15 @@ sub platform2xml {
       $platform = "LS454";
   }
   
-  # try seq_meth than seq_model
-  my $model = $self->seq_model($library->{seq_meth});
+  # try seq_model than seq_make
+  my $model = $self->seq_model($library->{seq_model});
   if (($model eq "unspecified") && $library->{seq_make}) {
       $model = $self->seq_model($library->{seq_make});
   }
   
   unless ($model && $platform) {
     # Never get here
-    print STDERR "Something wrong, No sequencer model and platform.\n" ;
+    print STDERR "Something wrong, no sequencer model or platform identified.\n";
     print STDERR "Platform: $platform\tModel: $model\n";
     print STDERR Dumper $library;
     exit;
@@ -135,27 +135,31 @@ sub experiment2xml {
   my $linkin_id = $data->{metagenome_id};
   my $sample_id = $data->{sample_id};
   
-  my $experiment_id    = $library->{ebi_id} ? $library->{ebi_id} : $data->{library_id};
-  my $experiment_name  = $library->{metagenome_name};
-  my $library_strategy = $library->{investigation_type};
- 
+  my $experiment_id   = $library->{ebi_id} ? $library->{ebi_id} : $data->{library_id};
+  my $experiment_name = $library->{metagenome_name};
+  
   my $library_selection = "RANDOM";
+  my $library_strategy  = undef;
   my $library_source    = undef;
-
-  if ($library->{investigation_type} eq "metagenome") {
-    $library_source = "METAGENOMIC";
-  } else {
-    $library_source = uc($library->{investigation_type}) || undef;
+  
+  # translate investigation_type
+  if ($library->{investigation_type} eq 'metagenome') {
+      $library_strategy = "WGS";
+      $library_source   = "METAGENOMIC";
+  } elsif ($library->{investigation_type} eq 'mimarks-survey') {
+      $library_strategy = "AMPLICON";
+      $library_source   = "METAGENOMIC";
+  } elsif ($library->{investigation_type} eq 'metatranscriptome') {
+      $library_strategy = "RNA-Seq";
+      $library_source   = "METATRANSCRIPTOMIC";
   }
   
-  # checks 
-  unless ($library_strategy) {
-    print STDERR "No library type for $experiment_id, exit!\n";
-    exit;
-  }
-
-  unless ($library_source) {
-    print STDERR "Missing library source for $experiment_id, exit!\n";
+  unless ($library_strategy && $library_source) {
+      # Never get here
+      print STDERR "Something wrong, no library strategy or source identified.\n" ;
+      print STDERR "Strategy: $library_strategy\tSource: $library_source\n";
+      print STDERR Dumper $library;
+      exit;
   }
   
   my $xml = <<"EOF";
