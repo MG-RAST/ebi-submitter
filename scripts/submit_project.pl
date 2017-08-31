@@ -371,30 +371,13 @@ xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.subm
 </SUBMISSION_SET>
 EOF
 
-   # dump study_xml
-   open(FILE , ">$temp_dir/study.xml") or die "Can't write to study.xml" ;
-   print FILE $study_xml;
-   close(FILE);
-   
-   # dump sample_xml
-   open(FILE , ">$temp_dir/sample.xml") or die "Can't write sample.xml" ;
-   print FILE $sample_xml;
-   close(FILE);
-   
-   # dump experiment_xml
-   open(FILE , ">$temp_dir/experiment.xml") or die "Can't write experiment.xml" ;
-   print FILE $experiment_xml;
-   close(FILE);
-   
-   # dump run_xml
-   open(FILE , ">$temp_dir/run.xml") or die "Can't write run.xml" ;
-   print FILE $run_xml;
-   close(FILE);
-
-   # dump submission xml
-   open(FILE , ">$temp_dir/submission.xml") or die "Can't write submission.xml" ;
-   print FILE $submission;
-   close FILE;
+   # clean and output xml files
+   my $utf_clean = "iconv -f UTF-8 -t UTF-8 -c";
+   system("echo '$study_xml' | $utf_clean > $temp_dir/study.xml");
+   system("echo '$sample_xml' | $utf_clean > $temp_dir/sample.xml");
+   system("echo '$experiment_xml' | $utf_clean > $temp_dir/experiment.xml");
+   system("echo '$run_xml' | $utf_clean > $temp_dir/run.xml");
+   system("echo '$submission' | $utf_clean > $temp_dir/submission.xml");
    
    my $cmd = "curl -k -F \"SUBMISSION=\@$temp_dir/submission.xml\" -F \"STUDY=\@$temp_dir/study.xml\" -F \"SAMPLE=\@$temp_dir/sample.xml\" -F \"EXPERIMENT=\@$temp_dir/experiment.xml\" -F \"RUN=\@$temp_dir/run.xml\" \"$submit_url\"";
    

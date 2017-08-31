@@ -9,6 +9,7 @@ RUN apt-get install -y \
   libjson-xs-perl \
   libwww-perl \
   libxml2-dev \
+  libxml2-utils \
   libxml-perl \
   make \
   perl \
