@@ -147,11 +147,7 @@ print Dumper $study_xml if ($verbose && (! $debug));
 my $experiments = new Submitter::Experiments($seq_model_map, $study_ref, $center_name);
 
 ###### Create Samples XML ######
-my $sample_xml = <<"EOF";
-<?xml version="1.0" encoding="UTF-8"?>
-<SAMPLE_SET xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.sample.xsd">
-EOF
+my $samples = new Submitter::Samples($center_name);
 
 ###### Create RUN XML ######
 my $run_xml = <<"EOF";
@@ -179,13 +175,13 @@ foreach my $sample_data (@{$project_data->{samples}}) {
         }
     }
     if (scalar(@mg_ids) > 0) {
-        $sample_xml .= get_sample_xml($sample_data, $center_name, \@mg_ids);
+        $samples->add($sample_data, \@mg_ids);
     }
 }
 
 # finalize
 $run_xml .= "</RUN_SET>";
-$sample_xml .= "</SAMPLE_SET>";
+my $sample_xml = $samples->xml2txt;
 my $experiment_xml = $experiments->xml2txt;
 
 my $files = {
@@ -253,61 +249,6 @@ sub get_mg_tax_map {
     }
     
     return $mg_tax;
-}
-
-sub get_sample_xml {
-   my ($sample, $center_name, $mg_ids) = @_;
-
-   my $sample_alias = $sample->{id};
-   my $sample_name  = $sample->{name};
-   my $sdata = simplify_hash($sample->{data});
-   my $edata = simplify_hash($sample->{envPackage}{data});
-
-   # get ncbi scientific name and tax id
-   my $ncbiTaxName = $sdata->{metagenome_taxonomy};
-   my $ncbiTaxId   = $mg_tax_map->{$ncbiTaxName};
-   
-   # Fill template now
-   my $sample_attribute_table = {};
-   map { $sample_attribute_table->{$_} = $edata->{$_} } keys %$edata;
-   map { $sample_attribute_table->{$_} = $sdata->{$_} } keys %$sdata;
-
-   my $sample_xml = <<"EOF";
-    <SAMPLE alias="$sample_alias"
-    center_name="$center_name">
-        <TITLE>$sample_name Taxonomy ID:$ncbiTaxId</TITLE>
-        <SAMPLE_NAME>
-            <TAXON_ID>$ncbiTaxId</TAXON_ID>
-        </SAMPLE_NAME>
-        <DESCRIPTION>$sample_name Taxonomy ID:$ncbiTaxId</DESCRIPTION>
-        <SAMPLE_ATTRIBUTES>
-EOF
-
-   foreach my $id (@$mg_ids) {
-      $sample_xml .= <<"EOF";
-          <SAMPLE_ATTRIBUTE>
-             <TAG>BROKER_OBJECT_ID</TAG>
-             <VALUE>$id</VALUE>
-          </SAMPLE_ATTRIBUTE>
-EOF
-   }
-
-   foreach my $key (keys %$sample_attribute_table) {
-      my $value = $sample_attribute_table->{$key};
-      $sample_xml .= <<"EOF";
-          <SAMPLE_ATTRIBUTE>
-             <TAG>$key</TAG>
-             <VALUE>$value</VALUE>
-          </SAMPLE_ATTRIBUTE>
-EOF
-   }
-
-   $sample_xml .= <<"EOF";
-        </SAMPLE_ATTRIBUTES>
-    </SAMPLE>
-EOF
-
-   return $sample_xml;
 }
 
 sub get_run_xml {
