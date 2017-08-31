@@ -144,11 +144,11 @@ my $prj = new Submitter::Project($study_ref, simplify_hash($project_data->{data}
 my $study_xml = $prj->xml2txt;
 print Dumper $study_xml if ($verbose && (! $debug));
 
+###### Create Samples XML ######
+my $samples = new Submitter::Samples($mg_tax_map, $center_name);
+
 ###### Create Experiments XML ######
 my $experiments = new Submitter::Experiments($seq_model_map, $study_ref, $center_name);
-
-###### Create Samples XML ######
-my $samples = new Submitter::Samples($center_name);
 
 ###### Create RUN XML ######
 my $run_xml = <<"EOF";

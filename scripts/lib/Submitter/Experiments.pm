@@ -9,10 +9,11 @@ sub new {
   my ($class, $seq_model_map, $study_ref, $center_name) = @_;
   
   my $self = {
-    experiments => [],
-    seq_models  => $seq_model_map || {},
-    study_ref   => $study_ref || undef,
-    center_name => $center_name || undef
+    experiments   => [],
+    default_model => "unspecified",
+    seq_models    => $seq_model_map || {},
+    study_ref     => $study_ref || undef,
+    center_name   => $center_name || undef
   };
   
   return bless $self;
@@ -40,19 +41,19 @@ sub add {
   }
 }
 
-# Check model and return unspecified if model not supported
+# Check model and return default if model not supported
 sub seq_model {
   my ($self, $model) = @_;
   if ($model) {
     if ($self->{seq_models}{$model}) {
       return $model;
     } else {
-      print "Warning: Can't find model $model. Not in supported list of models. Setting to unspecified.\n";
-      return "unspecified";
+      print "Warning: Can't find model $model. Not in supported list. Setting to default.\n";
+      return $self->{default_model};
     }
   }
-  print "Warning: Model not defined. Setting to unspecified.\n";
-  return "unspecified";
+  print "Warning: Model not defined. Setting to default.\n";
+  return $self->{default_model};
 }
 
 sub platform2xml {

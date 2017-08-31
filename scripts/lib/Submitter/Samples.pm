@@ -6,10 +6,12 @@ use warnings;
 use Data::Dumper;
 
 sub new {
-  my ($class, $center_name) = @_;
+  my ($class, $mg_tax_map, $center_name) = @_;
   
   my $self = {
     samples     => [],
+    default_tax => "metagenome",
+    mg_taxonomy => $mg_tax_map || {},
     center_name => $center_name || undef,
     default_id  => "ERC000025",
     checklist   => {
@@ -61,6 +63,21 @@ sub add {
   }
 }
 
+# Check model and return default if model not supported
+sub get_tax_id {
+  my ($self, $mg_tax) = @_;
+  if ($mg_tax) {
+    if ($self->{mg_taxonomy}{$mg_tax}) {
+      return $self->{mg_taxonomy}{$mg_tax};
+    } else {
+      print "Warning: Can't find metagenome_taxonomy $mg_tax. Not in supported list. Setting to default.\n";
+      return $self->{mg_taxonomy}{$self->{default_tax}};
+    }
+  }
+  print "Warning: metagenome_taxonomy not defined. Setting to default.\n";
+  return $self->{mg_taxonomy}{$self->{default_tax}};
+}
+
 sub broker_object_ids {
   my ($self, $ids) = @_;
   my $xml = "";
@@ -104,13 +121,12 @@ EOF
 
 
 sub sample2xml {
-   my ($sample) = @_;
+   my ($self, $sample) = @_;
 
    my $center_name  = $self->center_name();
    my $sample_alias = $sample->{sample_id};
    my $sample_name  = $sample->{sample_name};
-   my $ncbiTaxName  = $sample->{sample_data}{metagenome_taxonomy};
-   my $ncbiTaxId    = $mg_tax_map->{$ncbiTaxName};
+   my $taxonomy_id  = $self->get_tax_id($sample->{sample_data}{metagenome_taxonomy});
    
    my $sample_attributes = {};
    map { $sample_attributes->{$_} = $sample->{envpack_data}{$_} } keys %{$sample->{envpack_data}};
@@ -118,11 +134,11 @@ sub sample2xml {
 
    my $xml = <<"EOF";
     <SAMPLE alias="$sample_alias" center_name="$center_name">
-        <TITLE>$sample_name Taxonomy ID:$ncbiTaxId</TITLE>
+        <TITLE>$sample_name Taxonomy ID:$taxonomy_id</TITLE>
         <SAMPLE_NAME>
-            <TAXON_ID>$ncbiTaxId</TAXON_ID>
+            <TAXON_ID>$taxonomy_id</TAXON_ID>
         </SAMPLE_NAME>
-        <DESCRIPTION>$sample_name Taxonomy ID:$ncbiTaxId</DESCRIPTION>
+        <DESCRIPTION>$sample_name Taxonomy ID:$taxonomy_id</DESCRIPTION>
         <SAMPLE_ATTRIBUTES>
             
 EOF
