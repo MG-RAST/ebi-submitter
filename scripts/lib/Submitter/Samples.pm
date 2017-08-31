@@ -55,8 +55,8 @@ sub add {
         mg_ids       => $mgids,
         sample_id    => $sample->{id},
         sample_name  => $sample->{name},
-        sample_data  => $self->simplify_hash($sample->{data});
-        envpack_data => $self->simplify_hash($sample->{envPackage}{data});
+        sample_data  => $self->simplify_hash($sample->{data}),
+        envpack_data => $self->simplify_hash($sample->{envPackage}{data})
     };
   }
 }
