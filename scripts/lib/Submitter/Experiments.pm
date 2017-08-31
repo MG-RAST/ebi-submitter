@@ -6,7 +6,7 @@ use warnings;
 use Data::Dumper;
 
 sub new {
-  my ($class, $seq_model_map, $study_ref, $center_name) = @_ ;
+  my ($class, $seq_model_map, $study_ref, $center_name) = @_;
   
   my $self = {
     experiments => [],
@@ -42,8 +42,7 @@ sub add {
 
 # Check model and return unspecified if model not supported
 sub seq_model {
-  my ($self, $model) = @_ ;
-  
+  my ($self, $model) = @_;
   if ($model) {
     if ($self->{seq_models}{$model}) {
       return $model;
@@ -52,13 +51,12 @@ sub seq_model {
       return "unspecified";
     }
   }
-  
   print "Warning: Model not defined. Setting to unspecified.\n";
   return "unspecified";
 }
 
 sub platform2xml {
-  my ($self, $library) = @_ ;
+  my ($self, $library) = @_;
   
   # use seq_meth
   my $platform = uc($library->{seq_meth});
@@ -93,9 +91,8 @@ EOF
 }
 
 sub attributes2xml {
-  my ($self, $library) = @_ ;
-  my $xml = "<EXPERIMENT_ATTRIBUTES>" ;
-  
+  my ($self, $library, $linkin_id) = @_;
+  my $xml = "<EXPERIMENT_ATTRIBUTES>";
   foreach my $key (keys %$library) {
     my $value = $library->{$key};
     $xml .= <<"EOF";
@@ -105,30 +102,28 @@ sub attributes2xml {
      </EXPERIMENT_ATTRIBUTE>
 EOF
   }
-  
+  $xml .= $self->broker_object_id($linkin_id);
   $xml .= "</EXPERIMENT_ATTRIBUTES>";
   return $xml;
 }
 
 sub broker_object_id {
-  my ($self, $id) = @_ ;
-  
-  my $xml .= <<"EOF";
+  my ($self, $id) = @_;
+  my $xml = <<"EOF";
    <EXPERIMENT_ATTRIBUTE>
       <TAG>BORKER_OBJECT_ID</TAG>
       <VALUE>$id</VALUE>
    </EXPERIMENT_ATTRIBUTE>
 EOF
-
   return $xml;
 }
 
 # input is library object verbosity full
 sub experiment2xml {
-  my ($self, $data) = @_ ;
+  my ($self, $data) = @_;
   
   my $center_name    = $self->center_name();
-  my $study_ref_name = $self->study_ref();  
+  my $study_ref_name = $self->study_ref();
   my $library        = $data->{library_data};  
   
   # BORKER_OBJECT_ID used to link experiment to MG-RAST
@@ -156,7 +151,7 @@ sub experiment2xml {
   
   unless ($library_strategy && $library_source) {
       # Never get here
-      print STDERR "Something wrong, no library strategy or source identified.\n" ;
+      print STDERR "Something wrong, no library strategy or source identified.\n";
       print STDERR "Strategy: $library_strategy\tSource: $library_source\n";
       print STDERR Dumper $library;
       exit;
@@ -180,13 +175,11 @@ sub experiment2xml {
 EOF
 
   $xml .= $self->platform2xml($library);
-  $xml .= $self->attributes2xml($library);
-  $xml .= $self->broker_object_id($linkin_id) ;
-  $xml .= "</EXPERIMENT>" ; 
+  $xml .= $self->attributes2xml($library, $linkin_id);
+  $xml .= "</EXPERIMENT>";
  
   return $xml
 }
-
 
 sub xml2txt {
   my ($self) = @_;
