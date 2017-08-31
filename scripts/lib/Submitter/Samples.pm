@@ -6,15 +6,17 @@ use warnings;
 use Data::Dumper;
 
 sub new {
-  my ($class, $mg_tax_map, $center_name) = @_;
+  my ($class, $mg_tax_map, $mixs_term_map, $project_name, $center_name) = @_;
   
   my $self = {
-    samples     => [],
-    default_tax => "metagenome",
-    mg_taxonomy => $mg_tax_map || {},
-    center_name => $center_name || undef,
-    default_id  => "ERC000025",
-    checklist   => {
+    samples      => [],
+    default_tax  => "metagenome",
+    mg_taxonomy  => $mg_tax_map || {},
+    mixs_map     => $mixs_term_map || {},
+    center_name  => $center_name || undef,
+    project_name => $project_name,
+    default_id   => "ERC000025",
+    checklist    => {
         "air"                   => "ERC000012",
         "built environment"     => "ERC000031",
         "host-associated"       => "ERC000013",
@@ -107,8 +109,10 @@ EOF
 sub attributes2xml {
   my ($self, $samples) = @_;
   my $xml = "";
-  foreach my $key (keys %$samples) {
-    my $value = $samples->{$key};
+  while (my ($key, $value) = each %$samples) {
+    if (exists $self->{mixs_map}{$key}) {
+       $key = $self->{mixs_map}{$key};
+    }
     $xml .= <<"EOF";
        <SAMPLE_ATTRIBUTE>
           <TAG>$key</TAG>
@@ -119,7 +123,6 @@ EOF
   return $xml;
 }
 
-
 sub sample2xml {
    my ($self, $sample) = @_;
 
@@ -128,7 +131,9 @@ sub sample2xml {
    my $sample_name  = $sample->{sample_name};
    my $taxonomy_id  = $self->get_tax_id($sample->{sample_data}{metagenome_taxonomy});
    
-   my $sample_attributes = {};
+   my $sample_attributes = {
+       project_name => $self->{project_name}
+   };
    map { $sample_attributes->{$_} = $sample->{envpack_data}{$_} } keys %{$sample->{envpack_data}};
    map { $sample_attributes->{$_} = $sample->{sample_data}{$_} } keys %{$sample->{sample_data}};
 

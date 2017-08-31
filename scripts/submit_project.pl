@@ -47,6 +47,23 @@ my $submit_options = {
     RELEASE   => 1 
 };
 
+my $mixs_term_map = {
+    "project_name"       => "project name",
+    "investigation_type" => "investigation type",
+    "seq_meth"           => "sequencing method",
+    "collection_date"    => "collection date",
+    "country"            => "geographic location (country and/or sea)",
+    "latitude"           => "geographic location (latitude)",
+    "longitude"          => "geographic location (longitude)",
+    "altitude"           => "geographic location (altitude)",
+    "depth"              => "geographic location (depth)",
+    "elevation"          => "geographic location (elevation)",
+    "env_package"        => "environmental package",
+    "biome"              => "environment (biome)",
+    "feature"            => "environment (feature)",
+    "material"           => "environment (material)"
+};
+
 GetOptions(
     'upload_list=s'   => \$upload_list,
     'project_id=s'    => \$project_id,
@@ -137,18 +154,19 @@ my $project_data = get_json_from_url($mgrast_url."/metadata/export/".$project_id
 
 
 ###### Create Project XML ######
-my $study_ref   = $project_data->{id};
-my $center_name = $project_data->{data}{PI_organization}{value} || "unknown" ;
+my $study_ref    = $project_data->{id};
+my $center_name  = $project_data->{data}{PI_organization}{value} || "unknown";
+my $project_name = $project_data->{data}{project_name}{value} || $study_ref;
 
 my $prj = new Submitter::Project($study_ref, simplify_hash($project_data->{data}));
 my $study_xml = $prj->xml2txt;
 print Dumper $study_xml if ($verbose && (! $debug));
 
 ###### Create Samples XML ######
-my $samples = new Submitter::Samples($mg_tax_map, $center_name);
+my $samples = new Submitter::Samples($mg_tax_map, $mixs_term_map, $project_name, $center_name);
 
 ###### Create Experiments XML ######
-my $experiments = new Submitter::Experiments($seq_model_map, $study_ref, $center_name);
+my $experiments = new Submitter::Experiments($seq_model_map, $mixs_term_map, $study_ref, $project_name, $center_name);
 
 ###### Create RUN XML ######
 my $run_xml = <<"EOF";

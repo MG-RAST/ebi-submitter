@@ -6,13 +6,15 @@ use warnings;
 use Data::Dumper;
 
 sub new {
-  my ($class, $seq_model_map, $study_ref, $center_name) = @_;
+  my ($class, $seq_model_map, $mixs_term_map, $study_ref, $project_name, $center_name) = @_;
   
   my $self = {
     experiments   => [],
     default_model => "unspecified",
     seq_models    => $seq_model_map || {},
+    mixs_map      => $mixs_term_map || {},
     study_ref     => $study_ref || undef,
+    project_name  => $project_name,
     center_name   => $center_name || undef
   };
   
@@ -94,8 +96,10 @@ EOF
 sub attributes2xml {
   my ($self, $library, $linkin_id) = @_;
   my $xml = "<EXPERIMENT_ATTRIBUTES>";
-  foreach my $key (keys %$library) {
-    my $value = $library->{$key};
+  while (my ($key, $value) = each %$library) {
+    if (exists $self->{mixs_map}{$key}) {
+      $key = $self->{mixs_map}{$key};
+    }
     $xml .= <<"EOF";
      <EXPERIMENT_ATTRIBUTE>
         <TAG>$key</TAG>
@@ -126,6 +130,7 @@ sub experiment2xml {
   my $center_name    = $self->center_name();
   my $study_ref_name = $self->study_ref();
   my $library        = $data->{library_data};  
+  $library->{project_name} = $self->{project_name};
   
   # BORKER_OBJECT_ID used to link experiment to MG-RAST
   my $linkin_id = $data->{metagenome_id};
