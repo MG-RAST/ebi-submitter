@@ -41,7 +41,7 @@ inputs:
     mgrastUrl:
         type: string?
         doc: MG-RAST API URL
-        default: http://api.metagenomics.anl.gov/
+        default: http://api-dev.metagenomics.anl.gov/
         inputBinding:
             prefix: --mgrast_url
     

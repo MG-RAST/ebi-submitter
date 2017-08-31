@@ -30,7 +30,7 @@ my $mgrast_url = "http://api.metagenomics.anl.gov";
 
 # ENA URL
 my $submit_option = 'ADD';
-my $submit_url    = "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/";
+my $submit_url    = "https://www.ebi.ac.uk/ena/submit/drop-box/submit/";
 my $user          = $ENV{'EBI_USER'} || undef;
 my $password      = $ENV{'EBI_PASSWORD'} || undef;
 
@@ -86,6 +86,12 @@ if ($help) {
 unless ($user && $password && $project_id && $upload_list && (-s $upload_list) && $submit_options->{$submit_option}) {
     &usage();
     exit 1;
+}
+
+if ($debug) {
+    $mgrast_url = "http://api-dev.metagenomics.anl.gov";
+    $submit_url = "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/";
+    print "Running in DEBUG mode:\nMG-RAST API:\t$mgrast_url\nEBI URL:\t$submit_url\n";
 }
 
 # parse upload info
