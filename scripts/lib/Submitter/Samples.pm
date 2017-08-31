@@ -11,7 +11,7 @@ sub new {
   my $self = {
     samples     => [],
     center_name => $center_name || undef,
-    default_id  => "ERC000025";
+    default_id  => "ERC000025",
     checklist   => {
         "air"                   => "ERC000012",
         "built environment"     => "ERC000031",
@@ -31,7 +31,7 @@ sub new {
     }
   };
   
-  return bless $self 
+  return bless $self;
 }
 
 sub center_name {

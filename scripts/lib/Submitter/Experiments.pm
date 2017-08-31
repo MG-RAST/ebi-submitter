@@ -15,7 +15,7 @@ sub new {
     center_name => $center_name || undef
   };
   
-  return bless $self 
+  return bless $self;
 }
 
 sub study_ref {
