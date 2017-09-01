@@ -181,6 +181,11 @@ sub sample2xml {
    };
    map { $sample_attributes->{$_} = $sample->{envpack_data}{$_} } keys %{$sample->{envpack_data}};
    map { $sample_attributes->{$_} = $sample->{sample_data}{$_} } keys %{$sample->{sample_data}};
+   
+   # hack to fix USA name
+   if (exists($sample_attributes->{country}) && ($sample_attributes->{country} eq 'United States of America')) {
+       $sample_attributes->{country} = 'USA';
+   }
 
    my $xml = <<"EOF";
     <SAMPLE alias="$sample_alias" center_name="$center_name">
