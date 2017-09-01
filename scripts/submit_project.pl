@@ -53,6 +53,7 @@ my $mixs_term_map = {
     seq_meth           => "sequencing method",
     collection_date    => "collection date",
     country            => "geographic location (country and/or sea)",
+    location           => "geographic location (region and locality)",
     latitude           => "geographic location (latitude)",
     longitude          => "geographic location (longitude)",
     altitude           => "geographic location (altitude)",
