@@ -15,7 +15,21 @@ sub new {
     mixs_map      => $mixs_term_map || {},
     study_ref     => $study_ref || undef,
     project_name  => $project_name,
-    center_name   => $center_name || undef
+    center_name   => $center_name || undef,
+    library_map   => {
+        'metagenome' => {
+            strategy => "WGS",
+            source   => "METAGENOMIC"
+        },
+        'mimarks-survey' => {
+            strategy => "AMPLICON",
+            source   => "METAGENOMIC"
+        },
+        'metatranscriptome' => {
+            strategy => "RNA-Seq",
+            source   => "METATRANSCRIPTOMIC"
+        }
+    }
   };
   
   return bless $self;
@@ -144,15 +158,9 @@ sub experiment2xml {
   my $library_source    = undef;
   
   # translate investigation_type
-  if ($library->{investigation_type} eq 'metagenome') {
-      $library_strategy = "WGS";
-      $library_source   = "METAGENOMIC";
-  } elsif ($library->{investigation_type} eq 'mimarks-survey') {
-      $library_strategy = "AMPLICON";
-      $library_source   = "METAGENOMIC";
-  } elsif ($library->{investigation_type} eq 'metatranscriptome') {
-      $library_strategy = "RNA-Seq";
-      $library_source   = "METATRANSCRIPTOMIC";
+  if (exists $self->{library_map}{$library->{investigation_type}}) {
+      $library_strategy = $self->{library_map}{$library->{investigation_type}}{strategy};
+      $library_source   = $self->{library_map}{$library->{investigation_type}}{source};
   }
   
   unless ($library_strategy && $library_source) {

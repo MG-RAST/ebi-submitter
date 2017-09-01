@@ -48,20 +48,20 @@ my $submit_options = {
 };
 
 my $mixs_term_map = {
-    "project_name"       => "project name",
-    "investigation_type" => "investigation type",
-    "seq_meth"           => "sequencing method",
-    "collection_date"    => "collection date",
-    "country"            => "geographic location (country and/or sea)",
-    "latitude"           => "geographic location (latitude)",
-    "longitude"          => "geographic location (longitude)",
-    "altitude"           => "geographic location (altitude)",
-    "depth"              => "geographic location (depth)",
-    "elevation"          => "geographic location (elevation)",
-    "env_package"        => "environmental package",
-    "biome"              => "environment (biome)",
-    "feature"            => "environment (feature)",
-    "material"           => "environment (material)"
+    project_name       => "project name",
+    investigation_type => "investigation type",
+    seq_meth           => "sequencing method",
+    collection_date    => "collection date",
+    country            => "geographic location (country and/or sea)",
+    latitude           => "geographic location (latitude)",
+    longitude          => "geographic location (longitude)",
+    altitude           => "geographic location (altitude)",
+    depth              => "geographic location (depth)",
+    elevation          => "geographic location (elevation)",
+    env_package        => "environmental package",
+    biome              => "environment (biome)",
+    feature            => "environment (feature)",
+    material           => "environment (material)"
 };
 
 GetOptions(

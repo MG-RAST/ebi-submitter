@@ -15,23 +15,68 @@ sub new {
     mixs_map     => $mixs_term_map || {},
     center_name  => $center_name || undef,
     project_name => $project_name,
-    default_id   => "ERC000025",
-    checklist    => {
-        "air"                   => "ERC000012",
-        "built environment"     => "ERC000031",
-        "host-associated"       => "ERC000013",
-        "human-associated"      => "ERC000014",
-        "human-gut"             => "ERC000015",
-        "human-oral"            => "ERC000016",
-        "human-skin"            => "ERC000017",
-        "human-vaginal"         => "ERC000018",
-        "microbial mat|biofilm" => "ERC000019",
-        "miscellaneous"         => "ERC000025",
-        "plant-associated"      => "ERC000020",
-        "sediment"              => "ERC000021",
-        "soil"                  => "ERC000022",
-        "wastewater|sludge"     => "ERC000023",
-        "water"                 => "ERC000024"
+    default_ep   => "miscellaneous",
+    envpack_map  => {
+        "air"                   => {
+            checklist => "ERC000012",
+            fullname  => "air environmental package"
+        },
+        "built environment"     => {
+            checklist => "ERC000031",
+            fullname  => "built environment environmental package"
+        },
+        "host-associated"       => {
+            checklist => "ERC000013",
+            fullname  => "host-associated environmental package"
+        },
+        "human-associated"      => {
+            checklist => "ERC000014",
+            fullname  => "human-associated environmental package"
+        },
+        "human-gut"             => {
+            checklist => "ERC000015",
+            fullname  => "human gut environmental package"
+        },
+        "human-oral"            => {
+            checklist => "ERC000016",
+            fullname  => "human oral environmental package"
+        },
+        "human-skin"            => {
+            checklist => "ERC000017",
+            fullname  => "human skin environmental package"
+        },
+        "human-vaginal"         => {
+            checklist => "ERC000018",
+            fullname  => "human vaginal environmental package"
+        },
+        "microbial mat|biofilm" => {
+            checklist => "ERC000019",
+            fullname  => "microbial mat/biofilm environmental package"
+        },
+        "miscellaneous"         => {
+            checklist => "ERC000025",
+            fullname  => "miscellaneous environmental package"
+        },
+        "plant-associated"      => {
+            checklist => "ERC000020",
+            fullname  => "plant-associated environmental package"
+        },
+        "sediment"              => {
+            checklist => "ERC000021",
+            fullname  => "sediment environmental package"
+        },
+        "soil"                  => {
+            checklist => "ERC000022",
+            fullname  => "soil environmental package"
+        },
+        "wastewater|sludge"     => {
+            checklist => "ERC000023",
+            fullname  => "wastewater/sludge environmental package"
+        },
+        "water"                 => {
+            checklist => "ERC000024",
+            fullname  => "water environmental package"
+        }
     }
   };
   
@@ -41,15 +86,6 @@ sub new {
 sub center_name {
   my ($self) = @_;
   return $self->{center_name};
-}
-
-sub get_checklist_id {
-   my ($self, $ep) = @_;
-   if ($self->{checklist}{$ep}) {
-      return $self->{checklist}{$ep};
-   } else {
-      return $self->{default_id};
-   }
 }
 
 sub add {
@@ -94,13 +130,22 @@ EOF
    return $xml;
 }
 
-sub checklist_id {
+sub checklist_ep {
   my ($self, $ep) = @_;
-  my $id  = $self->get_checklist_id($ep);
+  unless (exists $self->{envpack_map}{$ep}) {
+      print "Warning: Can't find env_package $ep. Not in supported list. Setting to default.\n";
+      $ep = $self->{default_ep};
+  }
+  my $check_id = $self->{envpack_map}{$ep}{checklist};
+  my $ep_name  = $self->{envpack_map}{$ep}{fullname};
   my $xml = <<"EOF";
     <SAMPLE_ATTRIBUTE>
        <TAG>ENA-CHECKLIST</TAG>
-       <VALUE>$id</VALUE>
+       <VALUE>$check_id</VALUE>
+    </SAMPLE_ATTRIBUTE>
+    <SAMPLE_ATTRIBUTE>
+       <TAG>$ep_name</TAG>
+       <VALUE>$ep</VALUE>
     </SAMPLE_ATTRIBUTE>
 EOF
   return $xml;
@@ -149,7 +194,7 @@ sub sample2xml {
 EOF
 
    $xml .= $self->broker_object_ids($sample->{mg_ids});
-   $xml .= $self->checklist_id($sample->{sample_data}{env_package});
+   $xml .= $self->checklist_ep($sample->{sample_data}{env_package});
    $xml .= $self->attributes2xml($sample_attributes);
    
    $xml .= <<"EOF";
