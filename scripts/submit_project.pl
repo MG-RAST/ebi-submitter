@@ -10,6 +10,7 @@ use JSON;
 use Getopt::Long;
 
 use Submitter::Project;
+use Submitter::Samples;
 use Submitter::Experiments;
 
 # inputs
@@ -30,15 +31,12 @@ my $mgrast_url = "http://api.metagenomics.anl.gov";
 
 # ENA URL
 my $submit_option = 'ADD';
-my $submit_url    = "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/";
+my $submit_url    = "https://www.ebi.ac.uk/ena/submit/drop-box/submit/";
 my $user          = $ENV{'EBI_USER'} || undef;
 my $password      = $ENV{'EBI_PASSWORD'} || undef;
 
-# output
-my $receipt_file  = "./receipt.xml";
-
 my $verbose = 0;
-my $help    = 0
+my $help    = 0;
 my $debug   = 0;
 
 my $submit_options = {
@@ -47,6 +45,24 @@ my $submit_options = {
     MODIFY    => 1,
     HOLD      => 1,
     RELEASE   => 1 
+};
+
+my $mixs_term_map = {
+    project_name       => "project name",
+    investigation_type => "investigation type",
+    seq_meth           => "sequencing method",
+    collection_date    => "collection date",
+    country            => "geographic location (country and/or sea)",
+    location           => "geographic location (region and locality)",
+    latitude           => "geographic location (latitude)",
+    longitude          => "geographic location (longitude)",
+    altitude           => "geographic location (altitude)",
+    depth              => "geographic location (depth)",
+    elevation          => "geographic location (elevation)",
+    env_package        => "environmental package",
+    biome              => "environment (biome)",
+    feature            => "environment (feature)",
+    material           => "environment (material)"
 };
 
 GetOptions(
@@ -66,17 +82,18 @@ GetOptions(
 );
 
 sub usage {
-    print "\n\nsubmit_project.pl >>> create the ENA XML file for an MG-RAST project and submit it to EBI\n";
+    print "\nsubmit_project.pl >>> create the ENA XML file for an MG-RAST project and submit it to EBI\n";
     print "submit_project.pl -project_id <project id> -upload_list <upload list file>\n";
-    print "\nOPTIONS\n";
+    print "OPTIONS\n";
     print "\t-user          - EBI submitter login; if provided overrides environment variable EBI_USER\n";
     print "\t-password      - password for login; if provided overrides environment variable EBI_PASSWORD\n"; 
     print "\t-mgrast_url    - MG-RAST API URL to retrieve the project from\n";
     print "\t-submit_url    - EBI submission URL\n";
     print "\t-submit_option - EBI submission option (default ADD): ".join(", ", keys %$submit_options)."\n";
-    print "\t-output        - name and path of receipt file, default is receipt.xml\n\n";
-    print "\t-temp_dir      - path of temp dir, default is CWD\n\n";
+    print "\t-output        - name and path of receipt file, default is receipt.xml\n";
+    print "\t-temp_dir      - path of temp dir, default is CWD\n";
     print "\t-verbose       - verbose output\n";
+    print "\t-debug         - debug mode, files created but not submitted\n";
     print "upload_list line format:: mg ID \\t filepath \\t md5sum \\t file type\\n\n";
 }
 
@@ -88,6 +105,12 @@ if ($help) {
 unless ($user && $password && $project_id && $upload_list && (-s $upload_list) && $submit_options->{$submit_option}) {
     &usage();
     exit 1;
+}
+
+if ($debug) {
+    $mgrast_url = "http://api-dev.metagenomics.anl.gov";
+    $submit_url = "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/";
+    print "Running in DEBUG mode:\nMG-RAST API:\t$mgrast_url\nEBI URL:\t$submit_url\n";
 }
 
 # parse upload info
@@ -108,7 +131,7 @@ close(UPLOAD);
 $submit_url .= '?auth=ENA%20'.$user.'%20'.$password;
 
 # Project ID will be ID for all submission for the given project - new and updates
-print STDERR "Checking submission id - create one if not provided\n" if ($verbose);
+print "Checking submission id - create one if not provided\n" if ($verbose);
 unless ($submission_id) {
     $submission_id = $project_id.".".time;
 }
@@ -118,36 +141,33 @@ my $json  = new JSON;
 my $agent = LWP::UserAgent->new;
 
 # get metagenome_taxonomy CV
-print STDERR "Getting metagenome_taxonomy CV from MG-RAST\n" if ($verbose);
+print "Getting metagenome_taxonomy CV from MG-RAST\n" if ($verbose);
 my $mg_tax_map = get_mg_tax_map($mgrast_url);
 
 # get seq_model CV
-print STDERR "Getting seq_model CV from MG-RAST\n" if ($verbose);
+print "Getting seq_model CV from MG-RAST\n" if ($verbose);
 my $seq_model_map = {};
 map { $seq_model_map->{$_} = 1 } @{ get_json_from_url($mgrast_url."/metadata/cv?label=seq_model") };
 
 # get project data
-print STDERR "Getting project metadata from MG-RAST\n" if ($verbose);
+print "Getting project metadata from MG-RAST\n" if ($verbose);
 my $project_data = get_json_from_url($mgrast_url."/metadata/export/".$project_id);
 
 
 ###### Create Project XML ######
-my $study_ref   = $project_data->{id};
-my $center_name = $project_data->{data}{PI_organization}{value} || "unknown" ;
+my $study_ref    = $project_data->{id};
+my $center_name  = $project_data->{data}{PI_organization}{value} || "unknown";
+my $project_name = $project_data->{data}{project_name}{value} || $study_ref;
 
 my $prj = new Submitter::Project($study_ref, simplify_hash($project_data->{data}));
 my $study_xml = $prj->xml2txt;
-print Dumper $study_xml if ($verbose);
-
-###### Create Experiments XML ######
-my $experiments = new Submitter::Experiments($seq_model_map, $study_ref, $center_name);
+print Dumper $study_xml if ($verbose && (! $debug));
 
 ###### Create Samples XML ######
-my $sample_xml = <<"EOF";
-<?xml version="1.0" encoding="UTF-8"?>
-<SAMPLE_SET xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.sample.xsd">
-EOF
+my $samples = new Submitter::Samples($mg_tax_map, $mixs_term_map, $project_name, $center_name);
+
+###### Create Experiments XML ######
+my $experiments = new Submitter::Experiments($seq_model_map, $mixs_term_map, $study_ref, $project_name, $center_name);
 
 ###### Create RUN XML ######
 my $run_xml = <<"EOF";
@@ -158,27 +178,30 @@ EOF
 
 # process project data
 foreach my $sample_data (@{$project_data->{samples}}) {
+    print "sample: ".$sample_data->{id}."\n" if ($verbose);
     my @mg_ids = ();
     foreach my $library_data (@{$sample_data->{libraries}}) {
         next unless ($library_data->{data}{metagenome_id} && $library_data->{data}{metagenome_id}{value});
+        print "library: ".$library_data->{id}."\n" if ($verbose);
         my $mgid = $library_data->{data}{metagenome_id}{value};
         unless ($mgid =~ /^mgm.*/) {
             $mgid = 'mgm'.$mgid;
         }
         if ($upload_data->{$mgid}) {
+            print "read: $mgid, ".join(", ", sort values %{$upload_data->{$mgid}})."\n" if ($verbose);
             push @mg_ids, $mgid;
             $experiments->add($sample_data->{id}, $library_data->{id}, $mgid, simplify_hash($library_data->{data}));
             $run_xml .= get_run_xml($center_name, $mgid, $upload_data->{$mgid});
         }
     }
     if (scalar(@mg_ids) > 0) {
-        $sample_xml .= get_sample_xml($sample_data, $center_name, \@mg_ids);
+        $samples->add($sample_data, \@mg_ids);
     }
 }
 
 # finalize
 $run_xml .= "</RUN_SET>";
-$sample_xml .= "</SAMPLE_SET>";
+my $sample_xml = $samples->xml2txt;
 my $experiment_xml = $experiments->xml2txt;
 
 my $files = {
@@ -187,16 +210,8 @@ my $files = {
     "experiment" => "experiment.xml",
     "run" => "run.xml"
 };
-print "Submitting\n" if ($verbose);
 
-if ($debug) {
-    print $study_xml . "\n";
-    print $sample_xml . "\n";
-    print $experiment_xml . "\n";
-    print $run_xml . "\n";
-} else {
-    submit($submit_option, $study_xml, $sample_xml, $experiment_xml, $run_xml, $submission_id, $center_name, $files);
-}
+submit($submit_option, $study_xml, $sample_xml, $experiment_xml, $run_xml, $submission_id, $center_name, $files);
 
 sub simplify_hash {
     my ($old) = @_;
@@ -256,61 +271,6 @@ sub get_mg_tax_map {
     return $mg_tax;
 }
 
-sub get_sample_xml {
-   my ($sample, $center_name, $mg_ids) = @_;
-
-   my $sample_alias = $sample->{id};
-   my $sample_name  = $sample->{name};
-   my $sdata = simplify_hash($sample->{data});
-   my $edata = simplify_hash($sample->{envPackage}{data});
-
-   # get ncbi scientific name and tax id
-   my $ncbiTaxName = $sdata->{metagenome_taxonomy};
-   my $ncbiTaxId   = $mg_tax_map->{$ncbiTaxName};
-   
-   # Fill template now
-   my $sample_attribute_table = {};
-   map { $sample_attribute_table->{$_} = $edata->{$_} } keys %$edata;
-   map { $sample_attribute_table->{$_} = $sdata->{$_} } keys %$sdata;
-
-   my $sample_xml = <<"EOF";
-    <SAMPLE alias="$sample_alias"
-    center_name="$center_name">
-        <TITLE>$sample_name Taxonomy ID:$ncbiTaxId</TITLE>
-        <SAMPLE_NAME>
-            <TAXON_ID>$ncbiTaxId</TAXON_ID>
-        </SAMPLE_NAME>
-        <DESCRIPTION>$sample_name Taxonomy ID:$ncbiTaxId</DESCRIPTION>
-        <SAMPLE_ATTRIBUTES>
-EOF
-
-   foreach my $id (@$mg_ids) {
-      $sample_xml .= <<"EOF";
-          <SAMPLE_ATTRIBUTE>
-             <TAG>BROKER_OBJECT_ID</TAG>
-             <VALUE>$id</VALUE>
-          </SAMPLE_ATTRIBUTE>
-EOF
-   }
-
-   foreach my $key (keys %$sample_attribute_table) {
-      my $value = $sample_attribute_table->{$key};
-      $sample_xml .= <<"EOF";
-          <SAMPLE_ATTRIBUTE>
-             <TAG>$key</TAG>
-             <VALUE>$value</VALUE>
-          </SAMPLE_ATTRIBUTE>
-EOF
-   }
-
-   $sample_xml .= <<"EOF";
-        </SAMPLE_ATTRIBUTES>
-    </SAMPLE>
-EOF
-
-   return $sample_xml;
-}
-
 sub get_run_xml {
 	my ($center_name, $mg_id, $mg_info) = @_;
     
@@ -335,8 +295,6 @@ EOF
 }
 
 # Submit xml files
-# submit($study_xml, $sample_xml, $experiment_xml, $run_xml, $submission_id, $center_name, $files);
-# $files = {"study" => "study.xml", "sample" => "sample.xml", "experiment" => "experiment.xml", "run" => "run.xml"};
 sub submit {
    my ($action, $study_xml, $sample_xml, $experiment_xml, $run_xml, $submission_id, $center_name, $files) = @_;
    
@@ -350,7 +308,7 @@ sub submit {
    if ($files) {
        foreach my $key (keys %$files) {
 	       if ($files->{$key}) {
-	           push @line_action, "<ACTION><$action source=\"".$files->{$key}."\" schema=\"".$key."\"/></ACTION>";
+	           push @line_actions, "<ACTION><$action source=\"".$files->{$key}."\" schema=\"".$key."\"/></ACTION>";
 	       }
        }
    }
@@ -372,45 +330,35 @@ xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.subm
 </SUBMISSION_SET>
 EOF
 
-   # dump study_xml
-   open(FILE , ">$temp_dir/study.xml") or die "Can't write to study.xml" ;
-   print FILE $study_xml;
-   close(FILE);
-   
-   # dump sample_xml
-   open(FILE , ">$temp_dir/sample.xml") or die "Can't write sample.xml" ;
-   print FILE $sample_xml;
-   close(FILE);
-   
-   # dump experiment_xml
-   open(FILE , ">$temp_dir/experiment.xml") or die "Can't write experiment.xml" ;
-   print FILE $experiment_xml;
-   close(FILE);
-   
-   # dump run_xml
-   open(FILE , ">$temp_dir/run.xml") or die "Can't write run.xml" ;
-   print FILE $run_xml;
-   close(FILE);
-
-   # dump submission xml
-   open(FILE , ">$temp_dir/submission.xml") or die "Can't write submission.xml" ;
-   print FILE $submission;
-   close FILE;
-   
-   print "Initiating http transfer of XMLs\n" if ($verbose);
+   # clean and output xml files
+   my $utf_clean = "iconv -f UTF-8 -t UTF-8 -c";
+   system("echo '$study_xml' | $utf_clean > $temp_dir/study.xml");
+   system("echo '$sample_xml' | $utf_clean > $temp_dir/sample.xml");
+   system("echo '$experiment_xml' | $utf_clean > $temp_dir/experiment.xml");
+   system("echo '$run_xml' | $utf_clean > $temp_dir/run.xml");
+   system("echo '$submission' | $utf_clean > $temp_dir/submission.xml");
    
    my $cmd = "curl -k -F \"SUBMISSION=\@$temp_dir/submission.xml\" -F \"STUDY=\@$temp_dir/study.xml\" -F \"SAMPLE=\@$temp_dir/sample.xml\" -F \"EXPERIMENT=\@$temp_dir/experiment.xml\" -F \"RUN=\@$temp_dir/run.xml\" \"$submit_url\"";
-   print "$cmd\n";
+   
+   if ($debug) {
+       print "######### submission.xml #########\n".$submission."\n";
+       print "######### study.xml #########\n".$study_xml."\n";
+       print "######### sample.xml #########\n".$sample_xml."\n";
+       print "######### experiment.xml #########\n".$experiment_xml."\n";
+       print "######### run.xml #########\n".$run_xml."\n";
+       print "######### curl command (not sent) #########\n$cmd\n";
+       exit 0;
+   }
+   
+   print "Initiating http transfer of XMLs\n$cmd\n" if ($verbose);
    my $receipt = `$cmd`;
-
-   print STDERR $receipt."\n" if($verbose);
+   print $receipt."\n" if ($verbose);
 
    if ($receipt) {
      open(FILE, ">$receipt_file");
      print FILE $receipt;
      close FILE;
-   }
-   else{
+   } else {
      print STDERR "No receipt for submission $submission_id\n";
      exit;
    }

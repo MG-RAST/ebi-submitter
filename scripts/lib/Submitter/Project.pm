@@ -13,11 +13,20 @@ sub new {
     study_title  => $data->{project_name},
     study_type => 'Metagenomics',
     study_abstract => $data->{project_description},
-    PI_name => $data->{PI_firstname}." ".$data->{PI_lastname},
     PI_email => $data->{PI_email},
-    submitter_name => $data->{firstname}." ".$data->{lastname},
-    admin_name => ($data->{"administrative-contact_PI_firstname"} || "")." ".($data->{"administrative-contact_PI_lastname"} || '')
+    PI_name => ($data->{PI_firstname} || "")." ".($data->{PI_lastname} || ""),
+    submitter_name => ($data->{firstname} || "")." ".($data->{lastname} || "")
   };
+  # clean names
+  $self->{PI_name} =~ s/^\s+|\s+$//g;
+  $self->{submitter_name} =~ s/^\s+|\s+$//g;
+  
+  unless ($self->{submitter_name}) {
+      $self->{submitter_name} = $self->{PI_name};
+  }
+  unless ($self->{PI_name}) {
+      $self->{PI_name} = $self->{submitter_name};
+  }
   
   # remove email and misc_param from metadata
   for my $key (keys %$data) {
@@ -72,20 +81,9 @@ sub pi {
   return $self->{PI_name};
 }
 
-# PI email contact
-sub email {
-  my ($self) = @_;
-  return $self->{PI_email};
-}
-
 sub center_name {
   my ($self) = @_;
   return $self->{center_name};
-}
-
-sub submitter_name {
-  my ($self) = @_;
-  return $self->{submitter_name};
 }
 
 # XML methods
