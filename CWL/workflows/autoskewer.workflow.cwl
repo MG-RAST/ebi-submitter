@@ -4,6 +4,7 @@ class: Workflow
 requirements:
     ScatterFeatureRequirement: {}
     MultipleInputFeatureRequirement: {}
+    StepInputExpressionRequirement: {}
 
 inputs:
     seqFiles:
@@ -38,10 +39,11 @@ outputs:
 steps:
     trimmer:
         run: ../tools/autoskewer.tool.cwl
-        scatter: "#trimmer/input"
+        scatter: ["#trimmer/input", "#trimmer/outName"]
+        scatterMethod: dotproduct
         in:
             input: seqFiles
             outName:
                 source: seqFiles
-                valueFrom: $(self).trim
+                valueFrom: $(self.file.basename).trim
         out: [trimmed]

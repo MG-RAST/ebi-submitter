@@ -2,18 +2,24 @@ cwlVersion: v1.0
 class: Workflow
 
 requirements:
-    - class: ScatterFeatureRequirement
-    - class: MultipleInputFeatureRequirement
+    ScatterFeatureRequirement: {}
+    MultipleInputFeatureRequirement: {}
+    StepInputExpressionRequirement: {}
 
 inputs:
     seqFiles:
         type:
             type: array
-            items: File
-    mgIDs:
-        type:
-            type: array
-            items: string
+            items:
+                type: record
+                fields:
+                    - name: file
+                      type: File
+                      doc: Input sequence file
+                    - name: mgid
+                      type: string
+                      doc: MG-RAST ID of sequence file
+        doc: Array of MG-RAST ID and sequence tuples
     project:
         type: string
     user:
@@ -30,41 +36,41 @@ outputs:
 
 steps:
     trimmer:
-        run: autoskewer.tool.cwl
-        scatter: "#trimmer/input"
+        run: ../tools/autoskewer.tool.cwl
+        scatter: ["#trimmer/input", "#trimmer/outName"]
+        scatterMethod: dotproduct
         in:
             input: seqFiles
             outName:
                 source: seqFiles
-                valueFrom: $(self).trim
-        out: [trimmedSeq]
+                valueFrom: $(self.file.basename).trim
+        out: [trimmed]
 
     uploader:
-        run: upload_read.tool.cwl
-        scatter: "#uploader/input"
-        scatter: "#uploader/mgID"
+        run: ../tools/upload_read.tool.cwl
+        scatter: ["#uploader/input", "#uploader/outName"]
+        scatterMethod: dotproduct
         in:
-            input: trimmer/trimmedSeq
-            mgID: mgIDs
+            input: trimmer/trimmed
             uploadDir: project
             ftpUser: user
             ftpPassword: password
             outName:
-                source: trimmer/trimmedSeq
-                valueFrom: $(self).info
+                source: trimmer/trimmed
+                valueFrom: $(self.file.basename).info
         out: [output]
 
     cat:
-        run: cat.tool.cwl
+        run: ../tools/cat.tool.cwl
         in:
             files: uploader/output
             outName:
                 source: project
                 valueFrom: $(self).mg.upload
-        out: output
+        out: [output]
 
     submitter:     	 
-        run: submit_project.tool.cwl
+        run: ../tools/submit_project.tool.cwl
         in:
             uploads: cat/output
             project: project
@@ -73,7 +79,7 @@ steps:
             submitOption: submitOption
             outName:
                 source: cat/output
-                valueFrom: $(self).receipt.xml
-        out: output
+                valueFrom: $(self.basename).receipt.xml
+        out: [output]
  
  
