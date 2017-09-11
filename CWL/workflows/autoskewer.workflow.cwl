@@ -6,28 +6,26 @@ requirements:
     MultipleInputFeatureRequirement: {}
     SchemaDefRequirement:
         types:
-            - $import: mgfile.yaml
+            - $import: ../tools/mgfile.yaml
 
 inputs:
     seqFiles:
         type:
             type: array
-            items: mgfile.yaml#mgfile
+            items: ../tools/mgfile.yaml#mgfile
 
 outputs:
     trimmedSeqs:
-        type:
-            type: array
-            items: mgfile.yaml#mgfile
-        outputSource: trimmer/trimmed
+        type: ../tools/mgfile.yaml#mgfile[]
+        outputSource: [trimmer/trimmed]
 
 steps:
     trimmer:
-        run: autoskewer.tool.cwl
+        run: ../tools/autoskewer.tool.cwl
         scatter: "#trimmer/input"
         in:
             input: seqFiles
             outName:
                 source: seqFiles
                 valueFrom: $(self).trim
-        out: [trimmedSeqs]
+        out: [trimmed]
