@@ -1,0 +1,9 @@
+type: record
+name: mgfile
+fields:
+    - name: file
+      type: File
+      doc: Input sequence file
+    - name: mgid
+      type: string
+      doc: MG-RAST ID of sequence file

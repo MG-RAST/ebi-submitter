@@ -12,21 +12,16 @@ hints:
 
 requirements:
     InlineJavascriptRequirement: {}
+    SchemaDefRequirement:
+        types:
+            - $import: mgfile.yaml
 
 stdout: upload_read.log
 stderr: upload_read.error
 
 inputs:
     input:
-        type:
-            type: record
-            fields:
-                - name: file
-                  type: File
-                  doc: Input sequence file
-                - name: mgid
-                  type: string
-                  doc: MG-RAST ID of sequence file
+        type: mgfile.yaml#mgfile
         doc: MG-RAST ID and sequence tuple
     
     uploadDir:
