@@ -69,7 +69,7 @@ steps:
                 valueFrom: $(self).mg.upload
         out: [output]
 
-    submitter:     	 
+    submitter:
         run: ../tools/submit_project.tool.cwl
         in:
             uploads: cat/output
