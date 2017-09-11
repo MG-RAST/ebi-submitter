@@ -22,6 +22,7 @@ stderr: autoskewer.error
 inputs:
     input:
         type: mgfile.yaml#mgfile
+        doc: MG-RAST ID and sequence tuple
     
     outName:
         type: string

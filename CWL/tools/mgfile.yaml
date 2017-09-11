@@ -1,6 +1,5 @@
 type: record
 name: mgfile
-doc: MG-RAST ID and sequence tuple
 fields:
     - name: file
       type: File
