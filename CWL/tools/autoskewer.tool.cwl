@@ -12,16 +12,21 @@ hints:
     
 requirements:
     InlineJavascriptRequirement: {}
-    SchemaDefRequirement:
-        types:
-            - $import: mgfile.yaml
 
 stdout: autoskewer.log
 stderr: autoskewer.error
 
 inputs:
     input:
-        type: mgfile.yaml#mgfile
+        type:
+            type: record
+            fields:
+                - name: file
+                  type: File
+                  doc: Input sequence file
+                - name: mgid
+                  type: string
+                  doc: MG-RAST ID of sequence file
         doc: MG-RAST ID and sequence tuple
     
     outName:

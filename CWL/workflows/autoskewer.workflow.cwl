@@ -4,19 +4,35 @@ class: Workflow
 requirements:
     ScatterFeatureRequirement: {}
     MultipleInputFeatureRequirement: {}
-    SchemaDefRequirement:
-        types:
-            - $import: ../tools/mgfile.yaml
 
 inputs:
     seqFiles:
         type:
             type: array
-            items: ../tools/mgfile.yaml#mgfile
+            items:
+                type: record
+                fields:
+                    - name: file
+                      type: File
+                      doc: Input sequence file
+                    - name: mgid
+                      type: string
+                      doc: MG-RAST ID of sequence file
+        doc: Array of MG-RAST ID and sequence tuples
 
 outputs:
     trimmedSeqs:
-        type: ../tools/mgfile.yaml#mgfile[]
+        type:
+            type: array
+            items:
+                type: record
+                fields:
+                    - name: file
+                      type: File
+                      doc: Input sequence file
+                    - name: mgid
+                      type: string
+                      doc: MG-RAST ID of sequence file
         outputSource: [trimmer/trimmed]
 
 steps:
