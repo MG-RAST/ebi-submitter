@@ -103,6 +103,7 @@ if ($help) {
 }
 
 unless ($user && $password && $project_id && $upload_list && (-s $upload_list) && $submit_options->{$submit_option}) {
+    print STDERR "Missing required input paramater\n";
     &usage();
     exit 1;
 }
@@ -190,8 +191,16 @@ foreach my $sample_data (@{$project_data->{samples}}) {
         if ($upload_data->{$mgid}) {
             print "read: $mgid, ".join(", ", sort values %{$upload_data->{$mgid}})."\n" if ($verbose);
             push @mg_ids, $mgid;
-            $experiments->add($sample_data->{id}, $library_data->{id}, $mgid, simplify_hash($library_data->{data}));
+            my $ldata = simplify_hash($library_data->{data});
+            $experiments->add($sample_data->{id}, $library_data->{id}, $mgid, $ldata);
             $run_xml .= get_run_xml($center_name, $mgid, $upload_data->{$mgid});
+            # add mixs library metadata to sample
+            foreach my $key (keys %$ldata) {
+                if (exists $mixs_term_map->{$key}) {
+                    $sample_data->{data}{$key} = { value => $ldata->{$key} };
+                    print "added '$key' : '".$ldata->{$key}."' to sample\n" if ($verbose);
+                }
+            }
         }
     }
     if (scalar(@mg_ids) > 0) {
