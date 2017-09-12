@@ -347,7 +347,7 @@ EOF
    system("echo '$run_xml' | $utf_clean > $temp_dir/run.xml");
    system("echo '$submission' | $utf_clean > $temp_dir/submission.xml");
    
-   my $cmd = "curl -k -F \"SUBMISSION=\@$temp_dir/submission.xml\" -F \"STUDY=\@$temp_dir/study.xml\" -F \"SAMPLE=\@$temp_dir/sample.xml\" -F \"EXPERIMENT=\@$temp_dir/experiment.xml\" -F \"RUN=\@$temp_dir/run.xml\" \"$submit_url\"";
+   my $cmd = "curl -s -k -F \"SUBMISSION=\@$temp_dir/submission.xml\" -F \"STUDY=\@$temp_dir/study.xml\" -F \"SAMPLE=\@$temp_dir/sample.xml\" -F \"EXPERIMENT=\@$temp_dir/experiment.xml\" -F \"RUN=\@$temp_dir/run.xml\" \"$submit_url\"";
    
    if ($debug) {
        print "######### submission.xml #########\n".$submission."\n";
