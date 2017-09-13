@@ -4,28 +4,46 @@ class: Workflow
 requirements:
     ScatterFeatureRequirement: {}
     MultipleInputFeatureRequirement: {}
-    SchemaDefRequirement:
-        types:
-            - $import: ../tools/mgfile.yaml
+    StepInputExpressionRequirement: {}
 
 inputs:
     seqFiles:
         type:
             type: array
-            items: ../tools/mgfile.yaml#mgfile
+            items:
+                type: record
+                fields:
+                    - name: file
+                      type: File
+                      doc: Input sequence file
+                    - name: mgid
+                      type: string
+                      doc: MG-RAST ID of sequence file
+        doc: Array of MG-RAST ID and sequence tuples
 
 outputs:
     trimmedSeqs:
-        type: ../tools/mgfile.yaml#mgfile[]
+        type:
+            type: array
+            items:
+                type: record
+                fields:
+                    - name: file
+                      type: File
+                      doc: Input sequence file
+                    - name: mgid
+                      type: string
+                      doc: MG-RAST ID of sequence file
         outputSource: [trimmer/trimmed]
 
 steps:
     trimmer:
         run: ../tools/autoskewer.tool.cwl
-        scatter: "#trimmer/input"
+        scatter: ["#trimmer/input", "#trimmer/outName"]
+        scatterMethod: dotproduct
         in:
             input: seqFiles
             outName:
                 source: seqFiles
-                valueFrom: $(self).trim
+                valueFrom: $(self.file.basename).trim
         out: [trimmed]
