@@ -112,7 +112,7 @@ sub attributes2xml {
   my $xml = "<EXPERIMENT_ATTRIBUTES>";
   while (my ($key, $value) = each %$library) {
     if (exists $self->{mixs_map}{$key}) {
-      $key = $self->{mixs_map}{$key};
+      $key = $self->{mixs_map}{$key}[0];
     }
     $xml .= <<"EOF";
      <EXPERIMENT_ATTRIBUTE>

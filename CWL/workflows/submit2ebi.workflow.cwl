@@ -28,6 +28,8 @@ inputs:
         type: string
     submitOption:
         type: string
+    submissionID:
+        type: string
 
 outputs:
     receipt:
@@ -77,9 +79,10 @@ steps:
             submitUser: user
             submitPassword: password
             submitOption: submitOption
+            submissionID: submissionID
             outName:
-                source: cat/output
-                valueFrom: $(self.basename).receipt.xml
+                source: project
+                valueFrom: $(self).receipt.xml
         out: [output]
  
  
