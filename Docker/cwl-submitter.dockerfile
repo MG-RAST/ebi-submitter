@@ -50,6 +50,7 @@ ENV PATH /usr/src/autoskewer/:$PATH
 # submission scripts
 COPY . ebi-submitter
 RUN chmod a+x ebi-submitter/scripts/* && \
+  mkdir -p /usr/local/lib/site_perl && \
   cp -r /usr/src/ebi-submitter/scripts/lib/Submitter /usr/local/lib/site_perl/.
 ENV PATH /usr/src/ebi-submitter/scripts:$PATH
 
