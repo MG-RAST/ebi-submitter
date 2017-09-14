@@ -70,6 +70,18 @@ inputs:
         default: ADD
         inputBinding:
             prefix: --submit_option
+    
+    submissionID:
+        type: string?
+        doc: Optional Submission ID
+        inputBinding:
+            prefix: --submission_id
+    
+    accessionID:
+        type: string?
+        doc: Optional Accession ID
+        inputBinding:
+            prefix: --accession_id
 
 
 baseCommand: submit_project.pl

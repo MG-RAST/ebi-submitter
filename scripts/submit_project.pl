@@ -17,6 +17,7 @@ use Submitter::Experiments;
 my $upload_list   = undef;
 my $project_id    = undef;
 my $submission_id = undef;
+my $accession_id  = undef;
 
 # schema/object type
 my $sample_type     = "Sample";
@@ -48,21 +49,21 @@ my $submit_options = {
 };
 
 my $mixs_term_map = {
-    project_name       => "project name",
-    investigation_type => "investigation type",
-    seq_meth           => "sequencing method",
-    collection_date    => "collection date",
-    country            => "geographic location (country and/or sea)",
-    location           => "geographic location (region and locality)",
-    latitude           => "geographic location (latitude)",
-    longitude          => "geographic location (longitude)",
-    altitude           => "geographic location (altitude)",
-    depth              => "geographic location (depth)",
-    elevation          => "geographic location (elevation)",
-    env_package        => "environmental package",
-    biome              => "environment (biome)",
-    feature            => "environment (feature)",
-    material           => "environment (material)"
+    project_name       => ["project name", undef],
+    investigation_type => ["investigation type", undef],
+    seq_meth           => ["sequencing method", undef],
+    collection_date    => ["collection date", undef],
+    country            => ["geographic location (country and/or sea)", undef],
+    location           => ["geographic location (region and locality)", undef],
+    latitude           => ["geographic location (latitude)", "DD"],
+    longitude          => ["geographic location (longitude)", "DD"],
+    altitude           => ["geographic location (altitude)", "m"],
+    depth              => ["geographic location (depth)", "m"],
+    elevation          => ["geographic location (elevation)", "m"],
+    env_package        => ["environmental package", undef],
+    biome              => ["environment (biome)", undef],
+    feature            => ["environment (feature)", undef],
+    material           => ["environment (material)", undef]
 };
 
 GetOptions(
@@ -78,6 +79,7 @@ GetOptions(
     'verbose!'        => \$verbose,
     'help!'           => \$help,
     'debug!'          => \$debug,
+    'accession_id=s'  => \$accession_id,
     'submission_id=s' => \$submission_id
 );
 
@@ -104,6 +106,12 @@ if ($help) {
 
 unless ($user && $password && $project_id && $upload_list && (-s $upload_list) && $submit_options->{$submit_option}) {
     print STDERR "Missing required input paramater\n";
+    &usage();
+    exit 1;
+}
+
+if (($submit_option eq 'MODIFY') && (! $accession_id)) {
+    print STDERR "Option 'MODIFY' requires an accession ID\n";
     &usage();
     exit 1;
 }
@@ -193,7 +201,7 @@ foreach my $sample_data (@{$project_data->{samples}}) {
             push @mg_ids, $mgid;
             my $ldata = simplify_hash($library_data->{data});
             $experiments->add($sample_data->{id}, $library_data->{id}, $mgid, $ldata);
-            $run_xml .= get_run_xml($center_name, $mgid, $upload_data->{$mgid});
+            $run_xml .= get_run_xml($center_name, $mgid, $library_data->{id}, $upload_data->{$mgid});
             # add mixs library metadata to sample
             foreach my $key (keys %$ldata) {
                 if (exists $mixs_term_map->{$key}) {
@@ -220,7 +228,7 @@ my $files = {
     "run" => "run.xml"
 };
 
-submit($submit_option, $study_xml, $sample_xml, $experiment_xml, $run_xml, $submission_id, $center_name, $files);
+submit($submit_option, $study_xml, $sample_xml, $experiment_xml, $run_xml, $submission_id, $accession_id, $center_name, $files);
 
 sub simplify_hash {
     my ($old) = @_;
@@ -281,7 +289,7 @@ sub get_mg_tax_map {
 }
 
 sub get_run_xml {
-	my ($center_name, $mg_id, $mg_info) = @_;
+	my ($center_name, $mg_id, $lib_id, $mg_info) = @_;
     
     my $filepath  = $mg_info->{path};
     my $file_md5  = $mg_info->{md5};
@@ -289,7 +297,7 @@ sub get_run_xml {
   
 	my $run_xml = <<"EOF";
 	    <RUN alias="$mg_id" center_name="$center_name">      
-        <EXPERIMENT_REF refname="$mg_id"/>
+        <EXPERIMENT_REF refname="$lib_id"/>
          <DATA_BLOCK>
             <FILES>
                 <FILE filename="$filepath"
@@ -305,9 +313,9 @@ EOF
 
 # Submit xml files
 sub submit {
-   my ($action, $study_xml, $sample_xml, $experiment_xml, $run_xml, $submission_id, $center_name, $files) = @_;
+   my ($action, $study_xml, $sample_xml, $experiment_xml, $run_xml, $submission_id, $accession_id, $center_name, $files) = @_;
    
-   unless($submission_id) {
+   unless ($submission_id) {
        print STDERR "No submission id\n";
        exit;
    }
@@ -322,15 +330,15 @@ sub submit {
        }
    }
    my $all_actions = join("\n", @line_actions);
+   my $accession   = $accession_id ? 'accession="'.$accession_id.'"' : '';
    my $submission  = <<"EOF";
 <?xml version="1.0" encoding="UTF-8"?>
 <SUBMISSION_SET xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.submission.xsd">
-<SUBMISSION alias="$submission_id"
- center_name="$center_name">
+    <SUBMISSION alias="$submission_id" $accession center_name="$center_name">
         <CONTACTS>
-           <CONTACT name="Alex Mira"/>
-           <CONTACT name="Andreas Wilke" inform_on_error="wilke\@mcs.anl.gov"/>
+            <CONTACT name="Alex Mira"/>
+            <CONTACT name="Andreas Wilke" inform_on_error="wilke\@mcs.anl.gov"/>
         </CONTACTS>
         <ACTIONS>
             $all_actions
