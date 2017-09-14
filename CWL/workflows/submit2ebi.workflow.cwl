@@ -22,6 +22,10 @@ inputs:
         doc: Array of MG-RAST ID and sequence tuples
     project:
         type: string
+    mgrastUrl:
+        type: string
+    submitUrl:
+        type: string
     user:
         type: string
     password:
@@ -76,6 +80,8 @@ steps:
         in:
             uploads: cat/output
             project: project
+            mgrastUrl: mgrastUrl
+            submitUrl: submitUrl
             submitUser: user
             submitPassword: password
             submitOption: submitOption
