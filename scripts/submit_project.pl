@@ -28,11 +28,11 @@ my $receipt_file    = "./receipt.xml";
 my $temp_dir        = ".";
 
 # mgrast base api url
-my $mgrast_url = "http://api.metagenomics.anl.gov";
+my $mgrast_url = "http://api-dev.metagenomics.anl.gov";
 
 # ENA URL
 my $submit_option = 'ADD';
-my $submit_url    = "https://www.ebi.ac.uk/ena/submit/drop-box/submit/";
+my $submit_url    = "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/";
 my $user          = $ENV{'EBI_USER'} || undef;
 my $password      = $ENV{'EBI_PASSWORD'} || undef;
 

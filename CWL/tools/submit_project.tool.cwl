@@ -41,14 +41,12 @@ inputs:
     mgrastUrl:
         type: string?
         doc: MG-RAST API URL
-        default: http://api-dev.metagenomics.anl.gov/
         inputBinding:
             prefix: --mgrast_url
     
     submitUrl:
         type: string?
         doc: EBI Submission URL
-        default: https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/
         inputBinding:
             prefix: --submit_url
     
