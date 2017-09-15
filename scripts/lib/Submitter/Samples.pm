@@ -157,10 +157,11 @@ sub attributes2xml {
   while (my ($key, $value) = each %$samples) {
     my $unit = "";
     if (exists $self->{mixs_map}{$key}) {
-       $key = $self->{mixs_map}{$key}[0];
-       if ($self->{mixs_map}{$key}[1]) {
-           $unit = "<UNITS>".$self->{mixs_map}{$key}[1]."</UNITS>";
-       }
+        my $old = $key;
+        $key = $self->{mixs_map}{$old}[0];
+        if ($self->{mixs_map}{$old}[1]) {
+            $unit = "<UNITS>".$self->{mixs_map}{$old}[1]."</UNITS>";
+        }
     }
     $xml .= <<"EOF";
        <SAMPLE_ATTRIBUTE>
