@@ -167,10 +167,7 @@ my $project_data = get_json_from_url($mgrast_url."/metadata/export/".$project_id
 my $study_ref    = $project_data->{id};
 my $center_name  = $project_data->{data}{PI_organization}{value} || "unknown";
 my $project_name = $project_data->{data}{project_name}{value} || $study_ref;
-
 my $prj = new Submitter::Project($study_ref, simplify_hash($project_data->{data}));
-my $study_xml = $prj->xml2txt;
-print Dumper $study_xml if ($verbose && (! $debug));
 
 ###### Create Samples XML ######
 my $samples = new Submitter::Samples($mg_tax_map, $mixs_term_map, $project_name, $center_name);
@@ -215,20 +212,28 @@ foreach my $sample_data (@{$project_data->{samples}}) {
         $samples->add($sample_data, \@mg_ids);
     }
 }
-
-# finalize
 $run_xml .= "</RUN_SET>";
-my $sample_xml = $samples->xml2txt;
-my $experiment_xml = $experiments->xml2txt;
 
 my $files = {
-    "study" => "study.xml",
-    "sample" => "sample.xml",
-    "experiment" => "experiment.xml",
-    "run" => "run.xml"
+    study => {
+        name => "study.xml",
+        text => $prj->xml2txt
+    },
+    sample => {
+        name => "sample.xml",
+        text => $samples->xml2txt
+    },
+    experiment => {
+        name => "experiment.xml",
+        text => $experiments->xml2txt
+    },
+    run => {
+        name => "run.xml",
+        text => $run_xml
+    }
 };
 
-submit($submit_option, $study_xml, $sample_xml, $experiment_xml, $run_xml, $submission_id, $accession_id, $center_name, $files);
+submit($submit_option, $submission_id, $accession_id, $center_name, $files);
 
 sub simplify_hash {
     my ($old) = @_;
@@ -313,7 +318,7 @@ EOF
 
 # Submit xml files
 sub submit {
-   my ($action, $study_xml, $sample_xml, $experiment_xml, $run_xml, $submission_id, $accession_id, $center_name, $files) = @_;
+   my ($action, $submission_id, $accession_id, $center_name, $files) = @_;
    
    unless ($submission_id) {
        print STDERR "No submission id\n";
@@ -322,12 +327,8 @@ sub submit {
    
    print "Preparing Submission XML\n" if ($verbose);
    my @line_actions;
-   if ($files) {
-       foreach my $key (keys %$files) {
-	       if ($files->{$key}) {
-	           push @line_actions, "<ACTION><$action source=\"".$files->{$key}."\" schema=\"".$key."\"/></ACTION>";
-	       }
-       }
+   foreach my $key (keys %$files) {
+       push @line_actions, "<ACTION><$action source=\"".$files->{$key}{name}."\" schema=\"".$key."\"/></ACTION>";
    }
    my $all_actions = join("\n", @line_actions);
    my $accession   = $accession_id ? 'accession="'.$accession_id.'"' : '';
@@ -347,23 +348,27 @@ xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.subm
 </SUBMISSION_SET>
 EOF
 
-   # clean and output xml files
+   $files->{submission} = {
+       name => "submission.xml",
+       text => $submission
+   };
+
+   # output and clean xml files
    my $utf_clean = "iconv -f UTF-8 -t UTF-8 -c";
-   system("echo '$study_xml' | $utf_clean > $temp_dir/study.xml");
-   system("echo '$sample_xml' | $utf_clean > $temp_dir/sample.xml");
-   system("echo '$experiment_xml' | $utf_clean > $temp_dir/experiment.xml");
-   system("echo '$run_xml' | $utf_clean > $temp_dir/run.xml");
-   system("echo '$submission' | $utf_clean > $temp_dir/submission.xml");
+   foreach my $file (values %$files) {
+       open(OUT, ">$temp_dir/".$file->{name}.".tmp");
+       print OUT $file->{text};
+       close(OUT);
+       system("cat $temp_dir/".$file->{name}.".tmp | $utf_clean > $temp_dir/".$file->{name});
+       system("rm $temp_dir/".$file->{name}.".tmp");
+   }
    
    my $cmd = "curl -s -k -F \"SUBMISSION=\@$temp_dir/submission.xml\" -F \"STUDY=\@$temp_dir/study.xml\" -F \"SAMPLE=\@$temp_dir/sample.xml\" -F \"EXPERIMENT=\@$temp_dir/experiment.xml\" -F \"RUN=\@$temp_dir/run.xml\" \"$submit_url\"";
    
    if ($debug) {
-       print "######### submission.xml #########\n".$submission."\n";
-       print "######### study.xml #########\n".$study_xml."\n";
-       print "######### sample.xml #########\n".$sample_xml."\n";
-       print "######### experiment.xml #########\n".$experiment_xml."\n";
-       print "######### run.xml #########\n".$run_xml."\n";
-       print "######### curl command (not sent) #########\n$cmd\n";
+       foreach my $file (values %$files) {
+           print "######### ".$file->{name}." #########\n".$file->{text}."\n";
+       }
        exit 0;
    }
    
