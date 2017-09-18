@@ -318,7 +318,7 @@ EOF
 
 # Submit xml files
 sub submit {
-   my ($action, $study_xml, $sample_xml, $experiment_xml, $run_xml, $submission_id, $accession_id, $center_name, $files) = @_;
+   my ($action, $submission_id, $accession_id, $center_name, $files) = @_;
    
    unless ($submission_id) {
        print STDERR "No submission id\n";
