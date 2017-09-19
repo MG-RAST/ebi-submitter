@@ -24,6 +24,8 @@ inputs:
         type: string
     mgrastUrl:
         type: string
+    mgrastToken:
+        type: string
     submitUrl:
         type: string
     user:
@@ -39,6 +41,9 @@ outputs:
     receipt:
         type: File
         outputSource: submitter/output
+    accessionLog:
+        type: File
+        outputSource: finalize/output
 
 steps:
     trimmer:
@@ -89,6 +94,24 @@ steps:
             outName:
                 source: project
                 valueFrom: $(self).receipt.xml
+        out: [output]
+    
+    finalize:
+        run: ../tools/curl.tool.cwl
+        in:
+            label: receipt
+            file: submitter/output
+            authBearer: mgrast
+            authToken: mgrastToken
+            url:
+                source: [mgrastUrl, project]
+                valueFrom: |
+                    ${
+                        return self[0]+"/project/"+self[1]+"/addaccession";
+                    }
+            outName:
+                source: project
+                valueFrom: $(self).receipt.json
         out: [output]
  
  
