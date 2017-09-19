@@ -30,11 +30,11 @@ inputs:
         doc: Upload file
     
     authBearer:
-        type: String
+        type: string
         doc: Auth bearer name
     
     authToken:
-        type: String
+        type: string
         doc: Auth token
     
     outName:
