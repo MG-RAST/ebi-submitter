@@ -99,9 +99,11 @@ steps:
     finalize:
         run: ../tools/curl.tool.cwl
         in:
-            label: receipt
+            label:
+                default: receipt
             file: submitter/output
-            authBearer: mgrast
+            authBearer:
+                default: mgrast
             authToken: mgrastToken
             url:
                 source: [mgrastUrl, project]
