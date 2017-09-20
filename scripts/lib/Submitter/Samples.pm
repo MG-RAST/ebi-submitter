@@ -138,6 +138,10 @@ sub checklist_ep {
   }
   my $check_id = $self->{envpack_map}{$ep}{checklist};
   my $ep_name  = $self->{envpack_map}{$ep}{fullname};
+  # fix for miscellaneous
+  if ($ep eq 'miscellaneous') {
+      $ep = 'miscellaneous natural';
+  }
   my $xml = <<"EOF";
     <SAMPLE_ATTRIBUTE>
        <TAG>ENA-CHECKLIST</TAG>
