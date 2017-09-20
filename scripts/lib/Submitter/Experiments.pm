@@ -150,7 +150,7 @@ sub experiment2xml {
   my $linkin_id = $data->{metagenome_id};
   my $sample_id = $data->{sample_id};
   
-  my $experiment_id   = $library->{ebi_id} ? $library->{ebi_id} : $data->{library_id};
+  my $experiment_id   = $data->{library_id};
   my $experiment_name = $library->{metagenome_name};
   
   my $library_selection = "RANDOM";
