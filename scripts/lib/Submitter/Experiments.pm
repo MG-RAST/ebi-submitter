@@ -16,7 +16,20 @@ sub new {
     study_ref     => $study_ref || undef,
     project_name  => $project_name,
     center_name   => $center_name || undef,
-    library_map   => {
+    default_meth  => 'LS454',
+    seq_meth_map  => {
+        LS454             => 1,
+        ILLUMINA          => 1,
+        HELICOS           => 1,
+        ABI_SOLID         => 1,
+        COMPLETE_GENOMICS => 1,
+        BGISEQ            => 1,
+        OXFORD_NANOPORE   => 1,
+        PACBIO_SMRT       => 1,
+        ION_TORRENT       => 1,
+        CAPILLARY         => 1
+    },
+    library_map => {
         'metagenome' => {
             strategy => "WGS",
             source   => "METAGENOMIC"
@@ -78,8 +91,8 @@ sub platform2xml {
   # use seq_meth
   my $platform = uc($library->{seq_meth});
   $platform =~ s/\s+/_/g;
-  if ($platform =~/454/) {
-      $platform = "LS454";
+  unless (exists $self->{seq_meth_map}{$platform}) {
+      $platform = $self->{default_meth};
   }
   
   # try seq_model than seq_make
