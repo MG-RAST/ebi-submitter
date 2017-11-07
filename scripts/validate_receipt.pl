@@ -41,8 +41,8 @@ if ($receipt->{'success'} eq 'false') {
     }
     exit 1;
 }
-if (($receipt->{'success'} eq 'true') && ($xml->{'SUBMISSION'}{'accession'})) {
-    print STDOUT "submission was successful\naccession ".$xml->{'SUBMISSION'}{'accession'}."\n";
+if (($receipt->{'success'} eq 'true') && ($receipt->{'SUBMISSION'}{'accession'})) {
+    print STDOUT "submission was successful\naccession ".$receipt->{'SUBMISSION'}{'accession'}."\n";
     if ($receipt->{'MESSAGES'}{'INFO'} && (scalar(@{$receipt->{'MESSAGES'}{'INFO'}}) > 0)) {
         print STDOUT join("\n", @{$receipt->{'MESSAGES'}{'INFO'}})."\n";
     }
@@ -64,28 +64,6 @@ sub parse_ebi_receipt {
         return undef;
     }
     return $xml;
-    
-    my $receipt = {
-        success => $xml->{'success'},
-        info    => $xml->{'MESSAGES'}{'INFO'},
-        error   => $xml->{'MESSAGES'}{'ERROR'} || undef,
-        submission => {
-            mgrast_accession => $xml->{'SUBMISSION'}{'alias'},
-            ena_accession    => $xml->{'SUBMISSION'}{'accession'} || undef,
-        },
-        study => {
-            mgrast_accession  => $xml->{'STUDY'}{'alias'},
-            ena_accession     => $xml->{'STUDY'}{'accession'} || undef,
-        },
-        samples     => [],
-        experiments => [],
-        runs        => []
-    };
-    @{$receipt->{samples}}     = map { {mgrast_accession => $_->{alias}, ena_accession => $_->{accession} || undef } } @{$xml->{'SAMPLE'}};
-    @{$receipt->{experiments}} = map { {mgrast_accession => $_->{alias}, ena_accession => $_->{accession} || undef } } @{$xml->{'EXPERIMENT'}};
-    @{$receipt->{runs}}        = map { {mgrast_accession => $_->{alias}, ena_accession => $_->{accession} || undef } } @{$xml->{'RUN'}};
-    
-    return $receipt;
 }
 
 sub get_usage {
