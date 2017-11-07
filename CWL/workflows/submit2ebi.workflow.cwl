@@ -117,7 +117,7 @@ steps:
         in:
             label:
                 default: receipt
-            file: submitter/output
+            file: submitter/outReceipt
             authBearer:
                 default: mgrast
             authToken: mgrastToken
