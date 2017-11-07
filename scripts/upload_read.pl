@@ -37,18 +37,18 @@ if ($help) {
     print get_usage();
     exit 0;
 } elsif (! -s $input) {
-    print STDERR "input sequence file is missing";
+    print STDERR "input sequence file is missing\n";
     exit 1;
 } elsif (length($output)==0) {
-    print STDERR "output was not specified";
+    print STDERR "output was not specified\n";
     exit 1;
 } elsif (! $updir) {
-    print STDERR "upload ftp dir is missing";
+    print STDERR "upload ftp dir is missing\n";
     exit 1;
 }
 
 unless ($format =~ /^fastq|fasta$/) {
-    print STDERR "format must be one of: fastq or fasta";
+    print STDERR "format must be one of: fastq or fasta\n";
     exit 1;
 }
 

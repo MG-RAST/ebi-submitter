@@ -26,8 +26,6 @@ inputs:
     uploads:
         type: File
         doc: Metagenome upload list file
-        format:
-            - Formats:tsv
         inputBinding:
             prefix: --upload_list
     
@@ -122,7 +120,4 @@ outputs:
         doc: Run xml file
         outputBinding:
             glob: run.xml
-
-$namespaces:
-    Formats: FileFormats.cv.yaml
 
