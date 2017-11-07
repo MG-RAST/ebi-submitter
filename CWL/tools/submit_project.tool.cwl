@@ -85,8 +85,6 @@ inputs:
 baseCommand: submit_project.pl
 
 arguments:
-    - prefix: --temp_dir
-      valueFrom: $(runtime.tmpdir)
     - prefix: --verbose
 
 outputs:
