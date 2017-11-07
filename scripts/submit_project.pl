@@ -63,7 +63,9 @@ my $mixs_term_map = {
     env_package        => ["environmental package", undef],
     biome              => ["environment (biome)", undef],
     feature            => ["environment (feature)", undef],
-    material           => ["environment (material)", undef]
+    material           => ["environment (material)", undef],
+    salinity           => ["salinity", "psu"],
+    temperature        => ["temperature", "ºC"]
 };
 
 GetOptions(

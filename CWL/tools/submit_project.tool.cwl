@@ -94,11 +94,36 @@ outputs:
         type: stdout
     error: 
         type: stderr
-    output:
+    outReceipt:
         type: File
         doc: Submission receipt file
         outputBinding:
             glob: $(inputs.outName)
+    outSubmission:
+        type: File
+        doc: Submission xml file
+        outputBinding:
+            glob: submission.xml
+    outStudy:
+        type: File
+        doc: Study xml file
+        outputBinding:
+            glob: study.xml
+    outSample:
+        type: File
+        doc: Sample xml file
+        outputBinding:
+            glob: sample.xml
+    outExperiment:
+        type: File
+        doc: Experiment xml file
+        outputBinding:
+            glob: experiment.xml
+    outRun:
+        type: File
+        doc: Run xml file
+        outputBinding:
+            glob: run.xml
 
 $namespaces:
     Formats: FileFormats.cv.yaml
