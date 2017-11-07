@@ -41,7 +41,22 @@ inputs:
 outputs:
     receipt:
         type: File
-        outputSource: submitter/output
+        outputSource: submitter/outReceipt
+    submission:
+        type: File
+        outputSource: submitter/outSubmission
+    study:
+        type: File
+        outputSource: submitter/outStudy
+    sample:
+        type: File
+        outputSource: submitter/outSample
+    experiment:
+        type: File
+        outputSource: submitter/outExperiment
+    run:
+        type: File
+        outputSource: submitter/outRun
     accessionLog:
         type: File
         outputSource: finalize/output
@@ -95,7 +110,7 @@ steps:
             outName:
                 source: project
                 valueFrom: $(self).receipt.xml
-        out: [output]
+        out: [outReceipt, outSubmission, outStudy, outSample, outExperiment, outRun]
     
     finalize:
         run: ../tools/curl.tool.cwl
