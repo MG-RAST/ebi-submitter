@@ -130,3 +130,5 @@ sub env_package_map {
         }
     };
 }
+
+1;
