@@ -104,7 +104,7 @@ sub broker2xml {
    </STUDY_ATTRIBUTE>
 EOF
   
-  return $attr_xml;
+  return $xml;
 }
 
 sub key2attribute {
