@@ -5,80 +5,20 @@ use strict;
 use warnings;
 use Data::Dumper;
 use HTML::Entities;
+use Submitter::Mixs;
 
 sub new {
-  my ($class, $mg_tax_map, $mixs_term_map, $project_name, $center_name) = @_;
+  my ($class, $mg_tax_map, $project_name, $center_name) = @_;
   
   my $self = {
     samples      => [],
     default_tax  => "metagenome",
     mg_taxonomy  => $mg_tax_map || {},
-    mixs_map     => $mixs_term_map || {},
+    mixs_map     => Submitter::Mixs::term_map(),
     center_name  => $center_name || undef,
     project_name => $project_name,
     default_ep   => "miscellaneous",
-    envpack_map  => {
-        "air"                   => {
-            checklist => "ERC000012",
-            fullname  => "air environmental package"
-        },
-        "built environment"     => {
-            checklist => "ERC000031",
-            fullname  => "built environment environmental package"
-        },
-        "host-associated"       => {
-            checklist => "ERC000013",
-            fullname  => "host-associated environmental package"
-        },
-        "human-associated"      => {
-            checklist => "ERC000014",
-            fullname  => "human-associated environmental package"
-        },
-        "human-gut"             => {
-            checklist => "ERC000015",
-            fullname  => "human gut environmental package"
-        },
-        "human-oral"            => {
-            checklist => "ERC000016",
-            fullname  => "human oral environmental package"
-        },
-        "human-skin"            => {
-            checklist => "ERC000017",
-            fullname  => "human skin environmental package"
-        },
-        "human-vaginal"         => {
-            checklist => "ERC000018",
-            fullname  => "human vaginal environmental package"
-        },
-        "microbial mat|biofilm" => {
-            checklist => "ERC000019",
-            fullname  => "microbial mat/biofilm environmental package"
-        },
-        "miscellaneous"         => {
-            checklist => "ERC000025",
-            fullname  => "miscellaneous environmental package"
-        },
-        "plant-associated"      => {
-            checklist => "ERC000020",
-            fullname  => "plant-associated environmental package"
-        },
-        "sediment"              => {
-            checklist => "ERC000021",
-            fullname  => "sediment environmental package"
-        },
-        "soil"                  => {
-            checklist => "ERC000022",
-            fullname  => "soil environmental package"
-        },
-        "wastewater|sludge"     => {
-            checklist => "ERC000023",
-            fullname  => "wastewater/sludge environmental package"
-        },
-        "water"                 => {
-            checklist => "ERC000024",
-            fullname  => "water environmental package"
-        }
-    }
+    envpack_map  => Submitter::Mixs::env_package_map()
   };
   
   return bless $self;
@@ -167,7 +107,7 @@ sub attributes2xml {
         my $old = $key;
         $key = $self->{mixs_map}{$old}[0];
         if ($self->{mixs_map}{$old}[1]) {
-            $unit = "<UNITS>".clean_xml($self->{mixs_map}{$old}[1])."</UNITS>";
+            $unit = "<UNITS>".$self->{mixs_map}{$old}[1]."</UNITS>";
         }
     }
     $value = clean_xml($value);

@@ -5,45 +5,22 @@ use strict;
 use warnings;
 use Data::Dumper;
 use HTML::Entities;
+use Submitter::Mixs;
 
 sub new {
-  my ($class, $seq_model_map, $mixs_term_map, $study_ref, $project_name, $center_name) = @_;
+  my ($class, $seq_model_map, $study_ref, $project_name, $center_name) = @_;
   
   my $self = {
     experiments   => [],
     default_model => "unspecified",
     seq_models    => $seq_model_map || {},
-    mixs_map      => $mixs_term_map || {},
+    mixs_map      => Submitter::Mixs::term_map(),
     study_ref     => $study_ref || undef,
     project_name  => $project_name,
     center_name   => $center_name || undef,
     default_meth  => 'LS454',
-    seq_meth_map  => {
-        LS454             => 1,
-        ILLUMINA          => 1,
-        HELICOS           => 1,
-        ABI_SOLID         => 1,
-        COMPLETE_GENOMICS => 1,
-        BGISEQ            => 1,
-        OXFORD_NANOPORE   => 1,
-        PACBIO_SMRT       => 1,
-        ION_TORRENT       => 1,
-        CAPILLARY         => 1
-    },
-    library_map => {
-        'metagenome' => {
-            strategy => "WGS",
-            source   => "METAGENOMIC"
-        },
-        'mimarks-survey' => {
-            strategy => "AMPLICON",
-            source   => "METAGENOMIC"
-        },
-        'metatranscriptome' => {
-            strategy => "RNA-Seq",
-            source   => "METATRANSCRIPTOMIC"
-        }
-    }
+    seq_meth_map  => Submitter::Mixs::seq_meth_map(),
+    library_map   => Submitter::Mixs::library_map()
   };
   
   return bless $self;

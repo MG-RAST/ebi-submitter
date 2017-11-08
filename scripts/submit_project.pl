@@ -9,6 +9,7 @@ use LWP::UserAgent;
 use JSON;
 use Getopt::Long;
 
+use Submitter::Mixs;
 use Submitter::Project;
 use Submitter::Samples;
 use Submitter::Experiments;
@@ -46,26 +47,6 @@ my $submit_options = {
     MODIFY    => 1,
     HOLD      => 1,
     RELEASE   => 1 
-};
-
-my $mixs_term_map = {
-    project_name       => ["project name", undef],
-    investigation_type => ["investigation type", undef],
-    seq_meth           => ["sequencing method", undef],
-    collection_date    => ["collection date", undef],
-    country            => ["geographic location (country and/or sea)", undef],
-    location           => ["geographic location (region and locality)", undef],
-    latitude           => ["geographic location (latitude)", "DD"],
-    longitude          => ["geographic location (longitude)", "DD"],
-    altitude           => ["geographic location (altitude)", "m"],
-    depth              => ["geographic location (depth)", "m"],
-    elevation          => ["geographic location (elevation)", "m"],
-    env_package        => ["environmental package", undef],
-    biome              => ["environment (biome)", undef],
-    feature            => ["environment (feature)", undef],
-    material           => ["environment (material)", undef],
-    salinity           => ["salinity", "psu"],
-    temperature        => ["temperature", "ºC"]
 };
 
 GetOptions(
@@ -172,10 +153,10 @@ my $project_name = $project_data->{data}{project_name}{value} || $study_ref;
 my $prj = new Submitter::Project($study_ref, simplify_hash($project_data->{data}));
 
 ###### Create Samples XML ######
-my $samples = new Submitter::Samples($mg_tax_map, $mixs_term_map, $project_name, $center_name);
+my $samples = new Submitter::Samples($mg_tax_map, $project_name, $center_name);
 
 ###### Create Experiments XML ######
-my $experiments = new Submitter::Experiments($seq_model_map, $mixs_term_map, $study_ref, $project_name, $center_name);
+my $experiments = new Submitter::Experiments($seq_model_map, $study_ref, $project_name, $center_name);
 
 ###### Create RUN XML ######
 my $run_xml = <<"EOF";
@@ -185,6 +166,7 @@ xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.run.
 EOF
 
 # process project data
+my $mixs_term_map = Submitter::Mixs::term_map();
 foreach my $sample_data (@{$project_data->{samples}}) {
     print "sample: ".$sample_data->{id}."\n" if ($verbose);
     my @mg_ids = ();
