@@ -248,7 +248,7 @@ sub simplify_hash {
 
 sub clean_xml {
     my ($text) = @_;
-    return encode_entities(decode_entities($text));
+    return encode_entities(decode_entities($text), q(<>&"'));
 }
 
 1;
