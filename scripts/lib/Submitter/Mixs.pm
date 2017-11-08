@@ -24,13 +24,13 @@ sub term_map {
         material           => ["environment (material)", undef],
         env_package        => ["environmental package", undef],
         # environmental package specific
-        ammonium           => ["ammonium", "µmol/L"],
-        magnesium          => ["magnesium", "mol/L"],
-        nitrate            => ["nitrate", "µmol/L"],
-        salinity           => ["salinity", "psu"],
-        sulfate            => ["sulfate", "µmol/L"],
-        sulfide            => ["sulfide", "µmol/L"],
-        temperature        => ["temperature", "ºC"]
+        ammonium           => ["ammonium", 'µmol/L'],
+        magnesium          => ["magnesium", 'mol/L'],
+        nitrate            => ["nitrate", 'µmol/L'],
+        salinity           => ["salinity", 'psu'],
+        sulfate            => ["sulfate", 'µmol/L'],
+        sulfide            => ["sulfide", 'µmol/L'],
+        temperature        => ["temperature", 'ºC']
     };
 }
 
