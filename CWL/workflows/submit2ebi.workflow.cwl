@@ -112,6 +112,12 @@ steps:
                 valueFrom: $(self).receipt.xml
         out: [outReceipt, outSubmission, outStudy, outSample, outExperiment, outRun]
     
+    validate:
+        run: ../tools/validate_receipt.tool.cwl
+        in:
+            receipt: submitter/outReceipt
+        out: []
+    
     finalize:
         run: ../tools/curl.tool.cwl
         in:

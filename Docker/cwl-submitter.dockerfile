@@ -1,6 +1,5 @@
 FROM ubuntu:latest
-RUN apt-get -y update && apt-get -y upgrade
-RUN apt-get install -y \
+RUN apt-get update && apt-get install -y \
   curl \
   g++ \
   git \
@@ -8,6 +7,7 @@ RUN apt-get install -y \
   libjson-perl \
   libjson-xs-perl \
   libwww-perl \
+  libxml-simple-perl \
   libxml2-dev \
   libxml2-utils \
   libxml-perl \
