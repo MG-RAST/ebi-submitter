@@ -39,7 +39,8 @@ if ($receipt->{'success'} eq 'false') {
     if ($receipt->{'MESSAGES'}{'ERROR'} && (scalar(@{$receipt->{'MESSAGES'}{'ERROR'}}) > 0)) {
         print STDERR join("\n", @{$receipt->{'MESSAGES'}{'ERROR'}})."\n";
     }
-    exit 1;
+    # exit failed-permanent
+    exit 42;
 }
 if (($receipt->{'success'} eq 'true') && ($receipt->{'SUBMISSION'}{'accession'})) {
     print STDOUT "submission was successful\naccession ".$receipt->{'SUBMISSION'}{'accession'}."\n";
