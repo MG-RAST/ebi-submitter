@@ -2,6 +2,7 @@ package Submitter::Mixs;
 
 use strict;
 use warnings;
+use utf8;
 
 sub term_map {
     return {
