@@ -4,6 +4,7 @@ our @ISA = "Submitter";
 use strict;
 use warnings;
 use Data::Dumper;
+use HTML::Entities;
 
 sub new {
   my ($class, $seq_model_map, $mixs_term_map, $study_ref, $project_name, $center_name) = @_;
@@ -109,7 +110,9 @@ sub platform2xml {
     exit;
   }
   
-  my $xml = <<"EOF"; 
+  $platform = clean_xml($platform);
+  $model    = clean_xml($model);
+  my $xml   = <<"EOF";
     <PLATFORM>
       <$platform>
         <INSTRUMENT_MODEL>$model</INSTRUMENT_MODEL>
@@ -127,7 +130,8 @@ sub attributes2xml {
     if (exists $self->{mixs_map}{$key}) {
       $key = $self->{mixs_map}{$key}[0];
     }
-    $xml .= <<"EOF";
+    $value = clean_xml($value);
+    $xml  .= <<"EOF";
      <EXPERIMENT_ATTRIBUTE>
         <TAG>$key</TAG>
         <VALUE>$value</VALUE>
@@ -141,6 +145,7 @@ EOF
 
 sub broker_object_id {
   my ($self, $id) = @_;
+  $id = clean_xml($id);
   my $xml = <<"EOF";
    <EXPERIMENT_ATTRIBUTE>
       <TAG>BORKER_OBJECT_ID</TAG>
@@ -164,7 +169,7 @@ sub experiment2xml {
   my $sample_id = $data->{sample_id};
   
   my $experiment_id   = $data->{library_id};
-  my $experiment_name = $library->{metagenome_name};
+  my $experiment_name = clean_xml($library->{metagenome_name});
   
   my $library_selection = "RANDOM";
   my $library_strategy  = undef;
@@ -172,8 +177,8 @@ sub experiment2xml {
   
   # translate investigation_type
   if (exists $self->{library_map}{$library->{investigation_type}}) {
-      $library_strategy = $self->{library_map}{$library->{investigation_type}}{strategy};
-      $library_source   = $self->{library_map}{$library->{investigation_type}}{source};
+      $library_strategy = clean_xml($self->{library_map}{$library->{investigation_type}}{strategy});
+      $library_source   = clean_xml($self->{library_map}{$library->{investigation_type}}{source});
   }
   
   unless ($library_strategy && $library_source) {
@@ -223,5 +228,11 @@ EOF
   $xml .= "</EXPERIMENT_SET>";
   return $xml;
 }
+
+sub clean_xml {
+    my ($text) = @_;
+    return encode_entities(decode_entities($text));
+}
+
 
 1;

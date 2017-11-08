@@ -2,6 +2,7 @@ package Submitter::Project;
 
 use strict;
 use warnings;
+use HTML::Entities;
 
 # Get project document from API
 sub new {
@@ -44,28 +45,11 @@ sub alias {
   my ($self) = @_;  
   return $self->{alias};
 }
-sub project_id {
-  my ($self) = @_;
-  return $self->{alias};
-}
 
 # project name
 sub name {
   my ($self) = @_;
   return $self->{study_title};
-}
-sub study_name {
-  my ($self) = @_;
-  return $self->name;
-}
-sub study_title {
-  my ($self) = @_;
-  return $self->name;
-}
- 
-sub study_abstract {
-  my ($self) = @_;
-  return $self->{study_abstract};
 }
 
 # alias for study_abstract 
@@ -88,15 +72,11 @@ sub center_name {
 
 # XML methods
 sub attributes2xml {
-  my ($self, $BROKER_OBJECT_ID, $BROKER_CUSTOMER_NAME) = @_;
+  my ($self) = @_;
   
-  my $id        = $self->alias();
-  my $customer  = $self->pi();
-  my $xml;
-  
+  my $xml = "";
   foreach my $key (keys %{$self->{attributes}}) {
-    my $value = $self->{attributes}->{$key};
-    
+    my $value = clean_xml($self->{attributes}->{$key});
     $xml .= <<"EOF";
       <STUDY_ATTRIBUTE>
          <TAG>$key</TAG>
@@ -109,20 +89,19 @@ EOF
 }
   
 sub broker2xml {
-  my ($self, $BROKER_OBJECT_ID, $BROKER_CUSTOMER_NAME) = @_;
+  my ($self) = @_;
   
-  my $id        = $self->alias();
-  my $customer  = $self->pi();
-  my $attr_xml  = <<"EOF";
+  my $id  = clean_xml($self->alias());
+  my $pi  = clean_xml($self->pi());
+  my $xml = <<"EOF";
     <STUDY_ATTRIBUTE>
        <TAG>BROKER_OBJECT_ID</TAG>
        <VALUE>$id</VALUE>
    </STUDY_ATTRIBUTE>
    <STUDY_ATTRIBUTE>
        <TAG>BROKER_CUSTOMER_NAME</TAG>
-       <VALUE>$customer</VALUE>
-   </STUDY_ATTRIBUTE>  
-    
+       <VALUE>$pi</VALUE>
+   </STUDY_ATTRIBUTE>
 EOF
   
   return $attr_xml;
@@ -131,15 +110,12 @@ EOF
 sub key2attribute {
   my ($self, $key) = @_;
   
-  my $xml;
-  my $value = $self->{$key} || undef;
-  
+  my $value = clean_xml($self->{$key}) || undef;
   unless (defined $value) {
-    print STDERR "No value for $key\n";
-    exit;
+    return "";
   }
-    
-  $xml  .= <<"EOF";
+  
+  my $xml = <<"EOF";
     <STUDY_ATTRIBUTE>
        <TAG>$key</TAG>
        <VALUE>$value</VALUE>
@@ -154,12 +130,12 @@ sub xml2txt {
   
   my $center_name = $self->center_name();
   my $alias       = $self->alias();
-  my $title       = $self->name();
-  my $abstract    = $self->description();
+  my $title       = clean_xml($self->name());
+  my $abstract    = clean_xml($self->description());
   
   my $xml = <<"EOF";
 <?xml version="1.0" encoding="UTF-8"?><STUDY_SET>
-    <STUDY center_name="$center_name" alias="$alias" >
+    <STUDY center_name="$center_name" alias="$alias">
         <DESCRIPTOR>
             <STUDY_TITLE>$title</STUDY_TITLE>
             <STUDY_TYPE existing_study_type="Metagenomics"/>
@@ -168,11 +144,10 @@ sub xml2txt {
         <STUDY_ATTRIBUTES>
 EOF
 
-    $xml .= $self->broker2xml;
+    $xml .= $self->broker2xml();
     $xml .= $self->key2attribute('submitter_name');
     $xml .= $self->key2attribute('PI_email');
-    $xml .= $self->attributes2xml;
-
+    $xml .= $self->attributes2xml();
     $xml .= <<"EOF";
         </STUDY_ATTRIBUTES>
     </STUDY>
@@ -180,6 +155,11 @@ EOF
 EOF
   
   return $xml;
+}
+
+sub clean_xml {
+    my ($text) = @_;
+    return encode_entities(decode_entities($text));
 }
 
 1;

@@ -4,6 +4,7 @@ our @ISA = "Submitter";
 use strict;
 use warnings;
 use Data::Dumper;
+use HTML::Entities;
 
 sub new {
   my ($class, $mg_tax_map, $mixs_term_map, $project_name, $center_name) = @_;
@@ -120,6 +121,7 @@ sub broker_object_ids {
   my ($self, $ids) = @_;
   my $xml = "";
   foreach my $id (@$ids) {
+     $id = clean_xml($id);
      $xml .= <<"EOF";
          <SAMPLE_ATTRIBUTE>
             <TAG>BROKER_OBJECT_ID</TAG>
@@ -136,12 +138,13 @@ sub checklist_ep {
       print "Warning: Can't find env_package $ep. Not in supported list. Setting to default.\n";
       $ep = $self->{default_ep};
   }
-  my $check_id = $self->{envpack_map}{$ep}{checklist};
-  my $ep_name  = $self->{envpack_map}{$ep}{fullname};
+  my $check_id = clean_xml($self->{envpack_map}{$ep}{checklist});
+  my $ep_name  = clean_xml($self->{envpack_map}{$ep}{fullname});
   # fix for miscellaneous
   if ($ep eq 'miscellaneous') {
       $ep = 'miscellaneous natural';
   }
+  $ep = clean_xml($ep);
   my $xml = <<"EOF";
     <SAMPLE_ATTRIBUTE>
        <TAG>ENA-CHECKLIST</TAG>
@@ -164,10 +167,11 @@ sub attributes2xml {
         my $old = $key;
         $key = $self->{mixs_map}{$old}[0];
         if ($self->{mixs_map}{$old}[1]) {
-            $unit = "<UNITS>".$self->{mixs_map}{$old}[1]."</UNITS>";
+            $unit = "<UNITS>".clean_xml($self->{mixs_map}{$old}[1])."</UNITS>";
         }
     }
-    $xml .= <<"EOF";
+    $value = clean_xml($value);
+    $xml  .= <<"EOF";
        <SAMPLE_ATTRIBUTE>
           <TAG>$key</TAG>$unit
           <VALUE>$value</VALUE>
@@ -182,8 +186,8 @@ sub sample2xml {
 
    my $center_name  = $self->center_name();
    my $sample_alias = $sample->{sample_id};
-   my $sample_name  = $sample->{sample_name};
-   my $taxonomy_id  = $self->get_tax_id($sample->{sample_data}{metagenome_taxonomy});
+   my $sample_name  = clean_xml($sample->{sample_name});
+   my $taxonomy_id  = clean_xml($self->get_tax_id($sample->{sample_data}{metagenome_taxonomy}));
    
    my $sample_attributes = {
        project_name => $self->{project_name}
@@ -240,6 +244,11 @@ sub simplify_hash {
     my $new = {};
     map { $new->{$_} = $old->{$_}{value} } grep { $old->{$_}{value} } keys %$old;
     return $new;
+}
+
+sub clean_xml {
+    my ($text) = @_;
+    return encode_entities(decode_entities($text));
 }
 
 1;
