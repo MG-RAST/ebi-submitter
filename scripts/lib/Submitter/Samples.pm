@@ -84,7 +84,8 @@ sub checklist_ep {
   if ($ep eq 'miscellaneous') {
       $ep = 'miscellaneous natural';
   }
-  $ep = clean_xml($ep);
+  # fix for '/'
+  $ep =~ s/\|/\//g;
   my $xml = <<"EOF";
     <SAMPLE_ATTRIBUTE>
        <TAG>ENA-CHECKLIST</TAG>
