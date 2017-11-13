@@ -80,6 +80,6 @@ close(OUTF);
 exit 0;
 
 sub get_usage {
-    return "USAGE: upload_read.pl -input=<sequence file> -output=<output info file> -updir=<ftp upload dir> -furl=<ebi ftp url> -user=<ebi ftp user> -pswd=<ebi ftp password> -tmpdir=<dir for temp files, default CWD> -trim <boolean: run adapter trimmer>\n";
+    return "USAGE: upload_read.pl -input=<sequence file> -output=<output info file> -updir=<ftp upload dir> -furl=<ebi ftp url> -user=<ebi ftp user> -pswd=<ebi ftp password> -tmpdir=<dir for temp files, default CWD>\n";
 }
 

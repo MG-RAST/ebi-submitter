@@ -82,7 +82,7 @@ sub checklist_ep {
   my $ep_name  = clean_xml($self->{envpack_map}{$ep}{fullname});
   # fix for miscellaneous
   if ($ep eq 'miscellaneous') {
-      $ep = 'miscellaneous natural';
+      $ep = 'miscellaneous natural or artificial environment';
   }
   # fix for '/'
   $ep =~ s/\|/\//g;
