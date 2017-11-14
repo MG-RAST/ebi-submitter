@@ -39,6 +39,9 @@ inputs:
         type: string
 
 outputs:
+    uploaded:
+        type: File[]
+        outputSource: uploader/outGzip
     receipt:
         type: File
         outputSource: submitter/outReceipt
@@ -85,12 +88,12 @@ steps:
             outName:
                 source: trimmer/trimmed
                 valueFrom: $(self.file.basename).info
-        out: [output]
+        out: [outInfo, outGzip]
 
     cat:
         run: ../tools/cat.tool.cwl
         in:
-            files: uploader/output
+            files: uploader/outInfo
             outName:
                 source: project
                 valueFrom: $(self).mg.upload

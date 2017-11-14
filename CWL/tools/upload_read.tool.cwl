@@ -77,17 +77,21 @@ arguments:
                   return null;
               }
           }
-    - prefix: --tmpdir
-      valueFrom: $(runtime.tmpdir)
 
 outputs:
     info:
         type: stdout
     error: 
         type: stderr
-    output:
+    outInfo:
         type: File
         doc: Output upload info file
-        outputBinding: 
+        outputBinding:
             glob: $(inputs.outName)
+    outGzip:
+        type: File
+        doc: Gzipped file that was uploaded
+        outputBinding:
+            glob:
+                glob: $(inputs.input.file).gz
 

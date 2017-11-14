@@ -55,8 +55,8 @@ unless ($format =~ /^fastq|fasta$/) {
 # set ftp connection
 my $ftp = Net::FTP->new($furl, Passive => 1) or die "Cannot connect to $furl: $!";
 $ftp->login($user, $pswd) or die "Cannot login using $user and $pswd. ", $ftp->message;
-$ftp->mkdir($updir);
-$ftp->cwd($updir);
+$ftp->mkdir($updir); # skip errors as dir may already exist
+$ftp->cwd($updir) or die "Cannot change working directory ", $ftp->message;
 $ftp->binary();
 
 # compress / md5
@@ -64,7 +64,7 @@ my $gzfile = $tmpdir."/".basename($input).".gz";
 my $md5 = `gzip -c $input | tee $gzfile | md5sum | cut -f1 -d' '`;
 chomp $md5;
 # ftp
-$ftp->put($gzfile, basename($gzfile));
+$ftp->put($gzfile, basename($gzfile)) or die "Put of $gzfile failed ", $ftp->message;
 
 # print output
 my @data = (
