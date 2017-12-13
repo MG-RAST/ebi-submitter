@@ -27,7 +27,7 @@ RUN wget --content-disposition http://sourceforge.net/projects/bowtie-bio/files/
   cp bowtie2-2.2.5/bowtie2* /usr/local/bin
 
 # skewer
-RUN git clone https://github.com/relipmoc/skewer && \
+RUN git clone https://github.com/wltrimbl/skewer && \
   cd skewer && \
   make && \
   make install
