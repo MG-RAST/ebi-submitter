@@ -92,6 +92,5 @@ outputs:
         type: File
         doc: Gzipped file that was uploaded
         outputBinding:
-            glob:
-                glob: $(inputs.input.file).gz
+            glob: $(inputs.input.file).gz
 
