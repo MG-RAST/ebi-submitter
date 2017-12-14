@@ -26,15 +26,15 @@ RUN wget --content-disposition http://sourceforge.net/projects/bowtie-bio/files/
   unzip bowtie2-2.2.5-linux-x86_64.zip && \
   cp bowtie2-2.2.5/bowtie2* /usr/local/bin
 
+# node.js version 7
+RUN curl -sL https://deb.nodesource.com/setup_7.x | bash - ; \
+  apt-get install -y nodejs
+
 # skewer
 RUN git clone https://github.com/wltrimbl/skewer && \
   cd skewer && \
   make && \
   make install
-
-# node.js version 7
-RUN curl -sL https://deb.nodesource.com/setup_7.x | bash - ; \
-  apt-get install -y nodejs 
 
 WORKDIR /usr/src
 
@@ -42,6 +42,7 @@ WORKDIR /usr/src
 RUN git clone http://github.com/MG-RAST/autoskewer && \
   cd autoskewer && \
   make
+
 ENV PATH /usr/src/autoskewer/:$PATH
 
 # submission scripts
