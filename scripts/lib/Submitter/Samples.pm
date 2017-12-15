@@ -82,9 +82,10 @@ sub checklist_ep {
   my $ep_name  = clean_xml($self->{envpack_map}{$ep}{fullname});
   # fix for miscellaneous
   if ($ep eq 'miscellaneous') {
-      $ep = 'miscellaneous natural';
+      $ep = 'miscellaneous natural or artificial environment';
   }
-  $ep = clean_xml($ep);
+  # fix for '/'
+  $ep =~ s/\|/\//g;
   my $xml = <<"EOF";
     <SAMPLE_ATTRIBUTE>
        <TAG>ENA-CHECKLIST</TAG>
