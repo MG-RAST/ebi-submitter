@@ -53,7 +53,7 @@ unless ($format =~ /^fastq|fasta$/) {
 }
 
 # set ftp connection
-my $ftp = Net::FTP->new($furl, Passive => 1) or die "Cannot connect to $furl: $!";
+my $ftp = Net::FTP->new($furl, Passive => 1, Timeout => 3600) or die "Cannot connect to $furl: $!";
 $ftp->login($user, $pswd) or die "Cannot login using $user and $pswd. ", $ftp->message;
 $ftp->mkdir($updir); # skip errors as dir may already exist
 $ftp->cwd($updir) or die "Cannot change working directory ", $ftp->message;
