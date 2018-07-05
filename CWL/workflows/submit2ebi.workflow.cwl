@@ -39,9 +39,15 @@ inputs:
         type: string
 
 outputs:
+    trimError:
+        type: File
+        outputSource: mergeTrimError/output
     uploaded:
         type: File[]
         outputSource: uploader/outGzip
+    uploadError:
+        type: File
+        outputSource: mergeUploadError/output
     receipt:
         type: File
         outputSource: submitter/outReceipt
@@ -60,6 +66,9 @@ outputs:
     run:
         type: File
         outputSource: submitter/outRun
+    submitError:
+        type: File
+        outputSource: submitter/error
     accessionLog:
         type: File
         outputSource: finalize/output
@@ -74,7 +83,15 @@ steps:
             outName:
                 source: seqFiles
                 valueFrom: $(self.file.basename).trim
-        out: [trimmed]
+        out: [trimmed, error]
+
+    mergeTrimError:
+        run: ../tools/cat.tool.cwl
+        in:
+            files: trimmer/error
+            outName:
+                valueFrom: autoskewer.error
+        out: [output]
 
     uploader:
         run: ../tools/upload_read.tool.cwl
@@ -88,9 +105,9 @@ steps:
             outName:
                 source: trimmer/trimmed
                 valueFrom: $(self.file.basename).info
-        out: [outInfo, outGzip]
+        out: [outInfo, outGzip, error]
 
-    cat:
+    mergeInfo:
         run: ../tools/cat.tool.cwl
         in:
             files: uploader/outInfo
@@ -98,11 +115,19 @@ steps:
                 source: project
                 valueFrom: $(self).mg.upload
         out: [output]
+    
+    mergeUploadError:
+        run: ../tools/cat.tool.cwl
+        in:
+            files: uploader/error
+            outName:
+                valueFrom: upload_read.error
+        out: [output]
 
     submitter:
         run: ../tools/submit_project.tool.cwl
         in:
-            uploads: cat/output
+            uploads: mergeInfo/output
             project: project
             mgrastUrl: mgrastUrl
             submitUrl: submitUrl
@@ -113,7 +138,7 @@ steps:
             outName:
                 source: project
                 valueFrom: $(self).receipt.xml
-        out: [outReceipt, outSubmission, outStudy, outSample, outExperiment, outRun]
+        out: [outReceipt, outSubmission, outStudy, outSample, outExperiment, outRun, error]
 
     finalize:
         run: ../tools/curl.tool.cwl
