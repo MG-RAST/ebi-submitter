@@ -89,7 +89,8 @@ steps:
         run: ../tools/cat.tool.cwl
         in:
             files: trimmer/error
-            outName: autoskewer.error
+            outName:
+                valueFrom: autoskewer.error
         out: [output]
 
     uploader:
@@ -119,7 +120,8 @@ steps:
         run: ../tools/cat.tool.cwl
         in:
             files: uploader/error
-            outName: upload_read.error
+            outName:
+                valueFrom: upload_read.error
         out: [output]
 
     submitter:
