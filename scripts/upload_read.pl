@@ -57,15 +57,17 @@ my $gzfile = $tmpdir."/".basename($input).".gz";
 my $md5 = `gzip -c $input | tee $gzfile | md5sum | cut -f1 -d' '`;
 chomp $md5;
 
-# set ftp connection
-my $ftp = Net::FTP->new($furl, Passive => 1, Timeout => 3600) or die "Cannot connect to $furl: $!";
-$ftp->login($user, $pswd) or die "Cannot login using $user and $pswd. ", $ftp->message;
-$ftp->mkdir($updir); # skip errors as dir may already exist
-$ftp->cwd($updir) or die "Cannot change working directory ", $ftp->message;
-$ftp->binary();
-
-# ftp
-$ftp->put($gzfile, basename($gzfile)) or die "Put of $gzfile failed ", $ftp->message;
+my $retry = 3;
+foreach ((1..$retry)) {
+    my $error = put_file($furl, $user, $pswd, $updir, $gzfile);
+    if (! $error) {
+        last;
+    }
+}
+if ($error) {
+    print STDERR $error."\n";
+    exit 1;
+}
 
 # print output
 my @data = (
@@ -79,6 +81,23 @@ print OUTF join("\t", @data)."\n";
 close(OUTF);
 
 exit 0;
+
+sub put_file {
+    my ($url, $user, $pswd, $dir, $file) = @_;
+    
+    # set ftp connection
+    my $ftp = Net::FTP->new($url, Passive => 1, Timeout => 3600) || return "Cannot connect to $url: $!";
+    $ftp->login($user, $pswd) || return "Cannot login using $user and $pswd: ".$ftp->message;
+    $ftp->mkdir($dir); # skip errors as dir may already exist
+    $ftp->cwd($dir) || return "Cannot change working directory: ".$ftp->message;
+    $ftp->binary();
+
+    # ftp
+    $ftp->put($file, basename($file)) || return "Put of $file failed: ".$ftp->message;
+    
+    $ftp->quit();
+    return "";
+}
 
 sub get_usage {
     return "USAGE: upload_read.pl -input=<sequence file> -output=<output info file> -updir=<ftp upload dir> -furl=<ebi ftp url> -user=<ebi ftp user> -pswd=<ebi ftp password> -tmpdir=<dir for temp files, default CWD>\n";
