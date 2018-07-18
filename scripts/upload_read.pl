@@ -57,9 +57,11 @@ my $gzfile = $tmpdir."/".basename($input).".gz";
 my $md5 = `gzip -c $input | tee $gzfile | md5sum | cut -f1 -d' '`;
 chomp $md5;
 
+my $error = "";
 my $retry = 3;
+
 foreach ((1..$retry)) {
-    my $error = put_file($furl, $user, $pswd, $updir, $gzfile);
+    $error = put_file($furl, $user, $pswd, $updir, $gzfile);
     if (! $error) {
         last;
     }
