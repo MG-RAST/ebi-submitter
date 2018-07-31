@@ -183,7 +183,7 @@ EOF
 sub simplify_hash {
     my ($self, $old) = @_;
     my $new = {};
-    map { $new->{$_} = $old->{$_}{value} } grep { $old->{$_}{value} } keys %$old;
+    map { $new->{$_} = $old->{$_}{value} } grep { $old->{$_}{value} ne "" } keys %$old;
     return $new;
 }
 

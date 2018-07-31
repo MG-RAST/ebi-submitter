@@ -222,7 +222,7 @@ submit($submit_option, $submission_id, $accession_id, $center_name, $files);
 sub simplify_hash {
     my ($old) = @_;
     my $new = {};
-    map { $new->{$_} = $old->{$_}{value} } grep { $old->{$_}{value} } keys %$old;
+    map { $new->{$_} = $old->{$_}{value} } grep { $old->{$_}{value} ne "" } keys %$old;
     return $new;
 }
 
