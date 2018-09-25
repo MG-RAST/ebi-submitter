@@ -6,10 +6,6 @@ doc: |
     create the ENA XML files for a MG-RAST Project and submit them to EBI
     >submit_project.pl
 
-hints:
-    DockerRequirement:
-        dockerPull: mgrast/ebi:0.2
-    
 requirements:
     InlineJavascriptRequirement: {}
 

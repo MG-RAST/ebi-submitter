@@ -6,10 +6,6 @@ doc: |
     detect and trim adapter sequences from reads
     >autoskewer.py -t <runtime.tmpdir> -i <input> -o <outName> -l <outLog>
 
-hints:
-    DockerRequirement:
-        dockerPull: mgrast/ebi:0.2
-    
 requirements:
     InlineJavascriptRequirement: {}
 
