@@ -6,10 +6,6 @@ doc: |
     upload read sequence file (fasta or fastq) to EBI ftp inbox: adaptor trim / compress / md5sum
     >validate_receipt.pl -input=<receipt>
 
-hints:
-    DockerRequirement:
-        dockerPull: mgrast/ebi:0.2
-
 requirements:
     InlineJavascriptRequirement: {}
 

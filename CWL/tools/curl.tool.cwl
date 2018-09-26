@@ -4,10 +4,6 @@ class: CommandLineTool
 label: curl
 doc: authenticated upload of a file using curl
 
-hints:
-    DockerRequirement:
-        dockerPull: mgrast/pipeline:4.03
-
 requirements:
     InlineJavascriptRequirement: {}
 

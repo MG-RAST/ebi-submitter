@@ -55,9 +55,12 @@ sub name {
 # alias for study_abstract 
 sub description {
   my ($self) = @_;
-  my $description = $self->{study_abstract};
-  $description =~ s/\w\s*\K\n//g; 
-  return $description;
+  if ($self->{study_abstract}) {
+      my $description = $self->{study_abstract};
+      $description =~ s/\w\s*\K\n//g; 
+      return $description;
+  }
+  return "";
 }
 
 sub pi {
@@ -159,7 +162,11 @@ EOF
 
 sub clean_xml {
     my ($text) = @_;
-    return encode_entities(decode_entities($text), q(<>&"'));
+    if ($text) {
+        return encode_entities(decode_entities($text), q(<>&"'));
+    } else {
+        return "";
+    }
 }
 
 1;

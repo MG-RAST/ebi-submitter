@@ -6,10 +6,6 @@ doc: |
     create the ENA XML files for a MG-RAST Project and submit them to EBI
     >submit_project.pl
 
-hints:
-    DockerRequirement:
-        dockerPull: mgrast/ebi:0.2
-    
 requirements:
     InlineJavascriptRequirement: {}
 
@@ -72,12 +68,6 @@ inputs:
         doc: Optional Submission ID
         inputBinding:
             prefix: --submission_id
-    
-    accessionID:
-        type: string?
-        doc: Optional Accession ID
-        inputBinding:
-            prefix: --accession_id
 
 
 baseCommand: submit_project.pl

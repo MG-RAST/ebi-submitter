@@ -4,10 +4,6 @@ class: CommandLineTool
 label: GNU cat
 doc: Concatenate FILE(s) to standard output
 
-hints:
-    DockerRequirement:
-        dockerPull: mgrast/pipeline:4.03
-
 requirements:
     InlineJavascriptRequirement: {}
 
