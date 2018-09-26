@@ -18,7 +18,6 @@ use Submitter::Experiments;
 my $upload_list   = undef;
 my $project_id    = undef;
 my $submission_id = undef;
-my $accession_id  = undef;
 
 # schema/object type
 my $sample_type     = "Sample";
@@ -62,7 +61,6 @@ GetOptions(
     'verbose!'        => \$verbose,
     'help!'           => \$help,
     'debug!'          => \$debug,
-    'accession_id=s'  => \$accession_id,
     'submission_id=s' => \$submission_id
 );
 
@@ -93,12 +91,6 @@ unless ($user && $password && $project_id && $upload_list && (-s $upload_list) &
     exit 1;
 }
 
-if (($submit_option eq 'MODIFY') && (! $accession_id)) {
-    print STDERR "Option 'MODIFY' requires an accession ID\n";
-    &usage();
-    exit 1;
-}
-
 if ($debug) {
     $mgrast_url = "http://api-dev.metagenomics.anl.gov";
     $submit_url = "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/";
@@ -122,15 +114,15 @@ close(UPLOAD);
 # add auth in a bad way
 $submit_url .= '?auth=ENA%20'.$user.'%20'.$password;
 
+# initialise handels
+my $json  = new JSON;
+my $agent = LWP::UserAgent->new;
+
 # Project ID will be ID for all submission for the given project - new and updates
 print "Checking submission id - create one if not provided\n" if ($verbose);
 unless ($submission_id) {
     $submission_id = $project_id.".".time;
 }
-
-# initialise handels
-my $json  = new JSON;
-my $agent = LWP::UserAgent->new;
 
 # get metagenome_taxonomy CV
 print "Getting metagenome_taxonomy CV from MG-RAST\n" if ($verbose);
@@ -145,6 +137,11 @@ map { $seq_model_map->{$_} = 1 } @{ get_json_from_url($mgrast_url."/metadata/cv?
 print "Getting project metadata from MG-RAST\n" if ($verbose);
 my $project_data = get_json_from_url($mgrast_url."/metadata/export/".$project_id);
 
+# check for previous submission
+my $accession_id = undef;
+if (($project_data->{data}{ebi_id}) && ($project_data->{data}{ebi_id})) {
+    $accession_id = $project_data->{data}{ebi_id};
+}
 
 ###### Create Project XML ######
 my $study_ref    = $project_data->{id};

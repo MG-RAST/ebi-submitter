@@ -37,8 +37,6 @@ inputs:
         type: string
     submissionID:
         type: string
-    accessionID:
-        type: string?
 
 outputs:
     trimError:
@@ -137,7 +135,6 @@ steps:
             submitPassword: password
             submitOption: submitOption
             submissionID: submissionID
-            accessionID: accessionID
             outName:
                 source: project
                 valueFrom: $(self).receipt.xml
