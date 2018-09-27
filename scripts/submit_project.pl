@@ -139,8 +139,11 @@ my $project_data = get_json_from_url($mgrast_url."/metadata/export/".$project_id
 
 # check for previous submission
 my $accession_id = undef;
-if (($project_data->{data}{ebi_id}) && ($project_data->{data}{ebi_id}{value})) {
-    $accession_id = $project_data->{data}{ebi_id}{value};
+if (exists($project_data->{data}{ebi_id}) && exists($project_data->{data}{ebi_id}{value})) {
+    my $prev_submit = get_json_from_url($mgrast_url."/submission/".$project_id);
+    if (exists($prev_submit->{receipt}) && ($prev_submit->{receipt}{submission}{mgrast_accession} eq $submission_id)) {
+        $accession_id = $prev_submit->{receipt}{submission}{ena_accession};
+    }
 }
 
 ###### Create Project XML ######
