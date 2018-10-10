@@ -28,11 +28,11 @@ my $receipt_file    = "./receipt.xml";
 my $temp_dir        = ".";
 
 # mgrast base api url
-my $mgrast_url = "http://api-dev.metagenomics.anl.gov";
+my $mgrast_url = "http://api-internal.metagenomics.anl.gov";
 
 # ENA URL
 my $submit_option = 'ADD';
-my $submit_url    = "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/";
+my $submit_url    = "https://www.ebi.ac.uk/ena/submit/drop-box/submit/";
 my $user          = $ENV{'EBI_USER'} || undef;
 my $password      = $ENV{'EBI_PASSWORD'} || undef;
 
@@ -139,8 +139,11 @@ my $project_data = get_json_from_url($mgrast_url."/metadata/export/".$project_id
 
 # check for previous submission
 my $accession_id = undef;
-if (($project_data->{data}{ebi_id}) && ($project_data->{data}{ebi_id}{value})) {
-    $accession_id = $project_data->{data}{ebi_id}{value};
+if (exists($project_data->{data}{ebi_id}) && exists($project_data->{data}{ebi_id}{value})) {
+    my $prev_submit = get_json_from_url($mgrast_url."/submission/".$project_id);
+    if (exists($prev_submit->{receipt}) && ($prev_submit->{receipt}{submission}{mgrast_accession} eq $submission_id)) {
+        $accession_id = $prev_submit->{receipt}{submission}{ena_accession};
+    }
 }
 
 ###### Create Project XML ######
@@ -274,6 +277,11 @@ sub get_mg_tax_map {
     return $mg_tax;
 }
 
+sub get_tomorrow {
+    my (undef,undef,undef,$mday,$mon,$year,undef,undef,undef) = gmtime(time);
+    return sprintf("%04d-%02d-%02dZ", $year+1900, $mon+1, $mday+1);
+}
+
 sub get_run_xml {
 	my ($center_name, $mg_id, $lib_id, $mg_info) = @_;
     
@@ -313,6 +321,7 @@ sub submit {
    }
    my $all_actions = join("\n", @line_actions);
    my $accession   = $accession_id ? 'accession="'.$accession_id.'"' : '';
+   my $hold_until  = get_tomorrow();
    my $submission  = <<"EOF";
 <?xml version="1.0" encoding="UTF-8"?>
 <SUBMISSION_SET xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -324,6 +333,9 @@ xsi:noNamespaceSchemaLocation="ftp://ftp.sra.ebi.ac.uk/meta/xsd/sra_1_5/SRA.subm
         </CONTACTS>
         <ACTIONS>
             $all_actions
+            <ACTION>
+                <HOLD HoldUntilDate="$hold_until"/>
+            </ACTION>
         </ACTIONS>
     </SUBMISSION>
 </SUBMISSION_SET>
