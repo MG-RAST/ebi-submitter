@@ -2,7 +2,7 @@ FROM ubuntu:latest
 MAINTAINER Andreas Wilke <wilke@mcs.anl.gov>
 
 # example: docker build -t autoskewer:latest .
-
+# tested with ubuntu:16.04
 
 
 RUN apt-get -y update && apt-get -y upgrade
