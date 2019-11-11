@@ -1,10 +1,12 @@
-cwlVersion: v1.0
+cwlVersion: v1.1
 class: CommandLineTool
 
 label: EBI upload read
 doc: |
     upload read sequence file (fasta or fastq) to EBI ftp inbox: adaptor trim / compress / md5sum
-    >upload_read.pl -input=<input> -output=<outName> -mgid=<mgID> -updir=<uploadDir> -furl=<ftpUrl> -user=<ftpUser> -pswd=<ftpPassword> -tmpdir=<tmpDir>
+    
+    # Command line tool options:
+    # >upload_read.pl -input=<input> -output=<outName> -mgid=<mgID> -updir=<uploadDir> -furl=<ftpUrl> -user=<ftpUser> -pswd=<ftpPassword> -tmpdir=<tmpDir>
 
 requirements:
     InlineJavascriptRequirement: {}
