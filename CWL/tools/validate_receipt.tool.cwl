@@ -1,10 +1,9 @@
-cwlVersion: v1.0
+cwlVersion: v1.1
 class: CommandLineTool
 
 label: EBI receipt validation
 doc: |
-    upload read sequence file (fasta or fastq) to EBI ftp inbox: adaptor trim / compress / md5sum
-    >validate_receipt.pl -input=<receipt>
+    validate upload receipt
 
 requirements:
     InlineJavascriptRequirement: {}
