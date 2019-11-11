@@ -1,4 +1,5 @@
 FROM perl:5.24
+LABEL maintainer="Andreas Wilke <wilke@mcs.anl.gov"
 RUN cpanm XML::LibXML \
   JSON \
   LWP \
